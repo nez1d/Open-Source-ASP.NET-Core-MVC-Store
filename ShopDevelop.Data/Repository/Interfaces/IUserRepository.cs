@@ -2,7 +2,7 @@
 
 namespace ShopDevelop.Data.Repository.Interfaces
 {
-    public interface IRepositoryUser
+    public interface IUserRepository
     {
         Task<User> GetUser(string email);
         Task<User> GetUser(int id);

@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -76,3 +76,4 @@ namespace ShopDevelop.Data.Models
         public int Quantity { get; set; }
     }
 }
+*/

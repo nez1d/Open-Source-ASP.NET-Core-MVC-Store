@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.DataBase;
-using ShopDevelop.Data.TRASHER.InsertDb;
 using ShopDevelop.Service;
+using ShopDevelop.Data.Repository.Entity;
+using ShopDevelop.Data.Repository.Interfaces;
 using ShopDevelop.Data.Models;
-/*using ShopDevelop.Data.Entity;*/
 
 var builder = WebApplication.CreateBuilder(args);
 // Поддержка контроллеров и представлений.
@@ -36,6 +36,14 @@ builder.Services.ConfigureApplicationCookie(config =>
 {
     config.LoginPath = "/Account/Login";
 });
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped(sp => ShoppingCartRepository.GetCart(sp));
+
+builder.Services.AddTransient<IProductRepository<Product>, ProductRepository>();
+
+builder.Services.AddMvc();
+
 // Добавляем AddDistributedMemoryCache.
 builder.Services.AddDistributedMemoryCache();
 // Добавляем сервисы сессии.
@@ -44,7 +52,7 @@ builder.Services.AddSession();
 var app = builder.Build();
 
 // Подключение класса для добавления объектов в базу данных.
-DbObjects.Initial(app);
+/*DbObjects.Initial(app);*/
 
 app.Configuration.Bind("Project", new Config());
 
