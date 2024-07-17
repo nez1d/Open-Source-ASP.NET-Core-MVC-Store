@@ -1,4 +1,4 @@
-﻿using ShopDevelop.Data.DataBase;
+﻿/*using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Models;
 using ShopDevelop.Data.Repository.Interfaces;
 
@@ -35,3 +35,4 @@ namespace ShopDevelop.Data.Repository.Entity
         }
     }
 }
+*/

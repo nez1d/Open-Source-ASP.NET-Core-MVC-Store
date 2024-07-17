@@ -34,13 +34,13 @@
                             <p class="discount-price">@prodcut.Discount %</p>
                         </div>
                         <div class="catalog-buttons__inner">
-                            <button class="catalog-like__btn catalog-bottom__btn">
+                            <a class="catalog-like__btn catalog-bottom__btn">
                                 <img class="catalog-like__btn-image" src="~/images/Managment/like.svg" alt="">
-                            </button>
-                            <button class="catalog-cart__btn catalog-bottom__btn">
+                            </a>
+                            <a asp-controller="Cart" asp-action="Add" asp-route-id=@prodcut.Id class="catalog-cart__btn catalog-bottom__btn">
                                 <img class="catalog-cart__btn-image" src="~/images/Managment/cart.svg" alt=""
                                 onclick="">
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>

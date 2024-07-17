@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.DataBase;
 using ShopDevelop.Service;
 using ShopDevelop.Data.Repository.Entity;
-using ShopDevelop.Data.Repository.Interfaces;
-using ShopDevelop.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // Поддержка контроллеров и представлений.
@@ -39,8 +37,6 @@ builder.Services.ConfigureApplicationCookie(config =>
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped(sp => ShoppingCartRepository.GetCart(sp));
-
-builder.Services.AddTransient<IProductRepository<Product>, ProductRepository>();
 
 builder.Services.AddMvc();
 

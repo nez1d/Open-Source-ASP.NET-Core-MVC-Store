@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Models;
 using ShopDevelop.Data.Repository.Entity;
 using ShopDevelop.Web.Models;
@@ -8,13 +9,16 @@ namespace ShopDevelop.Web.Controllers
     public class CartController : Controller
     {
         private readonly ShoppingCart _shoppingCart;
+        private readonly ApplicationDbContext _applicationDbContext;
 
-        public CartController(ShoppingCart shoppingCart)
+        public CartController(ApplicationDbContext applicationDbContext,
+                              ShoppingCart shoppingCart)
         {
             _shoppingCart = shoppingCart;
+            _applicationDbContext = applicationDbContext;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id)
         {
             var products = _shoppingCart.GetAllItems();
             _shoppingCart.ShoppingCartItems = products;
@@ -23,21 +27,21 @@ namespace ShopDevelop.Web.Controllers
             {
                 ShoppingCart = _shoppingCart,
             };
-
-            return View("Index", products); 
+            return View("Index", shoppingCart); 
         }
 
-        /*public IActionResult Add(int id, int? amount = 1)
+        [HttpGet]
+        public IActionResult Add(int id, int amount)
         {
-            var product = _shoppingCart.ShoppingCartItems.FirstOrDefault(x => x.Id == id);
+            var product = _applicationDbContext.Products
+                .FirstOrDefault(p => p.Id == id);
 
-            bool isValidAmount = false;
             if (product != null)
             {
-                isValidAmount = _shoppingCart.AddToCart(product, 1);
+                _shoppingCart.AddToCart(product/*, amount*/);
             }
 
-            return Index();
-        }*/
+            return Redirect("Index");
+        }
     }
 }

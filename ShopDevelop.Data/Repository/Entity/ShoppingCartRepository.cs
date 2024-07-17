@@ -32,7 +32,7 @@ namespace ShopDevelop.Data.Repository.Entity
 
             return new ShoppingCart(context) 
             {
-                ShoppingCartId = shoppingCartId
+                Id = shoppingCartId,
             };
         }
         // Получить все продукты корзины
@@ -52,7 +52,7 @@ namespace ShopDevelop.Data.Repository.Entity
             }
 
             var shoppingCartItem = _applicationDbContext.ShopCartItems.FirstOrDefault(
-                c => c.Product.Id == product.Id && c.ShoppingCartId == ShoppingCartId);
+                c => c.Product.Id == product.Id && c.ShoppingCartId == c.Id);
 
             if (shoppingCartItem == null) 
             { 
@@ -81,7 +81,7 @@ namespace ShopDevelop.Data.Repository.Entity
         {
             var cartItems = _applicationDbContext
                 .ShopCartItems
-                .Where(c => c.ShoppingCartId == ShoppingCartId);
+                .Where(c => c.ShoppingCartId == c.Id);
             _applicationDbContext.ShopCartItems.RemoveRange(cartItems);
             _applicationDbContext.SaveChanges();
         }
@@ -89,7 +89,7 @@ namespace ShopDevelop.Data.Repository.Entity
         public void DeleteToCart(Product product)
         {
             var shoppingCartItem = _applicationDbContext.ShopCartItems.SingleOrDefault(
-                s => s.Product.Id == product.Id && s.ShoppingCartId == ShoppingCartId);
+                s => s.Product.Id == product.Id && s.ShoppingCartId == s.Id);
 
 
         }
@@ -97,7 +97,7 @@ namespace ShopDevelop.Data.Repository.Entity
         public decimal GetTotalCartValue()
         {
             return _applicationDbContext.ShopCartItems
-                .Where(c => c.ShoppingCartId == ShoppingCartId)
+                .Where(c => c.ShoppingCartId == c.Id)
                 .Select(c => c.Product.Price * c.Amount).Sum();
         }
     }

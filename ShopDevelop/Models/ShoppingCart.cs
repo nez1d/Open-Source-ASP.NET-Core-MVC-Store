@@ -1,79 +1,114 @@
-﻿/*using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using ShopDevelop.Data.DataBase;
 
 namespace ShopDevelop.Data.Models
 {
     public class ShoppingCart
     {
-        public string Id { get; set; }
+        private readonly ApplicationDbContext _applicationDbContext;
+
+        public ShoppingCart(ApplicationDbContext applicationDbContext)
+        {
+            _applicationDbContext = applicationDbContext;
+        }
+
+        public int Id { get; set; }
+
+        public string ShoppingCartId { get; set; }
 
         public User User { get; set; }
 
         public string UserId { get; set; }
 
-        public List<CartProduct> ProductCollection = new List<CartProduct>();
+        public Product Product { get; set; }
 
-        // Добавление в корзину.
-        //TODO: Переделать return true;
-        public bool AddToCart(Product product, int quantity) 
+        public int Quantity { get; set; }
+
+        public IEnumerable<ShoppingCartItem> ShoppingCartItems { get; set; }
+
+        // Получить корзину.
+        public static ShoppingCart GetCart(IServiceProvider serviceProvider)
         {
-            CartProduct cartProduct = ProductCollection
-                .Where(p => p.Product.Id == product.Id)
-                .FirstOrDefault();
+            // Создание объекта для работы с сессиями.
+            ISession? session = serviceProvider.GetRequiredService<IHttpContextAccessor>()?
+                .HttpContext.Session;
+            // Объект для работы с базой данных.
+            var context = serviceProvider.GetService<ApplicationDbContext>();
+            string shoppingCartId = session.GetString("Id")
+                ?? Guid.NewGuid().ToString();
+            // Установка новой сессии.
+            session.SetString("Id", shoppingCartId);
 
-            if (product.InStock == 0 || quantity == 0)
+            return new ShoppingCart(context)
             {
-                return false;         
+                ShoppingCartId = shoppingCartId
+            };
+        }
+        // Получить все продукты корзины
+        public IEnumerable<ShoppingCartItem> GetAllItems()
+        {
+            return ShoppingCartItems ??
+                   (ShoppingCartItems = _applicationDbContext.ShopCartItems
+                       .Where(c => c.ShoppingCartId == ShoppingCartId)
+                       .Include(s => s.Product));
+        }
+        // Добавить в корзину.
+        public bool AddToCart(Product product, int amount)
+        {
+            if (product.InStock == 0 && amount == 0)
+            {
+                return false;
             }
 
-            if (cartProduct != null)
+            var shoppingCartItem = _applicationDbContext.ShopCartItems.FirstOrDefault(
+                c => c.Product.Id == product.Id && c.ShoppingCartId == ShoppingCartId);
+
+            if (shoppingCartItem == null)
             {
-                ProductCollection.Add(new CartProduct
+                if (amount > product.InStock)
                 {
+                    return false;
+                }
+                shoppingCartItem = new ShoppingCartItem
+                {
+                    ShoppingCartId = ShoppingCartId,
                     Product = product,
-                    Quantity = quantity
-                });
-                return true;
+                    Amount = amount
+                };
+                _applicationDbContext.ShopCartItems.Add(shoppingCartItem);
             }
             else
             {
-                cartProduct.Quantity += quantity;
-                return true;
+                return false;
             }
-        }
 
+            _applicationDbContext.SaveChanges();
+            return true;
+        }
+        // Очистить корзину.
+        public void ClearCart(Product entity)
+        {
+            var cartItems = _applicationDbContext
+                .ShopCartItems
+                .Where(c => c.ShoppingCartId == ShoppingCartId);
+            _applicationDbContext.ShopCartItems.RemoveRange(cartItems);
+            _applicationDbContext.SaveChanges();
+        }
         // Удалить из корзины.
         public void DeleteToCart(Product product)
         {
-            ProductCollection.RemoveAll(p => p.Product.Id == product.Id);
+            var shoppingCartItem = _applicationDbContext.ShopCartItems.SingleOrDefault(
+                s => s.Product.Id == product.Id && s.ShoppingCartId == ShoppingCartId);
         }
-
-        // Очистить корзину.
-        public void ClearCart()
-        {
-            ProductCollection.Clear();
-        }
-
         // Получить общую стоимость товаров в корзине.
-        public decimal ComputeTotalValue()
+        public decimal GetTotalCartValue()
         {
-            return ProductCollection.Sum(e => e.Product.Price * e.Quantity);
+            return _applicationDbContext.ShopCartItems
+                .Where(c => c.ShoppingCartId == ShoppingCartId)
+                .Select(c => c.Product.Price * c.Amount).Sum();
         }
-
-        // Получить корзину.
-        public void GetCart()
-        {
-            
-        }
-    }
-
-    public class CartProduct
-    {
-        public Product Product { get; set; }
-        public int Quantity { get; set; }
     }
 }
 */

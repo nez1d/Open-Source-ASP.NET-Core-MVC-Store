@@ -1,4 +1,6 @@
-﻿<div class="container">
+﻿@model ShopDevelop.Web.Models.ShoppingCartViewModel
+
+<div class="container">
     <div class="cart__inner">
         <form class="cart-info__section">
 
@@ -47,9 +49,23 @@
                 <h5 class="cart__info-subtitle cart__info_prod-subtitle">YOUR ORDER</h5>
                 <ul class="cart__products">
 
-                    
-                    
+                    @foreach (var prodcut in Model.ShoppingCart.ShoppingCartItems)
+                    {
+                        <li class="cart__product">
+                            <img class="cart__product-img" src="~/images/Products/Product/full__image_1.jpg" alt="">
+                            <div class="cart__product-info">
+                                <div class="cart__product-info-top">
+                                    <p class="cart__product-name">@prodcut.Name</p>
+                                    <p class="cart__product-size"></p>
+                                </div>
 
+                                <div class="cart__product-info-bottom">
+                                    <p class="cart__product-score"></p>
+                                    <p class="cart__product-price"></p>
+                                </div>
+                            </div>
+                        </li>
+                    }
                 </ul>
 
                 <div class="cart__total-price">
