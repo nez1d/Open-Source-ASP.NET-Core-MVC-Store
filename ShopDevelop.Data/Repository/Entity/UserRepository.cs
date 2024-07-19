@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace ShopDevelop.Data.Repository.Interfaces
 {
-    public class AuthRepository : IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public AuthRepository(ApplicationDbContext applicationDbContext)
+        public UserRepository(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }
@@ -30,11 +30,5 @@ namespace ShopDevelop.Data.Repository.Interfaces
             return await _applicationDbContext.User
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
-
-        /*public async Task<int> GetUsers(User model)
-        {
-            return await _applicationDbContext.User
-                .ToListAsync();
-        }*/
     }
 }

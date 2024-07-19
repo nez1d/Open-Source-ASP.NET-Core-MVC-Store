@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using ShopDevelop.Data.Models;
 using ShopDevelop.Web.Models;
 using ShopDevelop.Data.DataBase;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Data.Repository.Entity;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.ComponentModel;
 
 namespace ShopDevelop.Controllers
 {
@@ -16,29 +16,54 @@ namespace ShopDevelop.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public AccountController(ApplicationDbContext context)
+        private readonly RegisterUserRepository _registerUserRepository;
+
+        public  AccountController(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        /*private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager) 
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }*/
+            _registerUserRepository = new RegisterUserRepository(context);
+        }   
 
         public IActionResult UserProfile()
         {
             return View();
         }
-
+        
         [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterModelView model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var registerEmail = _registerUserRepository
+                .RegisterUserByEmail(model.Name, model.Password, model.Email);
+
+            if (await registerEmail == true)
+            {
+                SetClaim(model.Name);
+                return View("UserProfile", registerEmail);
+            }
+            /*else
+            {
+                var registerPhone = _registerUserRepository
+                .RegisterUserByEmail(model.Name, model.Password, model.PhoneNumber);
+
+                if (await registerPhone == true)
+                {
+                    SetClaim(model.Name);
+                    return View("UserProfile", registerPhone);
+                }
+            }*/
+            return RedirectToAction("Register");
         }
 
         [AllowAnonymous]
@@ -49,49 +74,49 @@ namespace ShopDevelop.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginModelView model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var user = await _context.User
-                .SingleOrDefaultAsync(
-                u => u.Login == model.Name
-                && u.Password == model.Password);
-
-            /*var user = await _userManager.FindByNameAsync(model.Name);*/
+            var user = _context.User
+                .FirstOrDefault(u => u.Login == model.Login && u.Password == model.Password);
 
             if (user == null) 
             {
                 ModelState.AddModelError("", "User not found");
             }
-
-            /*var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-
-            if (result.Succeeded)
+            else if(user.Login == model.Login || user.Password == model.Password)
             {
-                return Redirect("/Account/UserProfile");
-            }*/
-
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, model.Name)
-            };
-
-            var claimIdentity = new ClaimsIdentity(claims, "Cookie");
-            var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
-            await HttpContext.SignInAsync("Cookie", claimsPrincipal);
-
-            return View(model);
+                SetClaim(model.Login);
+                return View("UserProfile", model);
+            }
+            return View();
         }
 
         public IActionResult LogOff() 
         {
             HttpContext.SignOutAsync("Cookie");
             return Redirect("/Home/Index");
+        }
+
+        public async void RepeatPassword(string password)
+        {
+
+        }
+
+        public async void SetClaim(string name)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, name)
+            };
+
+            var claimIdentity = new ClaimsIdentity(claims, "Cookie");
+            var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
+            await HttpContext.SignInAsync("Cookie", claimsPrincipal);
         }
     }
 }

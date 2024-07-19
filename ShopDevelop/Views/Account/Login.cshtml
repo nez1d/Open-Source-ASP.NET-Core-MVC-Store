@@ -1,5 +1,5 @@
 ﻿@using ShopDevelop.Web.Models
-@model LoginViewModel
+@model LoginModelView
 
 <section class="register" id="register">
     <div class="container">
@@ -14,11 +14,12 @@
 
                 <h4 class="reg-subtitle">BASIC INFORMATION</h4>
 
-                <input asp-for="Name" class="reg-input" class="login-input" type="text" placeholder="Login" id="login-input">
+                <input asp-for="Login" class="reg-input" class="login-input" type="text" placeholder="Login" id="login-input">
                 <input asp-for="Password" class="reg-input" class="pass-input" type="password" placeholder="Password" id="pass-input">
 
                 <br>
-                <label class="rememberme-label" for="rememberme">Remember me</label><input class="rememberme-input" name="rememberme" type="checkbox">
+                <label class="rememberme-label" for="rememberme">Remember me</label>
+                <input asp-for="Remember" class="rememberme-input" name="rememberme" type="checkbox" value="false">
                 <a class="forgot-pass">Forgot your password?</a>
 
                 <p class="reg-other-text log-other-text">Don't you have an account?</p>
