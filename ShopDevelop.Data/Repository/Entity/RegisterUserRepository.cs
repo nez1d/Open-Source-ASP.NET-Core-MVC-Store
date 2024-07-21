@@ -17,7 +17,7 @@ namespace ShopDevelop.Data.Repository.Entity
         public async Task<bool> RegisterUserByEmail(string login, string password, string email)
         {
             var user = _applicationDbContext.User
-                .FirstOrDefaultAsync(u => u.Login == login || u.Email == email);
+                .FirstOrDefault(u => u.Login == login || u.Email == email);
 
             if (user != null)
             {
@@ -43,7 +43,6 @@ namespace ShopDevelop.Data.Repository.Entity
                 _applicationDbContext.User.AddAsync(userItem);
                 _applicationDbContext.SaveChangesAsync();
                 return true;
-                
             }        
         }
 

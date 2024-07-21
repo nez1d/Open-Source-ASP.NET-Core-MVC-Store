@@ -1,28 +1,33 @@
-﻿<body>
-    <section class="user-profile__section">
-        <div class="container">
-            <div class="user-profile__inner">
-                <h2 class="title">My Profile</h2>
+﻿@using ShopDevelop.Web.Models
+@model UserModelView
 
-                <div class="profile-top">
-                    <div class="profile__header">
-                        <img class="profile__header-img" src="" alt="">
-                    </div>
+@{
+    <body>
+        <section class="user-profile__section">
+            <div class="container">
+                <div class="user-profile__inner">
+                    <h2 class="title">My Profile</h2>
 
-                    <div class="profile__avatar">
-                        <img class="profile__avatar-img" src="" alt="">
-                    </div>
-
-                    <div class="profile-top-info__inner">
-                        <div class="profile-top-info__inner-text">
-                            <h4 class="profile-name__text">Maxim Focusov</h4>
-                            <p class="profile-country-text">Russia Moscow</p>
+                    <div class="profile-top">
+                        <div class="profile__header">
+                            <img class="profile__header-img" src="" alt="">
                         </div>
 
-                        <button class="profile-edit__btn">Edit Profile</button>
+                        <div class="profile__avatar">
+                        <img class="profile__avatar-img" src="@Model.User.ImagePath" alt="">
+                        </div>
+
+                        <div class="profile-top-info__inner">
+                            <div class="profile-top-info__inner-text">
+                            <h4 class="profile-name__text">@Model.User.FirstName @Model.User.LastName</h4>
+                            <p class="profile-country-text">@Model.User.Country @Model.User.City</p>
+                            </div>
+
+                            <button class="profile-edit__btn">Edit Profile</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</body>
+        </section>
+    </body>
+}

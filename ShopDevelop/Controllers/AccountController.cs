@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.Repository.Entity;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.ComponentModel;
+using ShopDevelop.Data.Models;
+using ShopDevelop.Data.Repository.Interfaces;
 
 namespace ShopDevelop.Controllers
 {
@@ -15,18 +17,23 @@ namespace ShopDevelop.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         private readonly RegisterUserRepository _registerUserRepository;
+        private readonly UserRepository _userRepository;
 
-        public  AccountController(ApplicationDbContext context)
+        public AccountController(ApplicationDbContext context)
         {
             _context = context;
             _registerUserRepository = new RegisterUserRepository(context);
+            _userRepository = new UserRepository(context);
         }   
 
-        public IActionResult UserProfile()
+        public IActionResult UserProfile(UserModelView model)
         {
-            return View();
+            var user = _context.User
+                .FirstOrDefault(u => u.Email == model.User.Email || 
+                                     u.Phone == model.User.Phone);   
+
+            return View(user);
         }
         
         [AllowAnonymous]
@@ -44,25 +51,18 @@ namespace ShopDevelop.Controllers
                 return View(model);
             }
 
-            var registerEmail = _registerUserRepository
+            var register = _registerUserRepository
                 .RegisterUserByEmail(model.Name, model.Password, model.Email);
 
-            if (await registerEmail == true)
+            if (await register == true)
             {
-                SetClaim(model.Name);
-                return View("UserProfile", registerEmail);
-            }
-            /*else
-            {
-                var registerPhone = _registerUserRepository
-                .RegisterUserByEmail(model.Name, model.Password, model.PhoneNumber);
-
-                if (await registerPhone == true)
+                var pass = RepeatPassword(model);
+                if (await pass == true)
                 {
                     SetClaim(model.Name);
-                    return View("UserProfile", registerPhone);
+                    return View("UserProfile", register);
                 }
-            }*/
+            }
             return RedirectToAction("Register");
         }
 
@@ -102,9 +102,13 @@ namespace ShopDevelop.Controllers
             return Redirect("/Home/Index");
         }
 
-        public async void RepeatPassword(string password)
+        public async Task<bool> RepeatPassword(RegisterModelView model)
         {
-
+            if(model.Password == null || model.Password != model.RepeatPassword)
+            {
+                return false;
+            }
+            return true;
         }
 
         public async void SetClaim(string name)
