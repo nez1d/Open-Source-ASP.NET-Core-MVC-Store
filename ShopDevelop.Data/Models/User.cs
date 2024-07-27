@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace ShopDevelop.Data.Models
+﻿namespace ShopDevelop.Data.Models
 {
     public class User /*: IdentityUser<int>*/
     {

@@ -2,9 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.DataBase;
 using ShopDevelop.Service;
 using ShopDevelop.Data.Repository.Entity;
-using ShopDevelop.Data.Repository.Interfaces;
+using ShopDevelop.Service.Interfaces;
+using ShopDevelop.Service.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 // Поддержка контроллеров и представлений.
 builder.Services.AddControllersWithViews();
 // Получаем строку подключения из файла конфигурации (appsettings.json).
@@ -38,9 +40,8 @@ builder.Services.ConfigureApplicationCookie(config =>
 // Создание зависимостей.
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped(sp => ShoppingCartRepository.GetCart(sp));
-
-/*builder.Services.AddSingleton<IUserRepository, UserRepository>();
-builder.Services.AddSingleton<IAuthentificateUserRepository, AuthentificateUserRepository>();*/
+builder.Services.AddScoped<IPasswordHasher, ShopDevelop.Data.Entity.PasswordHasher>();
+builder.Services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
 
 builder.Services.AddMvc();
 

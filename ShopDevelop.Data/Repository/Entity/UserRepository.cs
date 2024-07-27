@@ -25,5 +25,11 @@ namespace ShopDevelop.Data.Repository.Interfaces
             return await _applicationDbContext.User
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+        // Получить пользователя по Login.
+        public async Task<User> GetUserForLogin(string login)
+        {
+            return await _applicationDbContext.User
+                .FirstOrDefaultAsync(x => x.Login == login);
+        }
     }
 }

@@ -1,17 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.DataBase;
+using ShopDevelop.Data.Entity;
 using ShopDevelop.Data.Models;
-using ShopDevelop.Data.Repository.Interfaces;
+using ShopDevelop.Service.Interfaces;
 
 namespace ShopDevelop.Data.Repository.Entity
 {
     public class RegisterUserRepository 
     {
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public RegisterUserRepository(ApplicationDbContext applicationDbContext)
+        public RegisterUserRepository(ApplicationDbContext applicationDbContext, IPasswordHasher passwordHasher)
         {
             _applicationDbContext = applicationDbContext;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<bool> RegisterUserByEmail(string login, string password, string email)
@@ -28,7 +31,7 @@ namespace ShopDevelop.Data.Repository.Entity
                 var userItem = new User
                 {
                     Login = login,
-                    Password = password,
+                    Password = _passwordHasher.GeneratePassword(password),
                     Email = email,
                     FirstName = "",
                     LastName = "",

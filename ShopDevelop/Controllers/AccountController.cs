@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using ShopDevelop.Web.Models;
 using ShopDevelop.Data.DataBase;
-using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.Repository.Entity;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using System.ComponentModel;
-using ShopDevelop.Data.Models;
 using ShopDevelop.Data.Repository.Interfaces;
+using ShopDevelop.Service.Interfaces;
+using ShopDevelop.Service.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopDevelop.Controllers
 {
@@ -19,21 +18,30 @@ namespace ShopDevelop.Controllers
         private readonly ApplicationDbContext _context;
         private readonly RegisterUserRepository _registerUserRepository;
         private readonly UserRepository _userRepository;
+        private readonly UserModelView _userModel;
+        private readonly IPasswordHasher _PasswordHasher;
+        private readonly JwtProvider _jwtProvider;
+        private HttpContext context;
 
-        public AccountController(ApplicationDbContext context)
+        public AccountController(ApplicationDbContext context, IPasswordHasher passwordHasher)
         {
             _context = context;
-            _registerUserRepository = new RegisterUserRepository(context);
+            _registerUserRepository = new RegisterUserRepository(context, passwordHasher);
             _userRepository = new UserRepository(context);
+            _userModel = new UserModelView();
         }   
 
-        public IActionResult UserProfile(UserModelView model)
+        public async Task<IActionResult> UserProfile(LoginModelView model)
         {
-            var user = _context.User
-                .FirstOrDefault(u => u.Email == model.User.Email || 
-                                     u.Phone == model.User.Phone);   
+            if (model == null)
+            {
+                return View("Login");
+            }
 
-            return View(user);
+            var user = _userRepository.GetUserForLogin(model.Login);
+            _userModel.User = await user;
+            
+            return View(_userModel);
         }
         
         [AllowAnonymous]
@@ -91,6 +99,11 @@ namespace ShopDevelop.Controllers
             else if(user.Login == model.Login || user.Password == model.Password)
             {
                 SetClaim(model.Login);
+
+                var token = _jwtProvider.GenerateToken(user);
+
+                context.Response.Cookies.Append("tasty-cookies", token);
+
                 return View("UserProfile", model);
             }
             return View();
@@ -121,6 +134,11 @@ namespace ShopDevelop.Controllers
             var claimIdentity = new ClaimsIdentity(claims, "Cookie");
             var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
             await HttpContext.SignInAsync("Cookie", claimsPrincipal);
+        }
+
+        public async void GetClaim(string name)
+        {
+
         }
     }
 }
