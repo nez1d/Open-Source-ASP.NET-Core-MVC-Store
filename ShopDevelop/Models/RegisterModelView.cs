@@ -5,7 +5,7 @@ namespace ShopDevelop.Web.Models
     public class RegisterModelView
     {
         [Required]
-        public string Name { get; set; }
+        public string Login { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]

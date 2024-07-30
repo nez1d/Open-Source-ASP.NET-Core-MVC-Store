@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ShopDevelop.Service.Entity;
+using ShopDevelop.Data.Entity;
 using System.Text;
 
 namespace ShopDevelop.Data.Extensions

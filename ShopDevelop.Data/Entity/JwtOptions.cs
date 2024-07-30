@@ -1,4 +1,4 @@
-﻿namespace ShopDevelop.Service.Entity
+﻿namespace ShopDevelop.Data.Entity
 {
     public class JwtOptions
     {

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using ShopDevelop.Data.Models;
 using System.Security.Claims;
 using System.Text;
+using ShopDevelop.Data.Entity;
 
 namespace ShopDevelop.Service.Entity
 {
@@ -32,7 +33,7 @@ namespace ShopDevelop.Service.Entity
 
             var tockenValue = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return tockenValue.ToString();
+            return tockenValue;
         }
     }
 }

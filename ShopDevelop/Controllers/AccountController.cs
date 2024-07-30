@@ -8,7 +8,7 @@ using ShopDevelop.Data.Repository.Entity;
 using ShopDevelop.Data.Repository.Interfaces;
 using ShopDevelop.Service.Interfaces;
 using ShopDevelop.Service.Entity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 
 namespace ShopDevelop.Controllers
 {
@@ -31,15 +31,12 @@ namespace ShopDevelop.Controllers
             _userModel = new UserModelView();
         }   
 
-        public async Task<IActionResult> UserProfile(LoginModelView model)
+        public async Task<IActionResult> UserProfile(UserModelView model)
         {
             if (model == null)
             {
                 return View("Login");
             }
-
-            var user = _userRepository.GetUserForLogin(model.Login);
-            _userModel.User = await user;
             
             return View(_userModel);
         }
@@ -60,15 +57,18 @@ namespace ShopDevelop.Controllers
             }
 
             var register = _registerUserRepository
-                .RegisterUserByEmail(model.Name, model.Password, model.Email);
+                .RegisterUserByEmail(model.Login, model.Password, model.Email);
 
             if (await register == true)
             {
                 var pass = RepeatPassword(model);
                 if (await pass == true)
                 {
-                    SetClaim(model.Name);
-                    return View("UserProfile", register);
+                    var userProfileModel = _userRepository.GetUserForLogin(model.Login);
+                    _userModel.User = await userProfileModel;
+
+                    SetClaim(model.Login);
+                    return View("UserProfile", _userModel);
                 }
             }
             return RedirectToAction("Register");
@@ -100,18 +100,20 @@ namespace ShopDevelop.Controllers
             {
                 SetClaim(model.Login);
 
-                var token = _jwtProvider.GenerateToken(user);
+                /*var token = _jwtProvider.GenerateToken(user);*/
+                /*context.Response.Cookies.Append("tasty-cookies", token);*/
 
-                context.Response.Cookies.Append("tasty-cookies", token);
+                var userProfileModel = _userRepository.GetUserForLogin(model.Login);
+                _userModel.User = await userProfileModel;
 
-                return View("UserProfile", model);
+                return View("UserProfile", _userModel);
             }
             return View();
         }
 
-        public IActionResult LogOff() 
+        public async Task<IActionResult> LogOff()
         {
-            HttpContext.SignOutAsync("Cookie");
+            await HttpContext.SignOutAsync("Cookie");
             return Redirect("/Home/Index");
         }
 
@@ -136,9 +138,11 @@ namespace ShopDevelop.Controllers
             await HttpContext.SignInAsync("Cookie", claimsPrincipal);
         }
 
-        public async void GetClaim(string name)
+        public async Task<IActionResult> GetClaim(string name)
         {
-
+            /*var accessToken = Request.Headers[HeaderNames.Authorization];
+            var cookie = await HttpContext.GetTokenAsync("Cookie", accessToken);
+            return Redirect("UserProfile");*/
         }
     }
 }

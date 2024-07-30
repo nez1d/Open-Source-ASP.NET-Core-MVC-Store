@@ -3,7 +3,7 @@ using ShopDevelop.Data.DataBase;
 using ShopDevelop.Service;
 using ShopDevelop.Data.Repository.Entity;
 using ShopDevelop.Service.Interfaces;
-using ShopDevelop.Service.Entity;
+using ShopDevelop.Data.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

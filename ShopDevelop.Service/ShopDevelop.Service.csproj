@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ShopDevelop.Data\ShopDevelop.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entity\" />
+  </ItemGroup>
+
 </Project>

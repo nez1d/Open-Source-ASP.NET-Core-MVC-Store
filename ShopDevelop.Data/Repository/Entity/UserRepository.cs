@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Models;
-using System.Data.Entity;
 
 namespace ShopDevelop.Data.Repository.Interfaces
 {
