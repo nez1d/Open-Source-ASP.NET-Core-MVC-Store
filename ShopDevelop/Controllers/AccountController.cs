@@ -8,7 +8,8 @@ using ShopDevelop.Data.Repository.Entity;
 using ShopDevelop.Data.Repository.Interfaces;
 using ShopDevelop.Service.Interfaces;
 using ShopDevelop.Service.Entity;
-using Microsoft.Net.Http.Headers;
+using Microsoft.Net.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ShopDevelop.Controllers
 {
@@ -21,26 +22,32 @@ namespace ShopDevelop.Controllers
         private readonly UserModelView _userModel;
         private readonly IPasswordHasher _PasswordHasher;
         private readonly JwtProvider _jwtProvider;
-        private HttpContext context;
+        private readonly HttpContext _httpContext;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(ApplicationDbContext context, IPasswordHasher passwordHasher)
+        public AccountController(ApplicationDbContext context, IPasswordHasher passwordHasher,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
             _registerUserRepository = new RegisterUserRepository(context, passwordHasher);
             _userRepository = new UserRepository(context);
             _userModel = new UserModelView();
-        }   
-
-        public async Task<IActionResult> UserProfile(UserModelView model)
-        {
-            if (model == null)
-            {
-                return View("Login");
-            }
-            
-            return View(_userModel);
+            GetIdentityUser();
         }
         
+        [Authorize]
+        public async Task<IActionResult> UserProfile()
+        {
+            UserModelView model = _userModel;
+
+            if (model.User == null)
+            {
+                return Redirect("Login");
+            }
+            return View(_userModel);
+        }
+
         [AllowAnonymous]
         public IActionResult Register()
         {
@@ -106,43 +113,133 @@ namespace ShopDevelop.Controllers
                 var userProfileModel = _userRepository.GetUserForLogin(model.Login);
                 _userModel.User = await userProfileModel;
 
-                return View("UserProfile", _userModel);
+                return RedirectToAction("UserProfile", _userModel);
             }
             return View();
         }
 
-        public async Task<IActionResult> LogOff()
+        public async Task LogOff()
         {
-            await HttpContext.SignOutAsync("Cookie");
-            return Redirect("/Home/Index");
+            /*var cookie = HttpContext.Request.Cookies.ContainsKey("key");*/
+            /*await HttpContext.SignOutAsync("Key");*/
+
+            
+        }  
+
+        public async void SetClaim(string login)
+        {
+            /*var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, login),
+                new Claim(ClaimTypes.NameIdentifier, login)
+            };
+
+            var claimIdentity = new ClaimsIdentity(claims,
+                Microsoft.AspNetCore.Authentication.Cookies
+                .CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                claimsPrincipal);*/
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddYears(1);
+            Response.Cookies.Append("key", login, option);
+
+            /*var claims = new List<Claim>
+            {
+            new Claim(ClaimTypes.Name, login),
+        };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                //AllowRefresh = <bool>,
+                // Refreshing the authentication session should be allowed.
+
+                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                // The time at which the authentication ticket expires. A 
+                // value set here overrides the ExpireTimeSpan option of 
+                // CookieAuthenticationOptions set with AddCookie.
+
+                //IsPersistent = true,
+                // Whether the authentication session is persisted across 
+                // multiple requests. When used with cookies, controls
+                // whether the cookie's lifetime is absolute (matching the
+                // lifetime of the authentication ticket) or session-based.
+
+                //IssuedUtc = <DateTimeOffset>,
+                // The time at which the authentication ticket was issued.
+
+                //RedirectUri = <string>
+                // The full path or absolute URI to be used as an http 
+                // redirect response value.
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);*/
         }
 
         public async Task<bool> RepeatPassword(RegisterModelView model)
         {
-            if(model.Password == null || model.Password != model.RepeatPassword)
+            if (model.Password == null || model.Password != model.RepeatPassword)
             {
                 return false;
             }
             return true;
         }
 
-        public async void SetClaim(string name)
+        public async Task<IActionResult> GetIdentityUser()
         {
-            var claims = new List<Claim>
+            if (_httpContextAccessor.HttpContext.Request.Cookies.ContainsKey("key"))
             {
-                new Claim(ClaimTypes.Name, name)
-            };
+                string cookie = _httpContextAccessor.HttpContext.Request.Cookies["key"];
+                _userModel.User = await _userRepository.GetUserForLogin(cookie);
+            }
 
-            var claimIdentity = new ClaimsIdentity(claims, "Cookie");
-            var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
-            await HttpContext.SignInAsync("Cookie", claimsPrincipal);
+            return Redirect("UserProfile");
         }
 
-        public async Task<IActionResult> GetClaim(string name)
+        /*public async Task<IActionResult> GetIdentityUser()
         {
-            /*var accessToken = Request.Headers[HeaderNames.Authorization];
-            var cookie = await HttpContext.GetTokenAsync("Cookie", accessToken);
-            return Redirect("UserProfile");*/
+            string name = httpContext.Request.Cookies["Cookie"];
+
+            var userLogin = httpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+
+            _userModel.User = await _userRepository.GetUserForLogin(name);
+
+            return View("UserProfile", _userModel);
+
+
+
+            var cookie = await httpContext.GetTokenAsync("Cookie", ClaimTypes.Name);
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+
+            var claimIdentity = new ClaimsIdentity("Cookie");
+            var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
+            await HttpContext.GetTokenAsync("Cookie");
+
+
+                    /*var cookie = HttpContext.GetRouteValue("Cookie");
+            var cookies = HttpContext.GetTokenAsync(ClaimTypes.NameIdentifier);
+
+            _userModel.User = await _userRepository.GetUserForLogin(cookie.ToString());
+
+        _userModel.User = await _userRepository.GetUserForLogin(cookie);
+        }*/
+
+        /// <summary>
+        /// ДОДЕЛАТЬ ЗАГРУЗКУ СТРАНИЦЫ ВОШЕДШЕГО ЮСЕР ПРОФИЛЯ ЗАГРУЗКУ ПРОФИЛЯ.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> GetClaim()
+        {          
+            return View("UserProfile", _userModel);
         }
     }
 }

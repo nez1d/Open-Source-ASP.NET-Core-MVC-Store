@@ -4,6 +4,8 @@ using ShopDevelop.Service;
 using ShopDevelop.Data.Repository.Entity;
 using ShopDevelop.Service.Interfaces;
 using ShopDevelop.Data.Entity;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -17,15 +19,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     {
         options.UseNpgsql(connection);
     });
-    /*.AddIdentity<User, ApplicationRole>(config => 
-    {
-        config.Password.RequireDigit = false;
-        config.Password.RequireLowercase = false;
-        config.Password.RequireNonAlphanumeric = false;
-        config.Password.RequireUppercase = false;
-        config.Password.RequiredLength = 6;
-    })
-    .AddEntityFrameworkStores<ApplicationDbContext>();*/
 // Добавление Cookie в качестве сервиса.
 builder.Services.AddAuthentication("Cookie")
     .AddCookie("Cookie", config =>
@@ -49,6 +42,15 @@ builder.Services.AddMvc();
 builder.Services.AddDistributedMemoryCache();
 // Добавляем сервисы сессии.
 builder.Services.AddSession();
+// add security to cookie
+builder.Services.AddAuthentication(
+    Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults
+    .AuthenticationScheme
+    ).AddCookie(c =>
+    {
+        c.LoginPath = "/Account/Login";
+        c.LogoutPath = "/Account/LogOff";
+    });
 
 var app = builder.Build();
 
