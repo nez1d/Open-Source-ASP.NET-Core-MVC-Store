@@ -8,7 +8,6 @@ using ShopDevelop.Data.Repository.Entity;
 using ShopDevelop.Data.Repository.Interfaces;
 using ShopDevelop.Service.Interfaces;
 using ShopDevelop.Service.Entity;
-using Microsoft.Net.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ShopDevelop.Controllers
@@ -32,11 +31,10 @@ namespace ShopDevelop.Controllers
             _httpContextAccessor = httpContextAccessor;
             _registerUserRepository = new RegisterUserRepository(context, passwordHasher);
             _userRepository = new UserRepository(context);
-            _userModel = new UserModelView();
+            /*_userModel = new UserModelView();*/
             GetIdentityUser();
         }
-        
-        [Authorize]
+
         public async Task<IActionResult> UserProfile()
         {
             UserModelView model = _userModel;
@@ -74,7 +72,7 @@ namespace ShopDevelop.Controllers
                     var userProfileModel = _userRepository.GetUserForLogin(model.Login);
                     _userModel.User = await userProfileModel;
 
-                    SetClaim(model.Login);
+                    SetClaim(model.Login, model.Password);
                     return View("UserProfile", _userModel);
                 }
             }
@@ -105,15 +103,20 @@ namespace ShopDevelop.Controllers
             }
             else if(user.Login == model.Login || user.Password == model.Password)
             {
-                SetClaim(model.Login);
+                SetClaim(model.Login, model.Password);
 
                 /*var token = _jwtProvider.GenerateToken(user);*/
                 /*context.Response.Cookies.Append("tasty-cookies", token);*/
 
                 var userProfileModel = _userRepository.GetUserForLogin(model.Login);
-                _userModel.User = await userProfileModel;
 
-                return RedirectToAction("UserProfile", _userModel);
+                if(userProfileModel != null)
+                {
+                    _userModel.User = await userProfileModel;
+
+                    return View("UserProfile", _userModel);
+                }
+
             }
             return View();
         }
@@ -126,7 +129,7 @@ namespace ShopDevelop.Controllers
             
         }  
 
-        public async void SetClaim(string login)
+        public async void SetClaim(string login, string password)
         {
             /*var claims = new List<Claim>
             {
@@ -143,45 +146,9 @@ namespace ShopDevelop.Controllers
                 claimsPrincipal);*/
 
             CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddYears(1);
-            Response.Cookies.Append("key", login, option);
-
-            /*var claims = new List<Claim>
-            {
-            new Claim(ClaimTypes.Name, login),
-        };
-
-            var claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var authProperties = new AuthenticationProperties
-            {
-                //AllowRefresh = <bool>,
-                // Refreshing the authentication session should be allowed.
-
-                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                // The time at which the authentication ticket expires. A 
-                // value set here overrides the ExpireTimeSpan option of 
-                // CookieAuthenticationOptions set with AddCookie.
-
-                //IsPersistent = true,
-                // Whether the authentication session is persisted across 
-                // multiple requests. When used with cookies, controls
-                // whether the cookie's lifetime is absolute (matching the
-                // lifetime of the authentication ticket) or session-based.
-
-                //IssuedUtc = <DateTimeOffset>,
-                // The time at which the authentication ticket was issued.
-
-                //RedirectUri = <string>
-                // The full path or absolute URI to be used as an http 
-                // redirect response value.
-            };
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);*/
+            option.Expires = DateTime.Now.AddMonths(1);
+            Response.Cookies.Append("login-cookie", login, option);
+            Response.Cookies.Append("password-hash-cookie", password, option);
         }
 
         public async Task<bool> RepeatPassword(RegisterModelView model)
@@ -195,13 +162,17 @@ namespace ShopDevelop.Controllers
 
         public async Task<IActionResult> GetIdentityUser()
         {
-            if (_httpContextAccessor.HttpContext.Request.Cookies.ContainsKey("key"))
+            if (_httpContextAccessor.HttpContext.Request.Cookies.ContainsKey("login-cookie") &&
+                _httpContextAccessor.HttpContext.Request.Cookies.ContainsKey("password-hash-cookie"))
             {
-                string cookie = _httpContextAccessor.HttpContext.Request.Cookies["key"];
-                _userModel.User = await _userRepository.GetUserForLogin(cookie);
+                string cookieLogin = _httpContextAccessor.HttpContext.Request.Cookies["login-cookie"];
+                string cookiePassword = _httpContextAccessor.HttpContext.Request.Cookies["password-hash-cookie"];
+                
+                return View("UserProfile", _userModel.User = 
+                    await _userRepository.GetUserForLogin(cookieLogin));
+                
             }
-
-            return Redirect("UserProfile");
+            return Redirect("Login");
         }
 
         /*public async Task<IActionResult> GetIdentityUser()
