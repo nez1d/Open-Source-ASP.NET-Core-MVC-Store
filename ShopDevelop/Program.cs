@@ -4,8 +4,7 @@ using ShopDevelop.Service;
 using ShopDevelop.Data.Repository.Entity;
 using ShopDevelop.Service.Interfaces;
 using ShopDevelop.Data.Entity;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
+using ShopDevelop.Data.Repository.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -31,8 +30,11 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.LoginPath = "/Account/Login";
 });
 // Создание зависимостей.
+builder.Services.AddSingleton<IAuthentificateUserRepository, AuthentificateUserRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddScoped(sp => ShoppingCartRepository.GetCart(sp));
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<IPasswordHasher, ShopDevelop.Data.Entity.PasswordHasher>();
 builder.Services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
 
@@ -53,9 +55,6 @@ builder.Services.AddAuthentication(
     });
 
 var app = builder.Build();
-
-// Подключение класса для добавления объектов в базу данных.
-/*DbObjects.Initial(app);*/
 
 app.Configuration.Bind("Project", new Config());
 
