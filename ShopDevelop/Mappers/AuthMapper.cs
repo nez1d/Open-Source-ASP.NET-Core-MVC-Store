@@ -13,7 +13,6 @@ namespace ShopDevelop.Web.Mappers
                 Email = model.Email!,
                 Password = model.Password!,
                 Login = model.Login!,
-                Phone = model.PhoneNumber!
             };
         }
     }

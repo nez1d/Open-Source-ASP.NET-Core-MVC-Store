@@ -27,8 +27,8 @@ namespace ShopDevelop.Data.Repository.Interfaces
         // Получить пользователя по Login.
         public async Task<User> GetUserForLogin(string login)
         {
-            return await _applicationDbContext.User
-                .FirstOrDefaultAsync(x => x.Login == login);
+            return _applicationDbContext.User
+                .FirstOrDefault(x => x.Login == login);
         }
     }
 }

@@ -17,11 +17,6 @@ namespace ShopDevelop.Controllers
             _currentUser = currentUser;
         }
 
-        public ViewResult Index()
-        {
-            return View(_currentUser);
-        }
-
         [HttpGet]
         public ViewResult Index()
         {

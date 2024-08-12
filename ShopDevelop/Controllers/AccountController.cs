@@ -57,25 +57,22 @@ namespace ShopDevelop.Controllers
         {
             if (ModelState.IsValid)
             {
-                var register = _registerUserRepository
-                .RegisterUserByEmail(model.Login, model.Password, model.Email);
+                var pass = RepeatPassword(model);
 
-                if (await register == true)
+                if (await pass == true)
                 {
-                    var pass = RepeatPassword(model);
+                    var register = _registerUserRepository
+                        .RegisterUserByEmail(model.Login, 
+                                             model.Password, 
+                                             model.Email);
 
-                    if (await pass == true)
+                    if (await register == true)
                     {
-                        var userProfileModel = _userRepository.GetUserForLogin(model.Login);
-                        _userModel.User = await userProfileModel;
-
                         SetClaim(model.Login, model.Password);
-
                         return Redirect("/");
                     }
-                }
+                }       
             }
-            
             return View("Register", model);
         }
 
@@ -113,16 +110,13 @@ namespace ShopDevelop.Controllers
                     }
                 }
             }
-  
             return View(model);
         }
 
         public async Task LogOff()
         {
-            /*var cookie = HttpContext.Request.Cookies.ContainsKey("key");*/
-            /*await HttpContext.SignOutAsync("Key");*/
-
-            
+            var cookie = HttpContext.Request.Cookies.ContainsKey("key");
+            await HttpContext.SignOutAsync("Key");
         }  
 
         public async void SetClaim(string login, string password)

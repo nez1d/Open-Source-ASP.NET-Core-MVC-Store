@@ -24,9 +24,9 @@ namespace ShopDevelop.Data.Entity.Auth
             return id;
         }
 
-        public Task<int> CreateUser(User user)
+        /*public Task<int> CreateUser(User user)
         {
             throw new NotImplementedException();
-        }
+        }*/
     }
 }

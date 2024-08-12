@@ -13,11 +13,13 @@ builder.Services.AddControllersWithViews();
 // Получаем строку подключения из файла конфигурации (appsettings.json).
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 // Добавление Entity Framework Core в качестве сервиса.
+
 builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     {
         options.UseNpgsql(connection);
     });
+
 // Добавление Cookie в качестве сервиса.
 builder.Services.AddAuthentication("Cookie")
     .AddCookie("Cookie", config =>
@@ -30,9 +32,9 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.LoginPath = "/Account/Login";
 });
 // Создание зависимостей.
-builder.Services.AddSingleton<IAuthentificateUserRepository, AuthentificateUserRepository>();
+/*builder.Services.AddSingleton<IAuthentificateUserRepository, AuthentificateUserRepository>();*/
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddSingleton<IUserRepository, UserRepository>();
+/*builder.Services.AddSingleton<IUserRepository, UserRepository>();*/
 builder.Services.AddScoped(sp => ShoppingCartRepository.GetCart(sp));
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<IPasswordHasher, ShopDevelop.Data.Entity.PasswordHasher>();
