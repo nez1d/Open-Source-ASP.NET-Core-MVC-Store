@@ -32,9 +32,9 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.LoginPath = "/Account/Login";
 });
 // Создание зависимостей.
-/*builder.Services.AddSingleton<IAuthentificateUserRepository, AuthentificateUserRepository>();*/
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-/*builder.Services.AddSingleton<IUserRepository, UserRepository>();*/
+builder.Services.AddScoped<IAuthentificateUserRepository, AuthentificateUserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped(sp => ShoppingCartRepository.GetCart(sp));
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<IPasswordHasher, ShopDevelop.Data.Entity.PasswordHasher>();

@@ -16,12 +16,12 @@ namespace ShopDevelop.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly RegisterUserRepository _registerUserRepository;
-        private readonly UserRepository _userRepository;
-        private readonly UserModelView _userModel;
+        private readonly IRegisterUserRepository _registerUserRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _PasswordHasher;
+        private readonly UserModelView _userModel;
         private readonly JwtProvider _jwtProvider;
-        private IHttpContextAccessor _httpContextAccessor;
 
         public AccountController(ApplicationDbContext context, 
             IPasswordHasher passwordHasher,
@@ -98,7 +98,7 @@ namespace ShopDevelop.Controllers
                 }
                 else if (user.Login == model.Login || user.Password == model.Password)
                 {
-                    /*SetClaim(model.Login, model.Password);*/
+                    SetClaim(model.Login, model.Password);
 
                     var userProfileModel = _userRepository.GetUserForLogin(model.Login);
 

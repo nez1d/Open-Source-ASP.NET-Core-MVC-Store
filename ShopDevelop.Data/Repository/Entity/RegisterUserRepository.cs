@@ -2,11 +2,12 @@
 using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Entity;
 using ShopDevelop.Data.Models;
+using ShopDevelop.Data.Repository.Interfaces;
 using ShopDevelop.Service.Interfaces;
 
 namespace ShopDevelop.Data.Repository.Entity
 {
-    public class RegisterUserRepository 
+    public class RegisterUserRepository : IRegisterUserRepository
     {
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly IPasswordHasher _passwordHasher;
