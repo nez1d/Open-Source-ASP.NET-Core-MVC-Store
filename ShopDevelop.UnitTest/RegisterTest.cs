@@ -1,4 +1,4 @@
-﻿namespace ShopDevelop.UnitTest
+﻿namespace ShopDevelop.UnitTests
 {
     public class RegisterTest : Helpers.BaseTest
     {

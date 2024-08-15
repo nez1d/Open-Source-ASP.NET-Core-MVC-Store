@@ -1,4 +1,4 @@
-﻿namespace ShopDevelop.Data.Entity
+﻿namespace ShopDevelop.Data.Entity.Auth
 {
     public class AuthConstants
     {

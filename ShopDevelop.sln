@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDevelop.Data", "ShopDev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDevelop.Service", "ShopDevelop.Service\ShopDevelop.Service.csproj", "{E72A55CB-8897-4942-BFB3-6F14850179CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopDevelop.UnitTest", "ShopDevelop.UnitTest\ShopDevelop.UnitTest.csproj", "{07E78A4D-39ED-4FBF-89AC-DC45956B64B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDevelop.UnitTests", "ShopDevelop.UnitTest\ShopDevelop.UnitTests.csproj", "{07E78A4D-39ED-4FBF-89AC-DC45956B64B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,17 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Data.Configurations;
 using ShopDevelop.Data.Models;
-/*using ShopDevelop.Data.Entity;*/
 
 namespace ShopDevelop.Data.DataBase
 {
     public class ApplicationDbContext : DbContext
-                                      /*: IdentityDbContext<User, ApplicationRole, int>*/
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+            : base(options) 
+        { 
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -21,7 +24,6 @@ namespace ShopDevelop.Data.DataBase
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
         public DbSet<ShoppingCartItem> ShopCartItems { get; set; }
         public DbSet<Order> Order { get; set; }
+        public DbSet<DbSession> Sessions { get; set; }
     }
-
-    
 }
