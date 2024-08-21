@@ -45,15 +45,22 @@ builder.Services.AddMvc();
 // Добавляем AddDistributedMemoryCache.
 builder.Services.AddDistributedMemoryCache();
 // Добавляем сервисы сессии.
-builder.Services.AddSession();
+builder.Services.AddSession(options => {
+    options.Cookie.Name = ".AspNetCore.Cookies-Session"; // Название для Cookie сессии.
+    options.IdleTimeout = TimeSpan.FromMinutes(20); // Установка времени действия сессии.
+    options.Cookie.IsEssential = true;
+});
 // add security to cookie
 builder.Services.AddAuthentication(
     Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults
     .AuthenticationScheme
-    ).AddCookie(c =>
+    ).AddCookie(options =>
     {
-        c.LoginPath = "/Account/Login";
-        c.LogoutPath = "/Account/LogOff";
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/LogOff";
+        options.Cookie.Name = ".AspNetCore.Cookies-Session";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
     });
 
 var app = builder.Build();
@@ -72,7 +79,8 @@ app.UseRouting();
 // Поддержка статических файлов.
 app.UseStaticFiles();
 // Поддержка аутентивикации.
-app.UseAuthentication();
+app.UseAuthentication(
+    );
 // Поддержка втроризации.
 app.UseAuthorization();
 // Поддержка cookie.

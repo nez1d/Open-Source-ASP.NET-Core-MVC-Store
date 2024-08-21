@@ -63,8 +63,8 @@ namespace ShopDevelop.Controllers
                 {
                     var register = _registerUserRepository
                         .RegisterUserByEmail(model.Login, 
-                                             model.Password, 
-                                             model.Email);
+                                                model.Password, 
+                                                model.Email);
 
                     if (await register == true)
                     {

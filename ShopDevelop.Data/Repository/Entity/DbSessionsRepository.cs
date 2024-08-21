@@ -1,6 +1,7 @@
 ﻿using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Models;
 using ShopDevelop.Data.Repository.Interfaces;
+using System.Data.Entity;
 
 namespace ShopDevelop.Data.Repository.Entity
 {
@@ -12,34 +13,46 @@ namespace ShopDevelop.Data.Repository.Entity
         {
             _applicationDbContext = applicationDbContext;
         }
-        // TODO: ДОДЕЛАТЬ РЕАЛИЗАЦИЮ ИНТЕРФЕЙСА.
+        // Создание новой сессии.
         public async Task CreateSession(DbSession session)
         {
-            var dbSession = await _applicationDbContext.Sessions.AddAsync(session);
+            var dbSession = await _applicationDbContext
+                .Sessions.AddAsync(session);
+
             _applicationDbContext.SaveChangesAsync();     
         }
-
+        //Получить сессию.
         public async Task<DbSession?> GetSession(Guid sessionId)
         {
-            throw new NotImplementedException();
+            return await _applicationDbContext.Sessions
+                .FirstOrDefaultAsync(i => i.DbSessionId == sessionId);
         }
-
-        public async Task<int> UpdateSession(DbSession session)
+        // Обновление сессии.
+        public async Task UpdateSession(DbSession session)
         {
-            throw new NotImplementedException();
+            var dbSession = await _applicationDbContext
+                .Sessions.Where(i => i.DbSessionId == session.DbSessionId)
+                .FirstOrDefaultAsync();
+
+            dbSession.SessionData = session.SessionData;
+            _applicationDbContext.SaveChangesAsync();
         }
-
-        public Task<int?> GetUserId()
+        // Получение Id пользователя.
+        public async Task<int?> GetUserId(DbSession dbSession)
         {
-            throw new NotImplementedException();
-        }
+            var user = await _applicationDbContext.Sessions
+                .Where(i => i.UserId == dbSession.UserId)
+                .FirstOrDefaultAsync();
 
-        public Task<bool> IsLoggedIn()
-        {
-            throw new NotImplementedException();
+            return user.UserId;
         }
 
         public Task<int> SetUserId(int userId)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task<bool> IsLoggedIn()
         {
             throw new NotImplementedException();
         }

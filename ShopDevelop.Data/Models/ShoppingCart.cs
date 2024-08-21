@@ -19,10 +19,6 @@ namespace ShopDevelop.Data.Models
 
         public User User { get; set; }
 
-        public string UserId { get; set; }
-
-        public Product Product { get; set; }
-
         public int Quantity { get; set; }
 
         public IEnumerable<ShoppingCartItem> ShoppingCartItems { get; set; }
@@ -31,14 +27,17 @@ namespace ShopDevelop.Data.Models
         public static ShoppingCart GetCart(IServiceProvider serviceProvider)
         {
             // Создание объекта для работы с сессиями.
-            ISession? session = serviceProvider.GetRequiredService<IHttpContextAccessor>()?
+            ISession? session = serviceProvider
+                .GetRequiredService<IHttpContextAccessor>()?
                 .HttpContext.Session;
             // Объект для работы с базой данных.
-            var context = serviceProvider.GetService<ApplicationDbContext>();
-            string shoppingCartId = session.GetString("ShoppingCartId")
+            var context = serviceProvider
+                .GetService<ApplicationDbContext>();
+            string shoppingCartId = session
+                .GetString("ShoppingCartId")
                 ?? Guid.NewGuid().ToString();
             // Установка новой сессии.
-            session.SetString("Id", shoppingCartId);
+            session.SetString("ShoppingCartId", shoppingCartId);
 
             return new ShoppingCart(context)
             {

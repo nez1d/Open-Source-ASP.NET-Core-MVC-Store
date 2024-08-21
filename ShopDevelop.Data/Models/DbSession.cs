@@ -2,7 +2,7 @@
 {
     public class DbSession
     {
-        public int DbSessionId { get; set; }
+        public Guid DbSessionId { get; set; }
 
         public string SessionData { get; set; }
 

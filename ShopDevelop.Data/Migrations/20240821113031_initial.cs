@@ -28,23 +28,38 @@ namespace ShopDevelop.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sessions",
+                columns: table => new
+                {
+                    DbSessionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SessionData = table.Column<string>(type: "text", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastAccessed = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sessions", x => x.DbSessionId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Login = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
+                    Login = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: false),
+                    Phone = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Password = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Role = table.Column<string>(type: "text", nullable: false),
-                    Country = table.Column<string>(type: "text", nullable: false),
-                    City = table.Column<string>(type: "text", nullable: false),
+                    Country = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    City = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     Balance = table.Column<double>(type: "double precision", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    ImagePath = table.Column<string>(type: "text", nullable: false)
+                    ImagePath = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -64,8 +79,8 @@ namespace ShopDevelop.Data.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     Seller = table.Column<string>(type: "text", nullable: false),
                     Count = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<long>(type: "bigint", nullable: false),
-                    OldPrice = table.Column<long>(type: "bigint", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    OldPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     Discount = table.Column<int>(type: "integer", nullable: false),
                     Composition = table.Column<string>(type: "text", nullable: false),
                     Rating = table.Column<int>(type: "integer", nullable: false),
@@ -124,15 +139,15 @@ namespace ShopDevelop.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    UserId1 = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShoppingCart", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShoppingCart_User_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_ShoppingCart_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -142,25 +157,29 @@ namespace ShopDevelop.Data.Migrations
                 name: "ShopCartItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Amount = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<double>(type: "double precision", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Size = table.Column<string>(type: "text", nullable: false),
                     ShoppingCartId = table.Column<string>(type: "text", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId1 = table.Column<int>(type: "integer", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShopCartItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShopCartItems_Products_ProductId1",
-                        column: x => x.ProductId1,
+                        name: "FK_ShopCartItems_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShopCartItems_ShoppingCart_ShoppingCartId",
+                        column: x => x.ShoppingCartId,
+                        principalTable: "ShoppingCart",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -182,9 +201,14 @@ namespace ShopDevelop.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShopCartItems_ProductId1",
+                name: "IX_ShopCartItems_ProductId",
                 table: "ShopCartItems",
-                column: "ProductId1");
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShopCartItems_ShoppingCartId",
+                table: "ShopCartItems",
+                column: "ShoppingCartId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShopCartItems_UserId",
@@ -192,9 +216,9 @@ namespace ShopDevelop.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCart_UserId1",
+                name: "IX_ShoppingCart_UserId",
                 table: "ShoppingCart",
-                column: "UserId1");
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -204,19 +228,22 @@ namespace ShopDevelop.Data.Migrations
                 name: "Order");
 
             migrationBuilder.DropTable(
-                name: "ShopCartItems");
+                name: "Sessions");
 
             migrationBuilder.DropTable(
-                name: "ShoppingCart");
+                name: "ShopCartItems");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "ShoppingCart");
 
             migrationBuilder.DropTable(
                 name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

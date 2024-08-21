@@ -49,13 +49,13 @@
                 <h5 class="cart__info-subtitle cart__info_prod-subtitle">YOUR ORDER</h5>
                 <ul class="cart__products">
 
-                    @foreach (var prodcut in Model.ShoppingCart.ShoppingCartItems)
+                    @foreach (var product in Model.ShoppingCart.ShoppingCartItems)
                     {
                         <li class="cart__product">
                             <img class="cart__product-img" src="~/images/Products/Product/full__image_1.jpg" alt="">
                             <div class="cart__product-info">
                                 <div class="cart__product-info-top">
-                                    <p class="cart__product-name">@prodcut.Name</p>
+                                    <p class="cart__product-name">@product.Name</p>
                                     <p class="cart__product-size"></p>
                                 </div>
 

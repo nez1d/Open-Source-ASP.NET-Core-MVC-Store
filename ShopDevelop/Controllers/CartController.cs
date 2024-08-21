@@ -23,11 +23,11 @@ namespace ShopDevelop.Web.Controllers
             var products = _shoppingCart.GetAllItems();
             _shoppingCart.ShoppingCartItems = products;
 
-            var shoppingCart = new ShoppingCartViewModel
+            var shoppingCartModel = new ShoppingCartViewModel
             {
                 ShoppingCart = _shoppingCart,
             };
-            return View("Index", shoppingCart); 
+            return View("Index", shoppingCartModel); 
         }
 
         [HttpGet]

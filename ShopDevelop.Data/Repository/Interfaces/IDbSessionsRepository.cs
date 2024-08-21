@@ -6,9 +6,9 @@ namespace ShopDevelop.Data.Repository.Interfaces
     {
         Task CreateSession(DbSession session);
         Task<DbSession?> GetSession(Guid sessionId);
-        Task<int> UpdateSession(DbSession session);
+        Task UpdateSession(DbSession session);
         Task<int> SetUserId(int userId);
-        Task<int?> GetUserId(); 
+        Task<int?> GetUserId(DbSession dbSession); 
         Task<bool> IsLoggedIn();
     }
 }
