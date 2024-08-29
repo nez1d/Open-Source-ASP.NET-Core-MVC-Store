@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShopDevelop.Data.DataBase;
@@ -11,9 +12,11 @@ using ShopDevelop.Data.DataBase;
 namespace ShopDevelop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827010353_initial1")]
+    partial class initial1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +48,31 @@ namespace ShopDevelop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("ShopDevelop.Data.Models.DbSession", b =>
+                {
+                    b.Property<Guid>("DbSessionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastAccessed")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SessionData")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DbSessionId");
+
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.Order", b =>
@@ -160,11 +188,11 @@ namespace ShopDevelop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("OldPrice")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("OldPrice")
+                        .HasColumnType("numeric");
 
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
@@ -193,27 +221,20 @@ namespace ShopDevelop.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId1")
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("ShoppingCart");
+                    b.ToTable("ShopCart");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCartItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
@@ -226,13 +247,10 @@ namespace ShopDevelop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ProductId1")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ShoppingCartId")
@@ -248,7 +266,9 @@ namespace ShopDevelop.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId1");
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingCartId");
 
                     b.HasIndex("UserId");
 
@@ -267,43 +287,45 @@ namespace ShopDevelop.Data.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(70)
+                        .HasColumnType("character varying(70)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -338,20 +360,22 @@ namespace ShopDevelop.Data.Migrations
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("ShopDevelop.Data.Models.User", "User")
+                    b.HasOne("ShopDevelop.Data.Models.User", null)
                         .WithMany("Cart")
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCartItem", b =>
                 {
                     b.HasOne("ShopDevelop.Data.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId1")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShopDevelop.Data.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany("ShoppingCartItems")
+                        .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -363,12 +387,19 @@ namespace ShopDevelop.Data.Migrations
 
                     b.Navigation("Product");
 
+                    b.Navigation("ShoppingCart");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCart", b =>
+                {
+                    b.Navigation("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.User", b =>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Client;
 using ShopDevelop.Data.DataBase;
 
 namespace ShopDevelop.Data.Models
@@ -17,28 +16,22 @@ namespace ShopDevelop.Data.Models
 
         public string Id { get; set; }
 
-        public User User { get; set; }
-
-        public string UserId { get; set; }
-
-        public Product Product { get; set; }
-
-        public int Quantity { get; set; }
-
         public IEnumerable<ShoppingCartItem> ShoppingCartItems { get; set; }
-
         // Получить корзину.
         public static ShoppingCart GetCart(IServiceProvider serviceProvider)
         {
             // Создание объекта для работы с сессиями.
-            ISession? session = serviceProvider.GetRequiredService<IHttpContextAccessor>()?
-                .HttpContext.Session;
+            ISession? session = serviceProvider
+                .GetRequiredService<IHttpContextAccessor>()
+                ?.HttpContext.Session;
             // Объект для работы с базой данных.
-            var context = serviceProvider.GetService<ApplicationDbContext>();
-            string shoppingCartId = session.GetString("ShoppingCartId")
+            var context = serviceProvider
+                .GetService<ApplicationDbContext>();
+            string shoppingCartId = session
+                .GetString("ShoppingCartId")
                 ?? Guid.NewGuid().ToString();
             // Установка новой сессии.
-            session.SetString("Id", shoppingCartId);
+            session.SetString("ShoppingCartId", shoppingCartId);
 
             return new ShoppingCart(context)
             {
@@ -48,9 +41,10 @@ namespace ShopDevelop.Data.Models
         // Получить все продукты корзины
         public IEnumerable<ShoppingCartItem> GetAllItems()
         {
-            return ShoppingCartItems = _applicationDbContext.ShopCartItems
-                       .Where(c => c.ShoppingCartId == Id)
-                       .Include(c => c.Product);
+            return ShoppingCartItems ??
+                   (ShoppingCartItems = _applicationDbContext.ShopCartItems
+                        .Where(c => c.ShoppingCartId == Id)
+                       .Include(s => s.Product));
         }
         // Добавить в корзину.
         public bool AddToCart(Product product)
@@ -86,14 +80,14 @@ namespace ShopDevelop.Data.Models
             return true;
         }
         // Очистить корзину.
-        public void ClearCart(Product entity)
+        /*public void ClearCart(Product entity)
         {
             var cartItems = _applicationDbContext
                 .ShopCartItems
                 .Where(c => c.ShoppingCartId == c.Id);
             _applicationDbContext.ShopCartItems.RemoveRange(cartItems);
             _applicationDbContext.SaveChanges();
-        }
+        }*/
         // Удалить из корзины.
         public void DeleteToCart(Product product)
         {

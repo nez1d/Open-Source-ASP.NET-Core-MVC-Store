@@ -9,6 +9,7 @@ using ShopDevelop.Data.Repository.Interfaces;
 using ShopDevelop.Service.Interfaces;
 using ShopDevelop.Service.Entity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Principal;
 
 namespace ShopDevelop.Controllers
 {
@@ -32,11 +33,12 @@ namespace ShopDevelop.Controllers
             _registerUserRepository = new RegisterUserRepository(context, passwordHasher);
             _userRepository = new UserRepository(context);
             _userModel = new UserModelView();
+            GetIdentityUser();
         }
 
-        public async Task<ViewResult> UserProfile(UserModelView model)
+        public async Task<ViewResult> Profile()
         {
-            model = _userModel;
+            UserModelView model = _userModel;
             if (model.User == null)
             {
                 RedirectToAction("Login");
@@ -63,13 +65,13 @@ namespace ShopDevelop.Controllers
                 {
                     var register = _registerUserRepository
                         .RegisterUserByEmail(model.Login, 
-                                             model.Password, 
-                                             model.Email);
+                                                model.Password, 
+                                                model.Email);
 
                     if (await register == true)
                     {
                         SetClaim(model.Login, model.Password);
-                        return Redirect("/");
+                        return Redirect("Profile");
                     }
                 }       
             }
@@ -106,7 +108,7 @@ namespace ShopDevelop.Controllers
                     {
                         _userModel.User = await userProfileModel;
 
-                        return View("UserProfile", _userModel);
+                        return Redirect("Profile");
                     }
                 }
             }
@@ -123,8 +125,7 @@ namespace ShopDevelop.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, login),
-                new Claim(ClaimTypes.NameIdentifier, login)
+                new Claim(ClaimTypes.Name, login)
             };
 
             var claimIdentity = new ClaimsIdentity(claims,
@@ -152,20 +153,27 @@ namespace ShopDevelop.Controllers
 
         public async Task<IActionResult> GetIdentityUser()
         {
-            if (_httpContextAccessor.HttpContext.Request.Cookies.ContainsKey("login-cookie") &&
-                _httpContextAccessor.HttpContext.Request.Cookies.ContainsKey("password-hash-cookie"))
+            const string cookie = ".AspNetCore.Cookies-Session";
+
+            if (_httpContextAccessor.HttpContext.Request.Cookies.ContainsKey(cookie))
             {
-                string? cookieLogin = _httpContextAccessor.HttpContext
-                    .Request.Cookies["login-cookie"];
+                var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value ??
+                    throw new ArgumentException(nameof(ClaimTypes.Name));
 
-                string? cookiePassword = _httpContextAccessor.HttpContext
-                    .Request.Cookies["password-hash-cookie"];
+                if (userName == null)
+                {
+                    return Redirect("Login");
+                }
+                else
+                {
+                    var data = await _userRepository
+                        .GetUserForLogin(userName);
 
-                _userModel.User = await _userRepository
-                    .GetUserForLogin(cookieLogin);
-
-                return View("UserProfile", _userModel);               
+                    _userModel.User = data;
+                    return Redirect("Profile");
+                }
             }
+            /*return Results.BadRequest("Email и/или пароль не установлены");*/
             return Redirect("Login");
         }
     }

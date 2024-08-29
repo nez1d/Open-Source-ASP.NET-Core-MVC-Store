@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Models;
-using ShopDevelop.Data.Repository.Entity;
 using ShopDevelop.Web.Models;
 
 namespace ShopDevelop.Web.Controllers
@@ -18,16 +17,15 @@ namespace ShopDevelop.Web.Controllers
             _applicationDbContext = applicationDbContext;
         }
 
-        public IActionResult Index(int id)
+        public IActionResult Index()
         {
-            var products = _shoppingCart.GetAllItems();
-            _shoppingCart.ShoppingCartItems = products;
+            _shoppingCart.GetAllItems();
 
-            var shoppingCart = new ShoppingCartViewModel
+            var shoppingCartModel = new ShoppingCartViewModel
             {
                 ShoppingCart = _shoppingCart,
             };
-            return View("Index", shoppingCart); 
+            return View("Index", shoppingCartModel); 
         }
 
         [HttpGet]
@@ -38,7 +36,7 @@ namespace ShopDevelop.Web.Controllers
 
             if (product != null)
             {
-                _shoppingCart.AddToCart(product/*, amount*/);
+                _shoppingCart.AddToCart(product);
             }
 
             return Redirect("Index");

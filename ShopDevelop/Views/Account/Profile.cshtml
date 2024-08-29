@@ -19,7 +19,20 @@
 
                         <div class="profile-top-info__inner">
                             <div class="profile-top-info__inner-text">
-                            <h4 class="profile-name__text">@Model.User.FirstName @Model.User.LastName</h4>
+                            <h4 class="profile-name__text">
+                                @if (String.IsNullOrEmpty(Model.User.FirstName))
+                                {
+                                    @("Name ")
+                                    @("Surname")
+                                }
+                                else
+                                {    
+                                    @Model.User.FirstName 
+                                    @(" ") 
+                                    @Model.User.LastName;
+                                }
+                                
+                            </h4>
                             <p class="profile-country-text">@Model.User.Country @Model.User.City</p>
                             </div>
 

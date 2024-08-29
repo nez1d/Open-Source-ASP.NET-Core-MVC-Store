@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using ShopDevelop.Data.Entity.Auth;
 
 namespace ShopDevelop.Data.Entity
 {
