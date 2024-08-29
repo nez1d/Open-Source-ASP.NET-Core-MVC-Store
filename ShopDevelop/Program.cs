@@ -13,7 +13,6 @@ builder.Services.AddControllersWithViews();
 // Получаем строку подключения из файла конфигурации (appsettings.json).
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 // Добавление Entity Framework Core в качестве сервиса.
-
 builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     {
@@ -97,7 +96,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=UserProfile}/{id?}");
+    pattern: "{controller=Account}/{action=Profile}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

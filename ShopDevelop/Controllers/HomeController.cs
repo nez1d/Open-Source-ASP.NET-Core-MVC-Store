@@ -20,8 +20,15 @@ namespace ShopDevelop.Controllers
         [HttpGet]
         public ViewResult Index()
         {
-            var product = _applicationDbContext.Products.Where(p => p.Price == 3900).ToList();
-            return View(product);
+            try
+            {
+                var product = _applicationDbContext.Products.Where(p => p.Price == 3900).ToList();
+                return View(product);
+            }
+            catch (Exception ex) 
+            { 
+            }
+            return View();
         }
     }
 }

@@ -14,10 +14,14 @@
 
         public string Size { get; set; }
 
+        public User User { get; set; }
+
         public string ShoppingCartId { get; set; }
 
-        public Product Product { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
 
-        public User User { get; set; }
+        public Product? Product { get; set; }
+
+        public int ProductId { get; set; }
     }
 }

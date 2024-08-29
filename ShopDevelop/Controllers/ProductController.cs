@@ -10,7 +10,6 @@ namespace ShopDevelop.Controllers
 {
     public class ProductController : Controller
     {
-        /*private readonly MockProductLongSample _allProducts = new MockProductLongSample();*/
 
         private readonly ApplicationDbContext _context;
 
@@ -19,16 +18,10 @@ namespace ShopDevelop.Controllers
             _context = context;
         }
 
-        /*public ViewResult Item(int id)
-        {
-            var product = _allProducts.ProductPage_1;
-            return View();
-        }*/
-
         public async Task<IActionResult> Item(int? id)
         {
             int _id;
-            if(id.HasValue)
+            if (id.HasValue)
             {
                 _id = id.Value;
             }
@@ -40,7 +33,7 @@ namespace ShopDevelop.Controllers
             var productPage = _context.Products
                  .Where(i => i.Id == id);
 
-            if (productPage == null) 
+            if (productPage == null)
             {
                 return View();
             }

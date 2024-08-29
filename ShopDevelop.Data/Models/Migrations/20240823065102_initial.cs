@@ -135,22 +135,20 @@ namespace ShopDevelop.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShoppingCart",
+                name: "ShopCart",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShoppingCart", x => x.Id);
+                    table.PrimaryKey("PK_ShopCart", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShoppingCart_User_UserId",
+                        name: "FK_ShopCart_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -163,23 +161,17 @@ namespace ShopDevelop.Data.Migrations
                     Amount = table.Column<int>(type: "integer", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Size = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     ShoppingCartId = table.Column<string>(type: "text", nullable: false),
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    ProductId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShopCartItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShopCartItems_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ShopCartItems_ShoppingCart_ShoppingCartId",
+                        name: "FK_ShopCartItems_ShopCart_ShoppingCartId",
                         column: x => x.ShoppingCartId,
-                        principalTable: "ShoppingCart",
+                        principalTable: "ShopCart",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -201,9 +193,9 @@ namespace ShopDevelop.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShopCartItems_ProductId",
-                table: "ShopCartItems",
-                column: "ProductId");
+                name: "IX_ShopCart_UserId",
+                table: "ShopCart",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShopCartItems_ShoppingCartId",
@@ -213,11 +205,6 @@ namespace ShopDevelop.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ShopCartItems_UserId",
                 table: "ShopCartItems",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCart_UserId",
-                table: "ShoppingCart",
                 column: "UserId");
         }
 
@@ -237,7 +224,7 @@ namespace ShopDevelop.Data.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "ShoppingCart");
+                name: "ShopCart");
 
             migrationBuilder.DropTable(
                 name: "Category");

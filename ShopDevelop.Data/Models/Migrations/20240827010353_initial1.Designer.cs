@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShopDevelop.Data.DataBase;
@@ -11,9 +12,11 @@ using ShopDevelop.Data.DataBase;
 namespace ShopDevelop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827010353_initial1")]
+    partial class initial1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,17 +221,14 @@ namespace ShopDevelop.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShoppingCart");
+                    b.ToTable("ShopCart");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCartItem", b =>
@@ -360,13 +360,9 @@ namespace ShopDevelop.Data.Migrations
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("ShopDevelop.Data.Models.User", "User")
+                    b.HasOne("ShopDevelop.Data.Models.User", null)
                         .WithMany("Cart")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCartItem", b =>
@@ -377,7 +373,7 @@ namespace ShopDevelop.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopDevelop.Data.Models.ShoppingCart", null)
+                    b.HasOne("ShopDevelop.Data.Models.ShoppingCart", "ShoppingCart")
                         .WithMany("ShoppingCartItems")
                         .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -390,6 +386,8 @@ namespace ShopDevelop.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("ShoppingCart");
 
                     b.Navigation("User");
                 });

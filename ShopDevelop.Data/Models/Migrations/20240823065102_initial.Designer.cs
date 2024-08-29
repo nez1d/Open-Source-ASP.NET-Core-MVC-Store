@@ -12,7 +12,7 @@ using ShopDevelop.Data.DataBase;
 namespace ShopDevelop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240821113031_initial")]
+    [Migration("20240823065102_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -221,17 +221,14 @@ namespace ShopDevelop.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShoppingCart");
+                    b.ToTable("ShopCart");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCartItem", b =>
@@ -363,13 +360,9 @@ namespace ShopDevelop.Data.Migrations
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("ShopDevelop.Data.Models.User", "User")
+                    b.HasOne("ShopDevelop.Data.Models.User", null)
                         .WithMany("Cart")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCartItem", b =>

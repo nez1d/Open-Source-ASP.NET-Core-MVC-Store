@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿/*using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.Models;
 
@@ -16,3 +16,4 @@ namespace ShopDevelop.Data.Configurations
         }
     }
 }
+*/

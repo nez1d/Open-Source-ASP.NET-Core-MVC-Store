@@ -2,7 +2,7 @@
 {
     public class Product
     {
-        public Product Products;
+        /*public Product Products;*/
 
         public int Id { get; set; }
 
