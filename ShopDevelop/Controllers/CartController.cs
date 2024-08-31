@@ -41,5 +41,17 @@ namespace ShopDevelop.Web.Controllers
 
             return Redirect("Index");
         }
+
+        public IActionResult Remove(int id)
+        {
+            var product = _applicationDbContext.Products
+                .FirstOrDefault(p => p.Id == id);
+
+            if (product != null)
+            {
+                _shoppingCart.DeleteToCart(product);
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
