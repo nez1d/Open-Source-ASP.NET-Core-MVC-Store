@@ -2,8 +2,6 @@
 {
     public class Product
     {
-        /*public Product Products;*/
-
         public int Id { get; set; }
 
         public int Article { get; set; }
