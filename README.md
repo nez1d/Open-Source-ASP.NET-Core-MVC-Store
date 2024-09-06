@@ -1,3 +1,3 @@
-# ASP.NET Core Store
+# Sample ASP.NET Core Store
 
 ### In Development
