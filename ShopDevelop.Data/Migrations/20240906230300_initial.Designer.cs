@@ -12,7 +12,7 @@ using ShopDevelop.Data.DataBase;
 namespace ShopDevelop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240823065102_initial")]
+    [Migration("20240906230300_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -228,27 +228,19 @@ namespace ShopDevelop.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShopCart");
+                    b.ToTable("ShoppingCart");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.ShoppingCartItem", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Amount")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                    b.Property<int?>("Amount")
+                        .HasColumnType("integer");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
@@ -257,11 +249,7 @@ namespace ShopDevelop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -333,6 +321,9 @@ namespace ShopDevelop.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("User");
                 });
 
@@ -379,15 +370,11 @@ namespace ShopDevelop.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopDevelop.Data.Models.User", "User")
+                    b.HasOne("ShopDevelop.Data.Models.User", null)
                         .WithMany("CartItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShopDevelop.Data.Models.Category", b =>

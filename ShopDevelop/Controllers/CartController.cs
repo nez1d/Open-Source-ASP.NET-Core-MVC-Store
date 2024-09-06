@@ -2,6 +2,7 @@
 using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Models;
 using ShopDevelop.Web.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ShopDevelop.Web.Controllers
 {
@@ -25,7 +26,7 @@ namespace ShopDevelop.Web.Controllers
             {
                 ShoppingCart = _shoppingCart,
             };
-            return View("Index", shoppingCartModel); 
+            return View("Index", shoppingCartModel);
         }
 
         [HttpGet]

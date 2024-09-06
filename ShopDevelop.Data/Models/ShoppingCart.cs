@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ShopDevelop.Data.DataBase;
+using System.Net;
 
 namespace ShopDevelop.Data.Models
 {
@@ -20,36 +23,37 @@ namespace ShopDevelop.Data.Models
         // Получить корзину.
         public static ShoppingCart GetCart(IServiceProvider serviceProvider)
         {
-            // Создание объекта для работы с сессиями.
-            ISession? session = serviceProvider
-                .GetRequiredService<IHttpContextAccessor>()
-                ?.HttpContext.Session;
-            // Объект для работы с базой данных.
-            var context = serviceProvider
-                .GetService<ApplicationDbContext>();
-            string shoppingCartId = session
-                .GetString("ShoppingCartId")
-                ?? Guid.NewGuid().ToString();
-            // Установка новой сессии.
-            session.SetString("ShoppingCartId", shoppingCartId);
+            ISession session = serviceProvider.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
+            var context = serviceProvider.GetService<ApplicationDbContext>();
+            string cartId = session.GetString(".AspNetCore.Cookies-Session") ?? Guid.NewGuid().ToString();
 
-            return new ShoppingCart(context)
+            if (serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.Request
+                .Cookies.ContainsKey(".AspNetCore.Cookies-Session"))
             {
-                Id = shoppingCartId
-            };
+
+            }
+            else
+            {
+
+            }
+
+            session.SetString(".AspNetCore.Cookies-Session", cartId);
+            return new ShoppingCart(context) { Id = cartId };
         }
+
         // Получить все продукты корзины
         public IEnumerable<ShoppingCartItem> GetAllItems()
         {
             return ShoppingCartItems ??
                    (ShoppingCartItems = _applicationDbContext.ShopCartItems
                         .Where(c => c.ShoppingCartId == Id)
-                       .Include(s => s.Product));
+                        .Include(s => s.Product));
         }
+
         // Добавить в корзину.
         public bool AddToCart(Product product)
         {
-            if (product.InStock == 0/* && amount == 0*/)
+            if (product.InStock == 0)
             {
                 return false;
             }
@@ -59,24 +63,21 @@ namespace ShopDevelop.Data.Models
 
             if (shoppingCartItem == null)
             {
-                /*if (amount > product.InStock)
-                {
-                    return false;
-                }*/
                 shoppingCartItem = new ShoppingCartItem
                 {
                     ShoppingCartId = Id,
                     Product = product,
-                    /*Amount = amount*/
+                    Amount = 1,
                 };
                 _applicationDbContext.ShopCartItems.Add(shoppingCartItem);
+                _applicationDbContext.SaveChanges();
             }
             else
             {
                 return false;
             }
 
-            _applicationDbContext.SaveChanges();
+
             return true;
         }
         // Очистить корзину.
@@ -95,7 +96,7 @@ namespace ShopDevelop.Data.Models
                 s => s.Product.Id == product.Id && s.ShoppingCartId == s.ShoppingCartId);
         }
         // Получить общую стоимость товаров в корзине.
-        public decimal GetTotalCartValue()
+        public decimal? GetTotalCartValue()
         {
             return _applicationDbContext.ShopCartItems
                 .Where(c => c.ShoppingCartId == Id)

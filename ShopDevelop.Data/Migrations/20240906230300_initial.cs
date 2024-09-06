@@ -135,7 +135,7 @@ namespace ShopDevelop.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShopCart",
+                name: "ShoppingCart",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
@@ -143,9 +143,9 @@ namespace ShopDevelop.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShopCart", x => x.Id);
+                    table.PrimaryKey("PK_ShoppingCart", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShopCart_User_UserId",
+                        name: "FK_ShoppingCart_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id");
@@ -155,31 +155,33 @@ namespace ShopDevelop.Data.Migrations
                 name: "ShopCartItems",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Amount = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    Size = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Amount = table.Column<int>(type: "integer", nullable: true),
                     ShoppingCartId = table.Column<string>(type: "text", nullable: false),
-                    ProductId = table.Column<int>(type: "integer", nullable: false)
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShopCartItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShopCartItems_ShopCart_ShoppingCartId",
+                        name: "FK_ShopCartItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShopCartItems_ShoppingCart_ShoppingCartId",
                         column: x => x.ShoppingCartId,
-                        principalTable: "ShopCart",
+                        principalTable: "ShoppingCart",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ShopCartItems_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -193,9 +195,9 @@ namespace ShopDevelop.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShopCart_UserId",
-                table: "ShopCart",
-                column: "UserId");
+                name: "IX_ShopCartItems_ProductId",
+                table: "ShopCartItems",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShopCartItems_ShoppingCartId",
@@ -206,6 +208,17 @@ namespace ShopDevelop.Data.Migrations
                 name: "IX_ShopCartItems_UserId",
                 table: "ShopCartItems",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCart_UserId",
+                table: "ShoppingCart",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Email",
+                table: "User",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -224,7 +237,7 @@ namespace ShopDevelop.Data.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "ShopCart");
+                name: "ShoppingCart");
 
             migrationBuilder.DropTable(
                 name: "Category");

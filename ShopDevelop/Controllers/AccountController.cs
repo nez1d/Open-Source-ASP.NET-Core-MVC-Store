@@ -9,7 +9,6 @@ using ShopDevelop.Data.Repository.Interfaces;
 using ShopDevelop.Service.Interfaces;
 using ShopDevelop.Service.Entity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Principal;
 
 namespace ShopDevelop.Controllers
 {
@@ -24,7 +23,7 @@ namespace ShopDevelop.Controllers
         private readonly UserModelView _userModel;
         private readonly JwtProvider _jwtProvider;
 
-        public AccountController(ApplicationDbContext context, 
+        public AccountController(ApplicationDbContext context,
             IPasswordHasher passwordHasher,
             IHttpContextAccessor httpContextAccessor)
         {
@@ -64,8 +63,8 @@ namespace ShopDevelop.Controllers
                 if (await pass == true)
                 {
                     var register = _registerUserRepository
-                        .RegisterUserByEmail(model.Login, 
-                                                model.Password, 
+                        .RegisterUserByEmail(model.Login,
+                                                model.Password,
                                                 model.Email);
 
                     if (await register == true)
@@ -73,7 +72,7 @@ namespace ShopDevelop.Controllers
                         SetClaim(model.Login, model.Password);
                         return Redirect("Profile");
                     }
-                }       
+                }
             }
             return View("Register", model);
         }
@@ -119,7 +118,7 @@ namespace ShopDevelop.Controllers
         {
             var cookie = HttpContext.Request.Cookies.ContainsKey("key");
             await HttpContext.SignOutAsync("Key");
-        }  
+        }
 
         public async void SetClaim(string login, string password)
         {
@@ -129,17 +128,13 @@ namespace ShopDevelop.Controllers
             };
 
             var claimIdentity = new ClaimsIdentity(claims,
-                Microsoft.AspNetCore.Authentication.Cookies
-                .CookieAuthenticationDefaults.AuthenticationScheme);
+                CookieAuthenticationDefaults.AuthenticationScheme);
 
             var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                claimsPrincipal);
 
-            /*CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddMonths(1);
-            Response.Cookies.Append("login-cookie", login, option);
-            Response.Cookies.Append("password-hash-cookie", password, option);*/
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                claimsPrincipal);
         }
 
         public async Task<bool> RepeatPassword(RegisterModelView model)
@@ -157,8 +152,9 @@ namespace ShopDevelop.Controllers
 
             if (_httpContextAccessor.HttpContext.Request.Cookies.ContainsKey(cookie))
             {
-                var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value ??
-                    throw new ArgumentException(nameof(ClaimTypes.Name));
+                var userName = _httpContextAccessor.HttpContext.User
+                    .FindFirst(ClaimTypes.Name)?.Value
+                    ?? throw new ArgumentException(nameof(ClaimTypes.Name));
 
                 if (userName == null)
                 {
