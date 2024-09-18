@@ -29,7 +29,7 @@ namespace ShopDevelop.Data.Repository.Entity
             }
             else
             {
-                var userItem = new User
+                var userItem = new UserM
                 {
                     Login = login,
                     Password = _passwordHasher.GeneratePassword(password),
@@ -60,7 +60,7 @@ namespace ShopDevelop.Data.Repository.Entity
 
             if (userLogin.ToString() != login && userEmail.ToString() != phone)
             {
-                var user = new User
+                var user = new UserM
                 {
                     Login = login,
                     Password = password,

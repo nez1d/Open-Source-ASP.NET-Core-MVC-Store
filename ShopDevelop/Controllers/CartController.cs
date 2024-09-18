@@ -2,7 +2,6 @@
 using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Models;
 using ShopDevelop.Web.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ShopDevelop.Web.Controllers
 {
@@ -10,13 +9,50 @@ namespace ShopDevelop.Web.Controllers
     {
         private readonly ShoppingCart _shoppingCart;
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CartController(ApplicationDbContext applicationDbContext,
-                              ShoppingCart shoppingCart)
+            IHttpContextAccessor httpContextAccessor,
+            ShoppingCart shoppingCart)
         {
             _shoppingCart = shoppingCart;
             _applicationDbContext = applicationDbContext;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+
+        public static ShoppingCart GetCart(IServiceProvider serviceProvider)
+        {
+            ISession session = serviceProvider.GetRequiredService
+                <IHttpContextAccessor>()?.HttpContext.Session;
+
+            byte[] readData;
+            _httpContextAccessor.HttpContext.Session.TryGetValue("key", out readData);
+
+
+            var user = session.Get(".AspNetCore.Cookies-Session");
+
+            var context = serviceProvider
+                .GetService<ApplicationDbContext>();
+
+            string cartId = session.GetString(".AspNetCore.Cookies-Session");
+            /*?? Guid.NewGuid().ToString();*/
+
+            if (serviceProvider.GetRequiredService
+                <IHttpContextAccessor>().HttpContext.Request
+                .Cookies.ContainsKey(".AspNetCore.Cookies-Session"))
+            {
+
+            }
+            else
+            {
+                throw new Exception();
+            }
+
+            session.SetString(".AspNetCore.Cookies-Session", cartId);
+            return new ShoppingCart(context) { Id = cartId };
+        }
+
 
         public IActionResult Index()
         {

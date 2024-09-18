@@ -4,13 +4,13 @@ namespace ShopDevelop.Web.Data.SamplesPageProduct
 {
     public class MockProductLongSample
     {
-        public IEnumerable<Product> ProductPage_1
+        public IEnumerable<ProductP> ProductPage_1
         {
             get
             {
-                return new List<Product>
+                return new List<ProductP>
                 {
-                    new Product
+                    new ProductP
                     {
                         Name = "Лонгслив 2yk оверсайз базовый Setner...",
                         Article = 000000001,

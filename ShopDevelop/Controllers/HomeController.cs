@@ -15,16 +15,15 @@ namespace ShopDevelop.Controllers
         {
             _applicationDbContext = applicationDbContext;
             _currentUser = currentUser;
-            AddProduct();
         }
 
         public void AddProduct()
         {
             
 
-            var product = new List<Product>
+            var product = new List<ProductP>
         {
-            new Product
+            new ProductP
             {
                 Name = "T-Shirt 1",
                 ShortDescription = "",
@@ -52,7 +51,7 @@ namespace ShopDevelop.Controllers
                 },
                 ImageMiniPath = "../images/Products/T-Shirts/T-Shirt_1.jpg",
             },
-            new Product
+            new ProductP
             {
                 Name = "T-Shirt 2",
                 ShortDescription = "",
@@ -80,7 +79,7 @@ namespace ShopDevelop.Controllers
                 },
                 ImageMiniPath = "../images/Products/T-Shirts/T-Shirt_1.jpg",
             },
-            new Product
+            new ProductP
             {
                 Name = "T-Shirt 3",
                 ShortDescription = "",
@@ -108,7 +107,7 @@ namespace ShopDevelop.Controllers
                 },
                 ImageMiniPath = "../images/Products/T-Shirts/T-Shirt_1.jpg",
             },
-            new Product
+            new ProductP
             {
                 Name = "T-Shirt 4",
                 ShortDescription = "",
@@ -136,7 +135,7 @@ namespace ShopDevelop.Controllers
                 },
                 ImageMiniPath = "../images/Products/T-Shirts/T-Shirt_1.jpg",
             },
-            new Product
+            new ProductP
             {
                 Name = "T-Shirt 5",
                 ShortDescription = "",
@@ -164,7 +163,7 @@ namespace ShopDevelop.Controllers
                 },
                 ImageMiniPath = "../images/Products/T-Shirts/T-Shirt_1.jpg",
             },
-            new Product
+            new ProductP
             {
                 Name = "T-Shirt 6",
                 ShortDescription = "",
@@ -192,7 +191,7 @@ namespace ShopDevelop.Controllers
                 },
                 ImageMiniPath = "../images/Products/T-Shirts/T-Shirt_1.jpg",
             },
-            new Product
+            new ProductP
             {
                 Name = "T-Shirt 7",
                 ShortDescription = "",
@@ -220,7 +219,7 @@ namespace ShopDevelop.Controllers
                 },
                 ImageMiniPath = "../images/Products/T-Shirts/T-Shirt_1.jpg",
             },
-            new Product
+            new ProductP
             {
                 Name = "T-Shirt 8",
                 ShortDescription = "",

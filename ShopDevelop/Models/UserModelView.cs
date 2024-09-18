@@ -4,6 +4,6 @@ namespace ShopDevelop.Web.Models
 {
     public class UserModelView
     {
-        public User User { get; set; }
+        public UserM User { get; set; }
     }
 }

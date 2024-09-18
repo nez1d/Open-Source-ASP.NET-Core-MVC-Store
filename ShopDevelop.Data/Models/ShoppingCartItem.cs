@@ -8,6 +8,6 @@
 
         public string ShoppingCartId { get; set; }
 
-        public Product Product { get; set; }
+        public ProductP Product { get; set; }
     }
 }

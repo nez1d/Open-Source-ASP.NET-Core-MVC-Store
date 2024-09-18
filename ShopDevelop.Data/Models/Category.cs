@@ -10,6 +10,6 @@
 
         public string ImagePath { get; set; }
 
-        public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<ProductP> Products { get; set; }
     }
 }

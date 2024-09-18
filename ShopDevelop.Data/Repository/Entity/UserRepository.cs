@@ -13,27 +13,27 @@ namespace ShopDevelop.Data.Repository.Interfaces
             _applicationDbContext = applicationDbContext;
         }
         // Получить пользователя по Email.
-        public async Task<User> GetUser(string email)
+        public async Task<UserM> GetUser(string email)
         {
             return await _applicationDbContext.User
                 .SingleOrDefaultAsync(x => x.Email == email);
         }
         // Получить пользователя по Id.
-        public async Task<User> GetUser(int id)
+        public async Task<UserM> GetUser(int id)
         {
             return await _applicationDbContext.User
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         // Получить пользователя по Login.
-        public async Task<User> GetUserForLogin(string login)
+        public async Task<UserM> GetUserForLogin(string login)
         {
             return _applicationDbContext.User
                 .FirstOrDefault(x => x.Login == login);
         }
 
         //TODO: ДОДЕЛАТЬ
-        public Task<int> CreateUser(User user)
+        public Task<int> CreateUser(UserM user)
         {
             throw new NotImplementedException();
         }

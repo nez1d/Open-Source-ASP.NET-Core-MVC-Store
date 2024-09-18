@@ -16,7 +16,7 @@ namespace ShopDevelop.Data.DataBase
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<ProductP>()
                 .HasOne(f => f.Category)
                 .WithMany(c => c.Products)
                 .IsRequired()
@@ -25,16 +25,16 @@ namespace ShopDevelop.Data.DataBase
             modelBuilder.Entity<ShoppingCartItem>()
                 .HasOne(sci => sci.Product);
 
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<UserM>()
                 .HasIndex(user => user.Email)
                 .IsUnique(true);
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<User> User { get; set; }
+        public DbSet<UserM> User { get; set; }
         public DbSet<ShoppingCartItem> ShopCartItems { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductP> Products { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<DbSession> Sessions { get; set; }

@@ -4,9 +4,9 @@ namespace ShopDevelop.Data.Repository.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User> GetUser(string email);
-        Task<User> GetUser(int id);
-        Task<User> GetUserForLogin(string login);
-        Task<int> CreateUser(User user);
+        Task<UserM> GetUser(string email);
+        Task<UserM> GetUser(int id);
+        Task<UserM> GetUserForLogin(string login);
+        Task<int> CreateUser(UserM user);
     }
 }

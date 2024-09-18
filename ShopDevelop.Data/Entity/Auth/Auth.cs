@@ -16,7 +16,7 @@ namespace ShopDevelop.Data.Entity.Auth
             _contextAccessor = httpContextAccessor;
         }
 
-        public async Task<int> CreateUser(User user)
+        public async Task<int> CreateUser(UserM user)
         {
             /*user.Salt = Guid.NewGuid().ToString();*/
             /*user.Password = _encrypt.HashPassword(user.Password, user.Salt);*/
