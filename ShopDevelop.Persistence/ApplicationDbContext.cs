@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
 using ShopDevelop.Persistence.EntityTypeConfigurations;
 
@@ -16,6 +16,9 @@ namespace ShopDevelop.Persistence
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<User> Users { get; set; }
+        DbSet<Product> Products { get; set; }
+        DbSet<Category> Categories { get; set; }
+        DbSet<Order> Orders { get; set; }
+        DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }

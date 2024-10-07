@@ -11,7 +11,8 @@ namespace ShopDevelop.Controllers
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly ICurrentUser _currentUser;
 
-        public HomeController(ApplicationDbContext applicationDbContext, ICurrentUser currentUser)
+        public HomeController(ApplicationDbContext applicationDbContext, 
+            ICurrentUser currentUser)
         {
             _applicationDbContext = applicationDbContext;
             _currentUser = currentUser;

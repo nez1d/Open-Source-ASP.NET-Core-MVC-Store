@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Domain.Models;
-
-namespace ShopDevelop.Application.Interfaces
+namespace ShopDevelop.Domain.Interfaces
 {
-    public interface IApplicationDbContext
+    public interface IApplicationDbContext 
     {
-        Task<int> SaveShangesAsync(CancellationToken cancellationToken);
-        DbSet<User> Users { get; set; }
+        DbSet<Product> Products { get; set; }
+        DbSet<Category> Categories { get; set; }
+        DbSet<Order> Orders { get; set; }
+        DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
