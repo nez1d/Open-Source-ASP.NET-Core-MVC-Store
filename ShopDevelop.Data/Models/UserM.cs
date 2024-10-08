@@ -2,7 +2,7 @@
 
 namespace ShopDevelop.Data.Models
 {
-    public class User
+    public class UserM
     {
         [Required]
         public int Id { get; set; }

@@ -4,13 +4,13 @@ namespace ShopDevelop.Data.Constants
 {
     public class MockProductTShirts
     {
-        public IEnumerable<Product> Products
+        public IEnumerable<ProductP> Products
         {
             get
             {
-                return new List<Product>
+                return new List<ProductP>
                 {
-                    new Product
+                    new ProductP
                     {
                         Name = "T-Shirt 1",
                         ShortDescription = "",
@@ -18,7 +18,7 @@ namespace ShopDevelop.Data.Constants
                         ImagePath = "../images/Products/T-Shirts/T-Shirt_1.jpg",
                         Price = 3900,
                     },
-                    new Product
+                    new ProductP
                     {
                         Name = "T-Shirt 2",
                         ShortDescription = "",
@@ -26,7 +26,7 @@ namespace ShopDevelop.Data.Constants
                         ImagePath = "../images/Products/T-Shirts/T-Shirt_2.jpg",
                         Price = 3900,
                     },
-                    new Product
+                    new ProductP
                     {
                         Name = "T-Shirt 3",
                         ShortDescription = "",
@@ -34,7 +34,7 @@ namespace ShopDevelop.Data.Constants
                         ImagePath = "../images/Products/T-Shirts/T-Shirt_3.jpg",
                         Price = 3900,
                     },
-                    new Product
+                    new ProductP
                     {
                         Name = "T-Shirt 4",
                         ShortDescription = "",
@@ -42,7 +42,7 @@ namespace ShopDevelop.Data.Constants
                         ImagePath = "../images/Products/T-Shirts/T-Shirt_4.jpg",
                         Price = 3900,
                     },
-                    new Product
+                    new ProductP
                     {
                         Name = "T-Shirt 5",
                         ShortDescription = "",
@@ -50,7 +50,7 @@ namespace ShopDevelop.Data.Constants
                         ImagePath = "../images/Products/T-Shirts/T-Shirt_5.jpg",
                         Price = 3900,
                     },
-                    new Product
+                    new ProductP
                     {
                         Name = "T-Shirt 6",
                         ShortDescription = "",
@@ -58,7 +58,7 @@ namespace ShopDevelop.Data.Constants
                         ImagePath = "../images/Products/T-Shirts/T-Shirt_6.jpg",
                         Price = 3900,
                     },
-                    new Product
+                    new ProductP
                     {
                         Name = "T-Shirt 7",
                         ShortDescription = "",
@@ -66,7 +66,7 @@ namespace ShopDevelop.Data.Constants
                         ImagePath = "../images/Products/T-Shirts/T-Shirt_7.jpg",
                         Price = 3900,
                     },
-                    new Product
+                    new ProductP
                     {
                         Name = "T-Shirt 8",
                         ShortDescription = "",
@@ -78,9 +78,9 @@ namespace ShopDevelop.Data.Constants
             }
         }
 
-        public Product GetObjectProduct(int productId)
+        public ProductP GetObjectProduct(int productId)
         {
-            Product product = new Product();
+            ProductP product = new ProductP();
             return product;
         }
     }

@@ -4,7 +4,7 @@
     {
         public Task<List<TEntity>> Add(TEntity entity);
         public void Remove(TEntity entity);
-        TEntity GetById(int id);
-        IEnumerable<TEntity> GetAll();
+        Task<TEntity> GetById(int id);
+        Task<IEnumerable<TEntity>> GetAll();
     }
 }

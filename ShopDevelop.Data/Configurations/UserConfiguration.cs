@@ -4,9 +4,9 @@ using ShopDevelop.Data.Models;
 
 namespace ShopDevelop.Data.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<UserM>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<UserM> builder)
         {
             builder.HasKey(i => i.Id);
 

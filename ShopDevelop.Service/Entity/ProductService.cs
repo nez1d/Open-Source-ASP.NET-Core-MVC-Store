@@ -1,10 +1,10 @@
-﻿/*using ShopDevelop.Data.DataBase;
+﻿using ShopDevelop.Data.DataBase;
 using ShopDevelop.Data.Models;
 using ShopDevelop.Data.Repository.Interfaces;
 
 namespace ShopDevelop.Service.Entity
 {
-    public class ProductService : IProductRepository<Product>
+    public class ProductService : IProductRepository<ProductP>
     {
         private readonly ApplicationDbContext _context;
 
@@ -13,25 +13,24 @@ namespace ShopDevelop.Service.Entity
             _context = context;
         }
 
-        public async Task<List<Product>> Add(Product product)
+        public async Task<List<ProductP>> Add(ProductP product)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Product>> GetAll()
+        public async Task<IEnumerable<ProductP>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Product> GetById(int productId)
+        public async Task<ProductP> GetById(int productId)
         {
             throw new NotImplementedException();
         }
 
-        public async void Remove(Product product)
+        public async void Remove(ProductP product)
         {
             throw new NotImplementedException();
         }
     }
 }
-*/

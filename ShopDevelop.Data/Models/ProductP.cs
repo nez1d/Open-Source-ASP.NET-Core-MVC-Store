@@ -1,6 +1,6 @@
 ﻿namespace ShopDevelop.Data.Models
 {
-    public class Product
+    public class ProductP
     {
         public int Id { get; set; }
 

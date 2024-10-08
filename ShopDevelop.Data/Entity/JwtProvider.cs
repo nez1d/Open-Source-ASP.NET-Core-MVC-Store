@@ -17,7 +17,7 @@ namespace ShopDevelop.Service.Entity
             _options = options.Value;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(UserM user)
         {
             Claim[] claims = [new("userId", user.Id.ToString())];
 

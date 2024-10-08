@@ -6,9 +6,9 @@ namespace ShopDevelop.Web.Mappers
 {
     public class AuthMapper
     {
-        public static User MapRegisterModelToUserModel(RegisterModelView model)
+        public static UserM MapRegisterModelToUserModel(RegisterModelView model)
         {
-            return new User()
+            return new UserM()
             {
                 Email = model.Email!,
                 Password = model.Password!,

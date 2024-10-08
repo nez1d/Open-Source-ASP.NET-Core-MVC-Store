@@ -4,6 +4,6 @@ namespace ShopDevelop.Data.Entity.Auth
 {
     public interface IAuth
     {
-        Task<int> CreateUser(User user);
+        Task<int> CreateUser(UserM user);
     }
 }

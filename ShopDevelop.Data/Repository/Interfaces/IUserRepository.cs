@@ -7,6 +7,6 @@ namespace ShopDevelop.Data.Repository.Interfaces
         Task<User> GetUser(string email);
         Task<User> GetUser(int id);
         Task<User> GetUserForLogin(string login);
-        Task<int> CreateUser(User user);
+        Task<int> CreateUser(UserM user);
     }
 }
