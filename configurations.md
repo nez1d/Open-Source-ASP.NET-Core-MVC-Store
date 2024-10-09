@@ -28,5 +28,5 @@ dotnet ef migrations add initial -c ApplicationDbContext --project ./ShopDevelop
 
 ### Migration update
 ```
-dotnet ef database update -c ApplicationDbContext --project ./ShopDevelop.Data -s "E:\Projects\C#\ASP.NET Core\ShopDeveloped\ShopDevelop\ShopDevelop.Web.csproj" --verbose
+dotnet ef database update -c ApplicationDbContext --project ./ShopDevelop.Persistence -s "E:\Projects\C#\ASP.NET Core\ShopDeveloped\ShopDevelop.WebApi" --verbose
 ```
