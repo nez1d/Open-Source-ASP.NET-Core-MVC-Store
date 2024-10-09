@@ -23,7 +23,7 @@ dotnet tool update --global dotnet-ef
 
 ### Adding the first migration
 ```
-dotnet ef migrations add initial -c ApplicationDbContext --project ./ShopDevelop.Data -s "E:\Projects\C#\ASP.NET Core\ShopDeveloped\ShopDevelop\ShopDevelop.Web.csproj" --verbose
+dotnet ef migrations add initial -c ApplicationDbContext --project ./ShopDevelop.Persistence -s "E:\Projects\C#\ASP.NET Core\ShopDeveloped\ShopDevelop.WebApi"
 ```
 
 ### Migration update
