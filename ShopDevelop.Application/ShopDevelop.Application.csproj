@@ -19,9 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Common\" />
+    <Folder Include="Data\Common\Exceptions\" />
     <Folder Include="Data\Repository\" />
-    <Folder Include="Entities\" />
+    <Folder Include="Entities\Product\Commands\" />
+    <Folder Include="Entities\Product\" />
+    <Folder Include="Entities\Product\Queries\" />
   </ItemGroup>
 
 </Project>

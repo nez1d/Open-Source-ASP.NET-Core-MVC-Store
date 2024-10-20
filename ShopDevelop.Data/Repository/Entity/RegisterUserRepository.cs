@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Data.DataBase;
-using ShopDevelop.Data.Entity;
 using ShopDevelop.Data.Models;
 using ShopDevelop.Data.Repository.Interfaces;
 using ShopDevelop.Service.Interfaces;

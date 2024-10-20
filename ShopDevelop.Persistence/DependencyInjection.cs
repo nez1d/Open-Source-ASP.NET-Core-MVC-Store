@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿/*using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using ShopDevelop.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Domain.Interfaces;
 
 namespace ShopDevelop.Persistence
 {
@@ -24,4 +25,4 @@ namespace ShopDevelop.Persistence
             return services;
         }
     }
-}
+}*/

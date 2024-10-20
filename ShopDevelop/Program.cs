@@ -34,7 +34,7 @@ builder.Services.ConfigureApplicationCookie(config =>
 // Создание зависимостей.
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IAuthentificateUserRepository, AuthentificateUserRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped(sp => ShoppingCart.GetCart(sp));
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<IPasswordHasher, ShopDevelop.Data.Entity.PasswordHasher>();
