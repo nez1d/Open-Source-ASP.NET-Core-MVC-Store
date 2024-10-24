@@ -6,7 +6,8 @@
 <section class="register" id="register">
     <div class="container">
         <div class="register__inner">
-            <form class="register-form" asp-controller="Auth" asp-action="Register" method="post">
+            <form class="register-form" asp-controller="Auth" asp-action="Register" asp-route-returnurl="@Model.ReturnUrl" method="post">
+                <input type="hidden" asp-for="@Model.ReturnUrl" />
                 <div asp-validation-summary="ModelOnly"></div>
                 <h1 class="reg-title">Register</h1>
 

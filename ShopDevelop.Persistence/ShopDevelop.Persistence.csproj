@@ -19,4 +19,8 @@
     <ProjectReference Include="..\ShopDevelop.Application\ShopDevelop.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>

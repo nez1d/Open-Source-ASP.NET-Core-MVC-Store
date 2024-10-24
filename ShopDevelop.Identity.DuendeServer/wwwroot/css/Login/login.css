@@ -136,11 +136,14 @@ body{
     opacity: 80%;
 }
 
-
 .log-other-text-info{
     margin-top: 10px;
 }
 
 .log-other-text{
     margin-top: 80px;
+}
+
+.reg-validation-span{
+    color: red;
 }

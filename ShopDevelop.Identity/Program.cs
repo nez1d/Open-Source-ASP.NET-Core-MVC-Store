@@ -25,6 +25,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.ConfigureApplicationCookie(config =>
 {
+    config.Cookie.HttpOnly = true;
+    config.ExpireTimeSpan = TimeSpan.FromDays(1);
+
     config.LoginPath = "/Auth/Login";
     config.LogoutPath = "/Auth/Logout";
     config.AccessDeniedPath = "/Auth/AccesDenied";
