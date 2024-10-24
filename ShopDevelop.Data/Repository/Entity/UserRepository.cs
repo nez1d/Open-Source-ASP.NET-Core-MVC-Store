@@ -4,7 +4,7 @@ using ShopDevelop.Data.Models;
 
 namespace ShopDevelop.Data.Repository.Interfaces
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository/* : IUserRepository*/
     {
         private readonly ApplicationDbContext _applicationDbContext;
 

@@ -15,12 +15,10 @@
                 <input asp-for="Password" class="reg-input" type="password" placeholder="Password" id="pass-input" class="pass-input">
                 <input asp-for="RepeatPassword" class="reg-input pa" type="password" placeholder="Repeat Password" id="pass-input" class="pass-input">
 
-                @* <h4 class="reg-subtitle">CONTSCT INFO</h4> *@
                 <input asp-for="Email" class="reg-input" type="email" placeholder="Email" id="login-input" class="login-input">
-                @* <input asp-for="PhoneNumber" class="reg-input" type="phone" placeholder="Phone" id="pass-input" class="pass-input"> *@
-
+                
                 <p class="reg-other-text">Already have an account?</p>
-                <a class="reg-login__link" href="/Account/Login">Log In</a>
+                <a class="reg-login__link" href="/Auth/Login">Log In</a>
                 <br>
                 <button class="btn-submit" type="submit">CREATE</button>
             </form>

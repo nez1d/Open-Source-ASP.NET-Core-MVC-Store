@@ -27,7 +27,7 @@ namespace ShopDevelop.Web.Controllers
                 <IHttpContextAccessor>()?.HttpContext.Session;
 
             byte[] readData;
-            _httpContextAccessor.HttpContext.Session.TryGetValue("key", out readData);
+            //_httpContextAccessor.HttpContext.Session.TryGetValue("key", out readData);
 
 
             var user = session.Get(".AspNetCore.Cookies-Session");

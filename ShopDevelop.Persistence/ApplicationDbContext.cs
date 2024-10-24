@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
 using ShopDevelop.Persistence.EntityTypeConfigurations;
@@ -7,18 +9,39 @@ namespace ShopDevelop.Persistence
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
-            : base (options) { }
+        private readonly IConfiguration _configuration;
+        public ApplicationDbContext(IConfiguration configuration) =>
+            _configuration = configuration;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        {
+            builder.UseNpgsql(_configuration
+                .GetConnectionString("DefaultConnection"))
+                .UseLoggerFactory(CreateLoggerFactory())
+                .EnableSensitiveDataLogging();
+        }
+
+        public ILoggerFactory CreateLoggerFactory() =>
+            LoggerFactory.Create(builder => { builder.AddConsole(); });
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguraion());
+            modelBuilder.ApplyConfiguration(new ReviewConfiguration());
+            modelBuilder.ApplyConfiguration(new ShoppingCartItemConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
-        DbSet<Product> Products { get; set; }
-        DbSet<Category> Categories { get; set; }
-        DbSet<Order> Orders { get; set; }
-        DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductDetail> ProductDedails { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

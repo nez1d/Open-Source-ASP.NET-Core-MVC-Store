@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+﻿/*using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
@@ -169,8 +169,8 @@ namespace ShopDevelop.Controllers
                     return Redirect("Profile");
                 }
             }
-            /*return Results.BadRequest("Email и/или пароль не установлены");*/
+            *//*return Results.BadRequest("Email и/или пароль не установлены");*//*
             return Redirect("Login");
         }
     }
-}
+}*/

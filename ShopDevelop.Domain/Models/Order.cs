@@ -6,9 +6,11 @@
         public string Address { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-        public string OrderTotal { get; set; }
+        public uint Amount { get; set; } 
+        public decimal OrderTotal { get; set; }
         public DateTime CreatedDate { get; set; }
-        public Guid UserId { get; set; }
         public User User { get; set; }
+        public Guid UserId { get; set; }
+        public Product Product { get; set; }
     }
 }

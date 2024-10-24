@@ -1,4 +1,4 @@
-﻿using ShopDevelop.Data.Models;
+﻿/*using ShopDevelop.Data.Models;
 
 namespace ShopDevelop.Data.Repository.Interfaces
 {
@@ -9,4 +9,4 @@ namespace ShopDevelop.Data.Repository.Interfaces
         Task<User> GetUserForLogin(string login);
         Task<int> CreateUser(UserM user);
     }
-}
+}*/
