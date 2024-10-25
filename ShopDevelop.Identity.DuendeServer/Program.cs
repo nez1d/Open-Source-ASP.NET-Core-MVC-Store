@@ -62,7 +62,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
-    .AddEntityFrameworkStores<AuthDbContext>();
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddSignInManager<SignInManager<ApplicationUser>>()
+    .AddRoleManager<RoleManager<ApplicationRole>>()
+    .AddDefaultTokenProviders(); 
 
 builder.Services.Configure<IdentityOptions>(options => 
 {

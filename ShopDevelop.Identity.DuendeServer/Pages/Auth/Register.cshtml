@@ -11,10 +11,10 @@
 <section class="register" id="register">
     <div class="container">
         <div class="register__inner">
-            <form class="register-form" method="post">
-                <input type="hidden" asp-for="model.ReturnUrl" />
-                <h1 class="reg-title">Register</h1>
+            <form  class="register-form" method="post">
+                @* <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" /> *@
 
+                <h1 class="reg-title">Register</h1>
                 <p class="reg-other-text-info">Create an account so you can start shopping.</p>
 
                 <h4 class="reg-subtitle">BASIC INFORMATION</h4>

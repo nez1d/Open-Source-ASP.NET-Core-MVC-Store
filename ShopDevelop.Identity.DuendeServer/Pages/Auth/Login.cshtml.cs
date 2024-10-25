@@ -46,7 +46,6 @@ public class LoginModel : PageModel
 
     public async Task<IActionResult> OnPost()
     {
-        model.ReturnUrl = "/";
         if (!ModelState.IsValid)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
@@ -63,7 +62,7 @@ public class LoginModel : PageModel
 
             if (result.Succeeded)
             {
-                return Redirect(model.ReturnUrl);
+                return Redirect("/");
             }
             ModelState.AddModelError(string.Empty, "Login Error");
             return Page();

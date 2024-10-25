@@ -8,12 +8,13 @@ namespace ShopDevelop.Identity.DuendeServer.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RegisterModel(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager) =>
-            (userManager, signInManager) = (_userManager, _signInManager);
+        public RegisterModel(SignInManager<ApplicationUser> signInManager,
+                             UserManager<ApplicationUser> userManager) =>
+            (_signInManager, _userManager) = (signInManager, userManager);
+        
 
         [BindProperty]
         public RegisterViewModel model { get; set; }
@@ -24,11 +25,12 @@ namespace ShopDevelop.Identity.DuendeServer.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
                 {
                     UserName = model.UserName,
+                    Email = "wewfewf@fwew.wef"
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
