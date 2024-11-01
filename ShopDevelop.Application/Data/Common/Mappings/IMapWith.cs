@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 
-namespace ShopDevelop.Application.Data.Common.Mappings
+namespace ShopDevelop.Application.Data.Common.Mappings;
+
+public interface IMapWith<T>
 {
-    internal interface IMapWith<T>
-    {
-        void Mapping(Profile profile) =>
-            profile.CreateMap(typeof(T), GetType());
-    }
+    void Mapping(Profile profile) =>
+        profile.CreateMap(typeof(T), GetType());
 }

@@ -11,18 +11,17 @@
 <section class="register" id="register">
     <div class="container">
         <div class="register__inner">
-            <form class="register-form" method="post">
-                <input hidden asp-for="@Model.model.ReturnUrl" />
+            <form asp-route-returnUrl="@ViewData["ReturnUrl"]" class="register-form" method="post">
+                <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
 
                 <h1 class="reg-title">Log In</h1>
-
                 <p class="reg-other-text-info log-other-text-info">Welcome back, we've missed you!</p>
 
                 <h4 class="reg-subtitle">BASIC INFORMATION</h4>
 
-                <input asp-for="@Model.model.UserName" class="reg-input" class="login-input" type="text" placeholder="Login" id="login-input">
+                <input asp-for="@Model.model.Email" class="reg-input" type="email" placeholder="Email" id="login-input" class="login-input">
                 <br>
-                <span class="reg-validation-span" asp-validation-for="model.UserName"></span>
+                <span class="reg-validation-span" asp-validation-for="model.Email"></span>
                 <input asp-for="@Model.model.Password" type="password" class="reg-input" class="pass-input" placeholder="Password" id="pass-input">
                 <br>
                 <span class="reg-validation-span" asp-validation-for="model.Password"></span>

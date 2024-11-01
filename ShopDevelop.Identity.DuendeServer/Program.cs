@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Services;
 using ShopDevelop.Identity.DuendeServer.Data;
 using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 using ShopDevelop.Identity.DuendeServer.Models;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetValue<string>("DefaultConnection");
@@ -20,6 +22,7 @@ builder.Services.AddAuthentication("cookie")
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
 
         options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
         options.AccessDeniedPath = "/Auth/AccessDenied";
     });
     /*.AddGoogle("Google", options =>
@@ -41,28 +44,28 @@ builder.Services.AddAuthentication("cookie")
 
 builder.Services.AddAuthorization(options =>
 {
-    /*options.AddPolicy("Admin", policy =>
+    options.AddPolicy("AuthUser", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireClaim("department", "sales");
-        policy.RequireClaim("status", "senior");
+        policy.RequireClaim(ClaimTypes.Role, "AuthUser");
+    });
+    options.AddPolicy("Admin", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(ClaimTypes.Role, "Admin");
     });
     options.AddPolicy("Moderator", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireClaim("department", "sales");
-        policy.RequireClaim("status", "senior");
+        policy.RequireClaim(ClaimTypes.Role, "Moderator");
     });
-    options.AddPolicy("User", policy =>
-    {
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim("department", "sales");
-        policy.RequireClaim("status", "senior");
-    });*/
 });
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
-    .AddEntityFrameworkStores<AuthDbContext>();
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddSignInManager<SignInManager<ApplicationUser>>()
+    .AddRoleManager<RoleManager<ApplicationRole>>()
+    .AddDefaultTokenProviders(); 
 
 builder.Services.Configure<IdentityOptions>(options => 
 {
@@ -77,7 +80,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.,@-+";
     options.User.RequireUniqueEmail = true;
 });
 
@@ -89,6 +92,10 @@ builder.Services.AddIdentityServer()
     .AddDeveloperSigningCredential();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddControllers();
+
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 var app = builder.Build();
 
