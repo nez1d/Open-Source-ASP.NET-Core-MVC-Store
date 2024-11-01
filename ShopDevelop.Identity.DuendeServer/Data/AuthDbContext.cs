@@ -38,7 +38,8 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser, ApplicationRole,
             entity.ToTable(name: "UserTockens"));
         builder.Entity<IdentityRoleClaim<string>>(entity =>
             entity.ToTable(name: "RoleClaim"));
-        builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });
+        /*builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });*/
+
         base.OnModelCreating(builder);
     }
 }

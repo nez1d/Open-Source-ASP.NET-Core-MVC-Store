@@ -17,10 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShopDevelop.Application\ShopDevelop.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Repository\" />
+    <ProjectReference Include="..\ShopDevelop.Data\ShopDevelop.Data.csproj" />
   </ItemGroup>
 
 </Project>

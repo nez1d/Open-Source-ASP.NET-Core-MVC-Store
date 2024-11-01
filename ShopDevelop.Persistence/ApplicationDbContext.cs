@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
-using ShopDevelop.Persistence.EntityTypeConfigurations;
 
 namespace ShopDevelop.Persistence
 {
@@ -12,6 +11,9 @@ namespace ShopDevelop.Persistence
         private readonly IConfiguration _configuration;
         public ApplicationDbContext(IConfiguration configuration) =>
             _configuration = configuration;
+
+        /*public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options) { }*/
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
@@ -24,7 +26,7 @@ namespace ShopDevelop.Persistence
         public ILoggerFactory CreateLoggerFactory() =>
             LoggerFactory.Create(builder => { builder.AddConsole(); });
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
@@ -34,7 +36,7 @@ namespace ShopDevelop.Persistence
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingCartItemConfiguration());
             base.OnModelCreating(modelBuilder);
-        }
+        }*/
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }

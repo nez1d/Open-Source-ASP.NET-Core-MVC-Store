@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using IdentityModel;
 
 namespace ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 
@@ -18,10 +19,15 @@ public static class Configuration
             new ApiScope(AuthConstants.AUTH_IDENTITY_CLIENT_ID,
                          AuthConstants.AUTH_IDENTITY_DISPLAY_NAME)
         };
-
     public static IEnumerable<ApiResource> ApiResources =>
         new List<ApiResource>
         {
+            new ApiResource(AuthConstants.AUTH_IDENTITY_CLIENT_ID,
+                            AuthConstants.AUTH_IDENTITY_DISPLAY_NAME, 
+                            new [] { JwtClaimTypes.Name })
+            {
+                Scopes = { AuthConstants.AUTH_IDENTITY_CLIENT_ID }
+            }
         };
 
     public static IEnumerable<Client> Clients =>
@@ -31,18 +37,26 @@ public static class Configuration
             {
                 ClientId = AuthConstants.AUTH_IDENTITY_CLIENT_ID,
                 ClientName = AuthConstants.AUTH_IDENTITY_CLIENT_NAME,
-                ClientSecrets =
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+                /*ClientSecrets =
                 {
-                    new Secret("secret".Sha256())
-                },
+                    new Secret(AuthConstants.AUTH_IDENTITY_SECRET_KEY.Sha256())
+                },*/
                 RequirePkce = true,
                 RedirectUris =
                 {
-                    "http://.../signin-oidc"
+                    "http://.../signin-oidc",
+                    "https://localhost:7226/Home/Index/",
+
                 },
                 AllowedCorsOrigins =
                 {
                     "http://..."
+                },
+                PostLogoutRedirectUris =
+                {
+                    "http://.../signout-oidc",
                 },
                 AllowedScopes =
                 {
