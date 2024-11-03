@@ -35,10 +35,9 @@ public class ProductRepository : IProductRepository
 
     public async Task<IEnumerable<Product>> GetAll()
     {
-        var data = context.Products
+        return context.Products
             .Where(product => product.Id != null)
             .ToList();
-        return data;
     }
 
     public async Task<Product> GetById(Guid id)

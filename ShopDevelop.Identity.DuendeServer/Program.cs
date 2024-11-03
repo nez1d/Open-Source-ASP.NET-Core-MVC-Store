@@ -95,7 +95,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IIdentityService, IdentityService>();
+/*builder.Services.AddScoped<IIdentityService, IdentityService>();*/
 
 var app = builder.Build();
 

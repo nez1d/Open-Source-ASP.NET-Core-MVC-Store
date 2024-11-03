@@ -14,4 +14,12 @@
     <None Include="Views\Shared\CartItemPartial.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShopDevelop.Domain\ShopDevelop.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

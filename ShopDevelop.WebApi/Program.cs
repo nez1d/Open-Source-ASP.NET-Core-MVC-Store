@@ -2,16 +2,14 @@ using ShopDevelop.Application;
 using ShopDevelop.Persistence;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Persistence.Repository;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddControllers();
-
+builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>();
-
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 /*builder.Services.AddMediatR(config =>
@@ -37,6 +35,12 @@ var app = builder.Build();
 app.UseRouting();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+
+app.UseHsts();
+app.UseCors(x => x
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 
 app.UseSwagger();
 app.UseSwaggerUI(config =>

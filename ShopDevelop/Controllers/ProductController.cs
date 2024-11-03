@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Data.Constants;
+﻿using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Data.DataBase;
-using ShopDevelop.Data.Models;
-using ShopDevelop.Web.Data.SamplesPageProduct;
 
 namespace ShopDevelop.Controllers
 {
