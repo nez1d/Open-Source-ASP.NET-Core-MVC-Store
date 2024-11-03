@@ -4,27 +4,27 @@ using ShopDevelop.WebMVC.ViewModes;
 
 namespace ShopDevelop.WebMVC.Controllers;
 
-public class HomeController : Controller
+public class ProductController : Controller
 {
     private Uri _baseAddress = new Uri("https://localhost:7005/api");
     private readonly HttpClient _client;
-    public HomeController()
+    public ProductController()
     {
         _client = new HttpClient();
         _client.BaseAddress = _baseAddress;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(Guid id)
     {
-        var productViewModel = new List<ProductViewModel>();
+        var productViewModel = new ProductPageViewModel();
         HttpResponseMessage responseMessage = _client.GetAsync(
-            _client.BaseAddress + "/Home/GetHomeProductList").Result;
+            _client.BaseAddress + $"/Product/Index/{id}").Result;
 
         if (responseMessage.IsSuccessStatusCode)
         {
             string data = responseMessage.Content.ReadAsStringAsync().Result;
-            productViewModel = JsonConvert.DeserializeObject<List<ProductViewModel>>(data);
+            productViewModel = JsonConvert.DeserializeObject<ProductPageViewModel>(data);
         }
 
         return View(productViewModel);

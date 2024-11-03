@@ -1,8 +1,8 @@
-﻿<!-- Product Page Section -->
+﻿@model ShopDevelop.WebMVC.ViewModes.ProductPageViewModel;
+
+<!-- Product Page Section -->
 <section class="product" id="product">
-    @{
-        foreach (var product in Model)
-        {
+
             <section class="product" id="product">
                 <div class="container">
                     <div class="product__inner">
@@ -10,7 +10,7 @@
                             <div class="product_images-view">
                                 <div class="product_images_section">
 
-                                    <img class="product_main-image" src="@product.ImagePath" alt="">
+                            <img class="product_main-image" src="@Model.ImagePath" alt="">
 
                                     <ul class="product_image__items">
                                         <li class="product_image__item">
@@ -28,14 +28,14 @@
                                     </ul>
                                 </div>
                                 <div class="product-prices__section">
-                                    <p class="product-price-subtitle-1">@product.Discount %</p>
-                                    <p class="product-price-subtitle-2">@product.OldPrice ₽</p>
-                                    <p class="product-price-title">@product.Price ₽</p>
+                            <p class="product-price-subtitle-1">@Model.Discount %</p>
+                            <p class="product-price-subtitle-2">@Model.OldPrice ₽</p>
+                            <p class="product-price-title">@Model.Price ₽</p>
                                 </div>
                             </div>
 
                             <div class="product-parameters-view">
-                                <h3 class="product-name">@product.Name</h3>
+                        <h3 class="product-name">@Model.ProductName</h3>
 
                                 <ul class="product-stars">
                                     <li class="product-star">
@@ -53,19 +53,19 @@
                                     <li class="product-star">
                                         <img src="~/images/Products/Product/Star.png" alt="" class="product-star__img">
                                     </li>
+                                    <p class="reviews-star">(129)</p>
                                 </ul>
-                                <p class="reviews-star">(129)</p>
 
                                 <div class="product-main-info">
                                     <ul class="product-main-info-parameters">
                                         <li class="product-main-info-parameter">
                                             <span class="product-main-info__item">Article:</span>
-                                            <span class="product-main-info__subitem">@product.Article</span>
+                                    <span class="product-main-info__subitem">@Model.Article</span>
                                             <!-- <hr> -->
                                         </li>
                                         <li class="product-main-info-parameter">
                                             <span class="product-main-info__item">Composition:</span>
-                                            <span class="product-main-info__subitem">@product.Composition</span>
+                                    <span class="product-main-info__subitem">@Model.Article</span>
                                             <!-- <hr> -->
                                         </li>
                                         <li class="product-main-info-parameter">
@@ -311,7 +311,7 @@
                                 <div class="description-text__inner">
                                     <h3 class="info__description-title">Description</h3>
                                     <p class="description-text">
-                                        @product.Description
+                                        @Model.Description
                                     </p>
                                 </div>
                             </div>
@@ -319,10 +319,5 @@
                     </div>
                 </div>
             </section>
-        }
-    }
+
 </section>
- 
-
-
-

@@ -9,6 +9,6 @@ public interface IProductRepository
     Task Delete(Guid id);
 
     Task<IEnumerable<Product>> GetAll();
-    Task<Product> GetById(Guid id);
+    Task<Product> GetById(Guid? id);
     IEnumerable<Product> GetByCategory(Guid categoryId);
 }

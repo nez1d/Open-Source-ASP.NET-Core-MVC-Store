@@ -53,15 +53,18 @@ body {
     display: flex;
     min-width: 600px;
     justify-content: space-between;
+    align-items: center;
 }
 
 .product_main-image {
-    margin: 40px 0 0px 30px;
-    min-width: 450px;
+    margin: 40px 0px 0px 30px;
+    min-width: 350px;
+    min-height: 200px;
 }
 
 .product_image__items {
     margin-left: 40px;
+    margin-right: 40px;
     gap: 10px;
     margin-top: 22px;
 }
@@ -74,20 +77,19 @@ body {
     max-width: 70px;
 }
 
-
 .img-off {
     opacity: 50%;
 }
 
 .product-prices__section {
     text-align: right;
-    margin-right: 12px;
+    margin-right: 40px;
 }
 
 .product-price-subtitle-1 {
     margin-top: 18px;
     color: var(--proc-color);
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
 }
 
