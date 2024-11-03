@@ -1,8 +1,9 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
 using ShopDevelop.Domain.Interfaces;
+using ShopDevelop.Persistence.Entities.Product.Queries.GetMinimizedProducts;
 
 namespace ShopDevelop.Persistence;
 
@@ -12,6 +13,10 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddMediatR(x =>
+                x.RegisterServicesFromAssemblies(
+                    typeof(GetMiniProductListHandler).Assembly));
+
         var connectionString = configuration["DefaultConnection"];
         services.AddDbContext<ApplicationDbContext>(options =>
         {

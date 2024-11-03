@@ -1,13 +1,13 @@
-﻿/*using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Application.Services;
 
-public class IdentityService : IIdentityService
+public class IdentityService /*: IIdentityService*/
 {
-    private readonly UserManager<ApplicationUser> userManager;
+    /*private readonly UserManager<ApplicationUser> userManager;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory;
     private readonly IAuthorizationService authorizationService;
 
@@ -15,7 +15,7 @@ public class IdentityService : IIdentityService
         UserManager<ApplicationUser> userManager,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService) =>
-            (this.userManager, this.userClaimsPrincipalFactory, this.authorizationService) = 
+            (this.userManager, this.userClaimsPrincipalFactory, this.authorizationService) =
             (userManager, userClaimsPrincipalFactory, authorizationService);
 
     public async Task<Guid> CreateUserAsync(string userName, string password)
@@ -35,7 +35,7 @@ public class IdentityService : IIdentityService
     {
         var user = await userManager.FindByIdAsync(userId);
 
-        if(user != null)
+        if (user != null)
         {
             await DeleteUserAsync(userId);
         }
@@ -50,12 +50,12 @@ public class IdentityService : IIdentityService
             return false;
         }
 
-        *//*var principal = await _userClaimsPrincipalFactory.CreateAsync(user);*//*
+        var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
 
         var claims = new List<Claim>
         {
-            *//*new (ClaimTypes.Name, model.Email),
-            new Claim(ClaimTypes.Role, "AuthUser")*//*
+            new (ClaimTypes.Name, model.Email),
+            new Claim(ClaimTypes.Role, "AuthUser")
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, "pwd", ClaimTypes.Name, ClaimTypes.Role);
@@ -78,6 +78,5 @@ public class IdentityService : IIdentityService
         var user = await userManager.FindByIdAsync(userId);
 
         return user?.UserName;
-    }
+    }*/
 }
-*/

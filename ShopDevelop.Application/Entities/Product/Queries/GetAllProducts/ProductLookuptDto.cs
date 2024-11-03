@@ -7,7 +7,6 @@ public class ProductLookuptDto : IMapWith<Domain.Models.Product>
 {
     public Guid Id { get; set; }
 
-
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Domain.Models.Product,

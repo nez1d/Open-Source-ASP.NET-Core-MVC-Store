@@ -22,10 +22,10 @@ public class GetAllProductsQueryHandler
     public async Task<ProductListVm> Handle(GetProductListQuery query,
         CancellationToken cancellationToken)
     {
-        *//*var product = await applicationDbContext.Products
+        var product = await applicationDbContext.Products
                 .Where(post => post.Id == query.Id)
                 .ProjectTo<ProductLookuptDto>(mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);*//*
+                .ToListAsync(cancellationToken);
 
         return new ProductListVm
         {
