@@ -3,6 +3,7 @@ using ShopDevelop.Persistence;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Persistence.Repository;
 using System.Reflection;
+using ShopDevelop.Application.Services.Product;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -11,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 /*builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssemblies(

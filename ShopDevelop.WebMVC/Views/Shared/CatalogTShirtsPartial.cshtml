@@ -4,7 +4,7 @@
         <li class="catalog__product">
             <img class="catalog__product-img" src="@prodcut.ImageMiniPath" alt="">
             <div class="catalog__product__inner">
-                <a asp-controller="Product" asp-action="Item" asp-route-id=@prodcut.Id class="catalog__name">@prodcut.ProductName</a>
+                <a asp-controller="Product" asp-action="Index" asp-route-id=@prodcut.Id class="catalog__name">@prodcut.ProductName</a>
                 <p class="seller__name">@prodcut.Seller.FirstName</p>
                 <div class="rating">
                     <ul class="catalog-stars">

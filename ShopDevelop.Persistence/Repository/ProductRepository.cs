@@ -1,22 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Data.Models;
+using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
-
 
 namespace ShopDevelop.Persistence.Repository;
 
 public class ProductRepository : IProductRepository
 {
-    private readonly ApplicationDbContext context;
-    public ProductRepository(ApplicationDbContext context) =>
+    private readonly IApplicationDbContext context;
+    public ProductRepository(IApplicationDbContext context) =>
         this.context = context;
 
     public async Task<Guid> Create(Product product)
     {
-        await context.AddAsync(product);
-        await context.SaveChangesAsync();
-        return product.Id;
+        throw new NotImplementedException();
     }
 
     public async Task<Guid> Update(Product product)
@@ -26,11 +23,11 @@ public class ProductRepository : IProductRepository
 
     public async Task Delete(Guid id)
     {
-        var product = GetById(id);
+        /*var product = GetById(id);
         if (product == null)
             throw new ArgumentException();
-        context.Remove(product);
-        await context.SaveChangesAsync();
+        await context.Products.Remove(product);
+        await context.SaveChangesAsync();*/
     }
 
     public async Task<IEnumerable<Product>> GetAll()
@@ -40,9 +37,10 @@ public class ProductRepository : IProductRepository
             .ToList();
     }
 
-    public async Task<Product> GetById(Guid id)
+    public async Task<Product?> GetById(Guid? id)
     {
-        throw new NotImplementedException();
+        return await context.Products
+            .FirstOrDefaultAsync(product => product.Id == id);
     }
 
     public IEnumerable<Product> GetByCategory(Guid categoryId)

@@ -138,7 +138,7 @@ body {
     cursor: pointer;
     justify-content: center;
     transition: .5s ease;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .catalog-bottom__btn:hover{
