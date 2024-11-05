@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Identity.Data;
 using ShopDevelop.Identity.Models;
@@ -105,3 +105,4 @@ namespace ShopDevelop.Identity.Controllers
         }
     }
 }
+*/

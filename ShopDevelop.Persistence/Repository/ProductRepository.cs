@@ -13,21 +13,30 @@ public class ProductRepository : IProductRepository
 
     public async Task<Guid> Create(Product product)
     {
-        throw new NotImplementedException();
+        await context.Products.AddAsync(product);
+        await context.SaveChangesAsync();
+        return product.Id;
     }
 
-    public async Task<Guid> Update(Product product)
+    public async Task Update(Product product)
     {
-        throw new NotImplementedException();
+        var model = GetById(product.Id);
+        if(model!= null)
+        {
+            context.Products.Update(product);
+            await context.SaveChangesAsync();
+        }
     }
 
     public async Task Delete(Guid id)
     {
-        /*var product = GetById(id);
+        var product = await GetById(id);
         if (product == null)
+        {
             throw new ArgumentException();
-        await context.Products.Remove(product);
-        await context.SaveChangesAsync();*/
+        }
+        context.Products.Remove(product);
+        await context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Product>> GetAll()
@@ -43,9 +52,9 @@ public class ProductRepository : IProductRepository
             .FirstOrDefaultAsync(product => product.Id == id);
     }
 
-    public IEnumerable<Product> GetByCategory(Guid categoryId)
+    public IEnumerable<Product> GetByCategoryId(Guid categoryId)
     {
-        /*return GetAll().Where(product => product.Category.Id == categoryId);*/
-        throw new NotImplementedException();
+        return context.Products
+            .Where(product => product.Category.Id == categoryId);
     }
 }

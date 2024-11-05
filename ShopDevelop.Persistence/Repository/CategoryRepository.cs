@@ -11,32 +11,44 @@ public class CategoryRepository : ICategoryRepository
     public CategoryRepository(IApplicationDbContext context) =>
         this.context = context;
 
-    public async Task<Guid> CreateCategory(Category category,
-        CancellationToken cancellationToken)
+    public async Task<Guid> Create(Category category)
     {
         await context.Categories.AddAsync(category);
-        await context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync();
         return category.Id;
     }
 
-    public Task DeleteCategory(Guid id)
+    public async Task Delete(Guid id)
     {
-        throw new NotImplementedException();
+        var category = GetById(id);
+        if (category == null)
+        {
+            throw new ArgumentException();
+        }
+        /*context.Categories.Remove(category);*/
+        await context.SaveChangesAsync();
     }
 
-    public Task EditCategory(Guid id)
+    public async Task Update(Category category)
     {
-        throw new NotImplementedException();
+        var model = GetById(category.Id);
+        if (model != null)
+        {
+            context.Categories.Update(category);
+            await context.SaveChangesAsync();
+        }
     }
 
-    public async Task<IEnumerable<Category>> GetAllCategory()
+    public async Task<IEnumerable<Category>> GetAll()
     {
-        throw new NotImplementedException();
+        return context.Categories
+            .Where(category => category.Id != null)
+            .ToList();
     }
 
-    public async Task<Category> GetCategoryById(Guid id)
+    public async Task<Category> GetById(Guid id)
     {
         return await context.Categories
-            .FirstOrDefaultAsync(product => product.Id == id);
+            .FirstOrDefaultAsync(category => category.Id == id);
     }
 }

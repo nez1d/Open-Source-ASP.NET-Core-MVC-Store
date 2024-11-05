@@ -10,7 +10,7 @@ namespace ShopDevelop.Domain.Interfaces
         DbSet<Order> Orders { get; set; }
         DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         DbSet<Review> Reviews { get; set; }
-        /*Task<int> SaveChangesAsync();*/
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync();
+        /*Task<int> SaveChangesAsync(CancellationToken cancellationToken);*/
     }
 }

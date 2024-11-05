@@ -2,10 +2,9 @@
 
 public interface ICategoryRepository
 {
-    Task<Guid> CreateCategory(Domain.Models.Category category,
-        CancellationToken cancellationToken);
-    Task EditCategory(Guid id);
-    Task DeleteCategory(Guid id);
-    Task<Domain.Models.Category> GetCategoryById(Guid id);
-    Task<IEnumerable<Domain.Models.Category>> GetAllCategory();
+    Task<Guid> Create(Domain.Models.Category category);
+    Task Update(Domain.Models.Category category);
+    Task Delete(Guid id);
+    Task<Domain.Models.Category> GetById(Guid id);
+    Task<IEnumerable<Domain.Models.Category>> GetAll();
 }
