@@ -13,6 +13,21 @@ public class ProductService : IProductService
             (this.mediator, this.productRepository) = 
             (mediator, productRepository);
 
+    public async Task AddNewProduct(Domain.Models.Product product)
+    {
+        await productRepository.Create(product);
+    }
+
+    public async Task EditProduct(Domain.Models.Product product)
+    {
+        await productRepository.Update(product);
+    }
+
+    public async Task DeleteProduct(Guid id)
+    {
+        await productRepository.Delete(id);
+    }
+
     public async Task<IEnumerable<MiniProductLookupDto>> GetAllProducts()
     {
         try
@@ -23,10 +38,6 @@ public class ProductService : IProductService
         catch (Exception ex) { }
 
         return null;
-    }
-
-    public async Task CreateProduct(Domain.Models.Product product)
-    {
     }
 
     public async Task<Domain.Models.Product> GetById(Guid? id)
@@ -40,17 +51,7 @@ public class ProductService : IProductService
         return null;
     }
 
-    public async Task EditProduct(Domain.Models.Product product)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task DeleteProduct(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<decimal> DiscountCalculate()
+    public async Task<decimal> DiscountCalculate(decimal price, decimal oldPrice)
     {
         throw new NotImplementedException();
     }
