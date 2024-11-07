@@ -1,4 +1,4 @@
-﻿namespace ShopDevelop.Application.Services;
+﻿namespace ShopDevelop.Application.Services.Identity;
 
 public interface IIdentityService
 {

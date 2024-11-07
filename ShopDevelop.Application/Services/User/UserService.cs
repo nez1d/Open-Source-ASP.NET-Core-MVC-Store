@@ -1,8 +1,8 @@
-﻿/*namespace ShopDevelop.Application.Services.User;
+﻿namespace ShopDevelop.Application.Services.User;
 
 public class UserService
 {
-    private readonly IUserRepository userRepository;
+    /*private readonly IUserRepository userRepository;
     public UserService(IUserRepository userRepository) =>
         this.userRepository = userRepository;
 
@@ -21,6 +21,5 @@ public class UserService
         // создать токен.
 
         // сохранить токен в куки.
-    }
+    }*/
 }
-*/
