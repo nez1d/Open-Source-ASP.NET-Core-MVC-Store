@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using ShopDevelop.Domain.Models;
 
-namespace ShopDevelop.Application.Services;
+namespace ShopDevelop.Application.Services.Identity;
 
 public class IdentityService /*: IIdentityService*/
 {
