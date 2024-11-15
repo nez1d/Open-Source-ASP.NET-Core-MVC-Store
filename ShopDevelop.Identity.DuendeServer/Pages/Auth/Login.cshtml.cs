@@ -1,4 +1,3 @@
-using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -45,7 +44,7 @@ public class LoginModel : PageModel
 
             await this.HttpContext.SignInAsync(claimsPrincipal);
 
-            return RedirectToPage("/Home/");
+            return Redirect("https://localhost:7226/");
         }
 
         return Page();

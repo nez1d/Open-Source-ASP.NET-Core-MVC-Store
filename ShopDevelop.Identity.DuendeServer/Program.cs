@@ -1,10 +1,14 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Application.Services;
+using Microsoft.IdentityModel.Tokens;
 using ShopDevelop.Identity.DuendeServer.Data;
 using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 using ShopDevelop.Identity.DuendeServer.Models;
 using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetValue<string>("DefaultConnection");
@@ -14,8 +18,42 @@ builder.Services.AddDbContext<AuthDbContext>(optoins =>
     optoins.UseNpgsql(connectionString);
 });
 
-builder.Services.AddAuthentication("cookie")
-    .AddCookie("cookie", options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("mysuperkey"))
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Cookies["tasty-cookies"];
+                return Task.CompletedTask;
+            }
+        };
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.Cookie.Name = "tasty-cookies";
+    });
+
+/*builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.Cookie.HttpOnly = true;
         options.Cookie.Name = "Asp.Net.Core.Authefication-cookie";
@@ -24,31 +62,30 @@ builder.Services.AddAuthentication("cookie")
         options.LoginPath = "/Auth/Login";
         options.LogoutPath = "/Auth/Logout";
         options.AccessDeniedPath = "/Auth/AccessDenied";
-    });
-    /*.AddGoogle("Google", options =>
-    {
-        options.ClientId = "";
-        options.ClientSecret = "";
-
-        //options.CallbackPath = "/singin-google";
-        //options.SignInScheme = "cookie";
-
-        options.Events = new OAuthEvents
-        {
-            OnCreatingTicket = e =>
-            {
-                e.Principal
-            }
-        };
     });*/
+/*.AddGoogle("Google", options =>
+{
+    options.ClientId = "";
+    options.ClientSecret = "";
+
+    //options.CallbackPath = "/singin-google";
+    //options.SignInScheme = "cookie";
+
+    options.Events = new OAuthEvents
+    {
+        OnCreatingTicket = e =>
+        {
+            e.Principal
+        }
+    };
+});*/
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AuthUser", policy =>
-    {
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim(ClaimTypes.Role, "AuthUser");
-    });
+    options.AddPolicy("AuthUser", new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireClaim(ClaimTypes.Role, "AuthUser")
+        .Build());
     options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
@@ -125,6 +162,25 @@ using(var scope = app.Services.CreateScope())
         logger.LogError(exception, "An error occurred app initialization");
     }
 }
+
+/*using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    string[] roles = [ "Admin", "Manager", "Member" ];
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+}*/
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseIdentityServer();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

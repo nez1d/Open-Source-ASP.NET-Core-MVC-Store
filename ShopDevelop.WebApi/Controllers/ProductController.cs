@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Services.Product;
 
 namespace ShopDevelop.WebApi.Controllers;
@@ -12,6 +14,7 @@ public class ProductController : BaseController
         this.productService = productService;
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> Index(Guid? id)
     {
         if(id != null)

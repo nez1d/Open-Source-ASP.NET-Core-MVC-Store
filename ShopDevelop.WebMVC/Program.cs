@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,37 @@ builder.Services.TryAddTransient(s =>
         .CreateClient(string.Empty); 
 });
 
+builder.Services.AddAuthentication("cookie")
+    .AddCookie("cookie", options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.Name = "Asp.Net.Core.Authefication-cookie";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AuthUser", new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireClaim("role", "AuthUser")
+        .Build());
+    options.AddPolicy("AuthUser", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(ClaimTypes.Role, "AuthUser");
+    });
+    options.AddPolicy("Admin", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(ClaimTypes.Role, "Admin");
+    });
+    options.AddPolicy("Moderator", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(ClaimTypes.Role, "Moderator");
+    });
+});
+
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -20,6 +54,9 @@ var app = builder.Build();
 
 app.UseRouting();
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "product",

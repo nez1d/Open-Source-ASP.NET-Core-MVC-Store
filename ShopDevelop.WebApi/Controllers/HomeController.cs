@@ -1,5 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using ShopDevelop.Application.Services.Product;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -12,6 +19,8 @@ public class HomeController : BaseController
             this.productService = productService;
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    /*[Authorize(Policy = "AuthUser")]*/
     public async Task<ActionResult> GetHomeProductList()
     {
         var products = await productService.GetAllProducts();
