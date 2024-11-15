@@ -61,7 +61,9 @@ public class RegisterModel : PageModel
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     claimsPrincipal);
 
-                /*var token = jwtProvider.GenerateToken(user);*/
+                var token = jwtProvider.GenerateToken(user);
+
+                this.HttpContext.Response.Cookies.Append("tasty-cookies", token);
 
                 await this.HttpContext.SignInAsync(claimsPrincipal);
 
@@ -69,12 +71,11 @@ public class RegisterModel : PageModel
             }
             ModelState.AddModelError(string.Empty, "Error occurred");
         }
-        GetToken();
         return Page();
     }
 
 
-    public dynamic GetToken()
+/*    public dynamic GetToken()
     {
         var handler = new JwtSecurityTokenHandler();
 
@@ -89,5 +90,5 @@ public class RegisterModel : PageModel
                                                    issuer: "ExampleIssuer",
                                                    expires: DateTime.UtcNow.AddHours(12));
         return handler.WriteToken(token);
-    }
+    }*/
 }
