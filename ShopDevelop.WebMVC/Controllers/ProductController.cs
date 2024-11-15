@@ -26,7 +26,6 @@ public class ProductController : Controller
             string data = responseMessage.Content.ReadAsStringAsync().Result;
             productViewModel = JsonConvert.DeserializeObject<ProductPageViewModel>(data);
         }
-
         return View(productViewModel);
     }
 }

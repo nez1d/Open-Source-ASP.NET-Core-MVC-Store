@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Identity.DuendeServer.Models;
+using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Identity.DuendeServer.Data.EntityConfigurations;
 

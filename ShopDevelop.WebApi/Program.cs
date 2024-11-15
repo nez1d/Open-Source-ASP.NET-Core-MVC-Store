@@ -1,9 +1,9 @@
-using ShopDevelop.Application;
-using ShopDevelop.Persistence;
+using ShopDevelop.Application.Services.Product;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Persistence.Repository;
-using System.Reflection;
-using ShopDevelop.Application.Services.Product;
+using ShopDevelop.Application;
+using ShopDevelop.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -13,6 +13,28 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddIdentityServer(options =>
+{
+    options.Authentication.CookieLifetime = TimeSpan.FromHours(10);
+});
+
+builder.Services.AddAuthentication(config =>
+{
+    config.DefaultAuthenticateScheme =
+        JwtBearerDefaults.AuthenticationScheme;
+    config.DefaultChallengeScheme =
+        JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        options.Authority = "https://localhost:7082/";
+        options.Audience = "NotesWebAPI";
+        options.RequireHttpsMetadata = false;
+    }).AddCookie(options =>
+    {
+        options.Cookie.Name = "tasty-cookies";
+    });
 
 /*builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssemblies(

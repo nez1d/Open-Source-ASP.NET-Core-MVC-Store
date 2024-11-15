@@ -4,6 +4,7 @@ namespace ShopDevelop.Domain.Interfaces
 {
     public interface IApplicationDbContext 
     {
+        DbSet<User> Users { get; set; }
         DbSet<Product> Products { get; set; }
         DbSet<ProductDetail> ProductDedails { get; set; }
         DbSet<Category> Categories { get; set; }
@@ -11,6 +12,5 @@ namespace ShopDevelop.Domain.Interfaces
         DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         DbSet<Review> Reviews { get; set; }
         Task<int> SaveChangesAsync();
-        /*Task<int> SaveChangesAsync(CancellationToken cancellationToken);*/
     }
 }

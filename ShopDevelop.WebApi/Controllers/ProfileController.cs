@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ShopDevelop.WebApi.Controllers;
@@ -12,4 +12,4 @@ public class ProfileController : Controller
     {
         return Ok();
     }
-}
+}*/
