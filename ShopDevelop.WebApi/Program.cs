@@ -4,6 +4,9 @@ using ShopDevelop.Application.Repository;
 using ShopDevelop.Persistence.Repository;
 using ShopDevelop.Application;
 using ShopDevelop.Persistence;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -28,9 +31,26 @@ builder.Services.AddAuthentication(config =>
 })
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("mysuperkeywoooooooooooooooochoeeeeeee"))
+        };
         options.Authority = "https://localhost:7082/";
         options.Audience = "NotesWebAPI";
         options.RequireHttpsMetadata = false;
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Cookies["tasty-cookies"];
+                return Task.CompletedTask;
+            }
+        };
     }).AddCookie(options =>
     {
         options.Cookie.Name = "tasty-cookies";

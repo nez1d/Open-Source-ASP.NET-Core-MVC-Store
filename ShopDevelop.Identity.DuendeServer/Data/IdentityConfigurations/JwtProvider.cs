@@ -14,7 +14,7 @@ public class JwtProvider
         Claim[] claims = [new(ClaimTypes.Role, "AuthUser")];
 
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes("mysuperkey")),
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthOptions.KEY)),
             SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
