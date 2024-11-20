@@ -17,7 +17,7 @@ public class UserProfileLookupDto
 
     public UserProfileLookupDto(Guid id, string login, string firstName, string lastName,
         string patornymic, string email, string phone, string country, string city, 
-        double balance, string imagePath, string imageFootePath)
+        double balance, string imagePath, string imageFooterPath)
     {
         Id = id;
         Login = login;
@@ -30,6 +30,6 @@ public class UserProfileLookupDto
         City = city;
         Balance = balance;
         ImagePath = imagePath;
-        ImageFooterPath = imageFootePath;
+        ImageFooterPath = imageFooterPath;
     }
 }
