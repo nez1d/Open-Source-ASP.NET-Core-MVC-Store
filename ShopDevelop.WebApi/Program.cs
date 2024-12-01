@@ -1,12 +1,12 @@
-using ShopDevelop.Application.Services.Product;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using ShopDevelop.Application.Repository;
-using ShopDevelop.Persistence.Repository;
 using ShopDevelop.Application;
+using ShopDevelop.Application.Repository;
+using ShopDevelop.Application.Services.Product;
 using ShopDevelop.Persistence;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ShopDevelop.Application.Services.User;
+using ShopDevelop.Persistence.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -16,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddIdentityServer(options =>
 {
@@ -40,7 +42,7 @@ builder.Services.AddAuthentication(config =>
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes("mysuperkeywoooooooooooooooochoeeeeeee"))
         };
-        options.Authority = "https://localhost:7082/";
+        options.Authority = "http://localhost:5261/";
         options.Audience = "NotesWebAPI";
         options.RequireHttpsMetadata = false;
         options.Events = new JwtBearerEvents

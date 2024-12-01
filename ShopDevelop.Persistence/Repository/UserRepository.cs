@@ -1,5 +1,4 @@
-﻿/*using AutoMapper;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Interfaces;
@@ -26,6 +25,7 @@ public class UserRepository : IUserRepository
 
     public async Task<ApplicationUser> GetUserById(Guid id)
     {
-        return await 
+        return await this.context.Users
+            .FirstOrDefaultAsync(user => user.Id == id);
     }
-}*/
+}

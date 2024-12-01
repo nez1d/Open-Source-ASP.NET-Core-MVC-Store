@@ -21,7 +21,7 @@ public class ProductRepository : IProductRepository
     public async Task Update(Product product)
     {
         var model = GetById(product.Id);
-        if(model!= null)
+        if (model != null)
         {
             context.Products.Update(product);
             await context.SaveChangesAsync();

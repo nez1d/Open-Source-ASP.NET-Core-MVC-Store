@@ -4,7 +4,7 @@ namespace ShopDevelop.Application.Repository;
 
 public interface IUserRepository
 {
-    Task<Guid> CreateUser(User user);
-    Task<User> GetAllUsers();
-    Task<User> GetUserById(Guid id);
+    Task<Guid> CreateUser(ApplicationUser user);
+    Task<ApplicationUser> GetAllUsers();
+    Task<ApplicationUser> GetUserById(Guid id);
 }

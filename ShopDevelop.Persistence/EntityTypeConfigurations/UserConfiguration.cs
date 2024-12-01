@@ -4,29 +4,13 @@ using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Persistence.EntityTypeConfigurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.HasKey(user => user.Id);
             builder
-                .Property(user => user.Login)
-                .HasMaxLength(50)
-                .IsRequired();
-            builder
-                .Property(user => user.Password)
-                .HasMaxLength(50)
-                .IsRequired();
-            builder
                 .Property(user => user.FirstName)
-                .HasMaxLength(50)
-                .IsRequired();
-            builder
-                .Property(user => user.LastName)
-                .HasMaxLength(50)
-                .IsRequired();
-            builder
-                .Property(user => user.Patronymic)
                 .HasMaxLength(50)
                 .IsRequired();
             builder
@@ -85,7 +69,7 @@ namespace ShopDevelop.Persistence.EntityTypeConfigurations
             builder
                 .HasMany(user => user.Orders)
                 .WithOne(review => review.User)
-                .HasForeignKey(review => review.UserId);
+                .HasForeignKey(review => review.UserId); 
         }
     }
 }

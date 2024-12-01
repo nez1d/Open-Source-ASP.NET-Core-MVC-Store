@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ShopDevelop.Identity.DuendeServer.Models;
+namespace ShopDevelop.Domain.Models;
 
 public class ApplicationRole : IdentityRole { }

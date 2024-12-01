@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using ShopDevelop.Application.Services.Product;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -19,15 +13,14 @@ public class HomeController : BaseController
             this.productService = productService;
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = "AuthUser")]
     public async Task<ActionResult> GetHomeProductList()
     {
         var products = await productService.GetAllProducts();
-        
         return Ok(products);
     }
 
-    [HttpGet("token")]
+    /*[HttpGet("token")]
     public dynamic GetToken()
     {
         var handler = new JwtSecurityTokenHandler();
@@ -44,5 +37,5 @@ public class HomeController : BaseController
                                                    issuer: "AuthServer",
                                                    expires: DateTime.UtcNow.AddHours(42));
         return handler.WriteToken(token);
-    }
+    }*/
 }

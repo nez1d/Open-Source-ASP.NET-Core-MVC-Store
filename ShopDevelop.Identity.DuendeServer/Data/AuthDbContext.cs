@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Identity.DuendeServer.Models;
+using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Identity.DuendeServer.Data;
 
@@ -9,20 +9,6 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser, ApplicationRole,
 {
     public AuthDbContext(DbContextOptions options)
             : base(options) { }
-
-    /*private readonly IConfiguration _configuration;
-    public AuthDbContext(IConfiguration configuration) =>
-        _configuration = configuration;
-
-    protected override void OnConfiguring(DbContextOptionsBuilder builder)
-    {
-        builder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"))
-            .UseLoggerFactory(CreateLoggerFactory())
-            .EnableSensitiveDataLogging(); 
-    }
-
-    public ILoggerFactory CreateLoggerFactory() =>
-            LoggerFactory.Create(builder => { builder.AddConsole(); });*/
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -38,7 +24,6 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser, ApplicationRole,
             entity.ToTable(name: "UserTockens"));
         builder.Entity<IdentityRoleClaim<string>>(entity =>
             entity.ToTable(name: "RoleClaim"));
-        /*builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });*/
 
         base.OnModelCreating(builder);
     }

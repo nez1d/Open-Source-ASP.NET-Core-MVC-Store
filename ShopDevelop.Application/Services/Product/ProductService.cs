@@ -10,12 +10,18 @@ public class ProductService : IProductService
     private readonly IProductRepository productRepository;
     public ProductService(ISender mediator,
         IProductRepository productRepository) =>
-            (this.mediator, this.productRepository) = 
-            (mediator, productRepository);
+        (this.mediator, this.productRepository) = 
+        (mediator, productRepository);
 
-    public async Task AddNewProduct(Domain.Models.Product product)
+    public async Task<bool> AddNewProduct(Domain.Models.Product product)
     {
-        await productRepository.Create(product);
+        var result = await productRepository.Create(product);
+
+        if (result != null)
+        {
+            return true;
+        }
+        return false;
     }
 
     public async Task EditProduct(Domain.Models.Product product)
@@ -51,9 +57,14 @@ public class ProductService : IProductService
         return null;
     }
 
-    public async Task<decimal> DiscountCalculate(decimal price, decimal oldPrice)
+    public async Task<decimal> CalculateDiscountByPrice(decimal price, decimal oldPrice)
     {
-        throw new NotImplementedException();
+        return (price / oldPrice) * 100;
+    }
+
+    public async Task<decimal> CalculateDiscountByPercent(decimal price, decimal discountPercent)
+    {
+        return price * discountPercent;
     }
 
     public async Task<decimal> RatingCalculate()
@@ -62,6 +73,11 @@ public class ProductService : IProductService
     }
 
     public async Task<int> ReviewsCalculate()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<int> CreateActicule()
     {
         throw new NotImplementedException();
     }
