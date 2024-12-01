@@ -1,4 +1,5 @@
-﻿namespace ShopDevelop.Domain.Models
+﻿/*
+namespace ShopDevelop.Domain.Models
 {
     public class User
     {
@@ -22,5 +23,9 @@
         public IEnumerable<ShoppingCartItem> CartItems { get; set; }
         public IEnumerable<Order> Orders { get; set; }
         public Guid OrderId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        
+        public string ApplicationUserId { get; set; }
     }
 }
+*/

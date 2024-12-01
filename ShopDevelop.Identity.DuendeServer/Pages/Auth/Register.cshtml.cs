@@ -5,15 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.IdentityModel.Tokens;
 using ShopDevelop.Domain.Models;
 using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
-using ShopDevelop.Identity.DuendeServer.Models;
 using ShopDevelop.Identity.DuendeServer.ViewModels;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
 
 namespace ShopDevelop.Identity.DuendeServer.Pages;
 
@@ -49,12 +44,11 @@ public class RegisterModel : PageModel
                 var claims = new List<Claim>
                 {
                     new (ClaimTypes.Name, model.Email),
-                    new Claim(ClaimTypes.Role, "AuthUser")
+                    new (ClaimTypes.Role, "AuthUser"),
+                    new ("UserId", user.Id.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, "pwd", ClaimTypes.Name, ClaimTypes.Role);
-                /*var claimsIdentity = new ClaimsIdentity(claims, ClaimTypes.Role);
-                  var claimsIdentity = new ClaimsIdentity(claims, ClaimTypes.Role);*/
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
                 await HttpContext.SignInAsync(
@@ -67,7 +61,7 @@ public class RegisterModel : PageModel
 
                 await this.HttpContext.SignInAsync(claimsPrincipal);
 
-                return Redirect("https://localhost:7005/index.html");
+                return Redirect("http://localhost:5185/index.html");
             }
             ModelState.AddModelError(string.Empty, "Error occurred");
         }

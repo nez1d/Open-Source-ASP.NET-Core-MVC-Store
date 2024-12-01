@@ -1,12 +1,12 @@
+using ShopDevelop.Identity.DuendeServer.Data;
+using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
+using ShopDevelop.Domain.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using ShopDevelop.Identity.DuendeServer.Data;
-using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
-using ShopDevelop.Identity.DuendeServer.Models;
 using System.Security.Claims;
 using System.Text;
 
@@ -52,34 +52,6 @@ builder.Services.AddAuthentication(options =>
         options.Cookie.Name = "tasty-cookies";
     });
 
-/*builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-    {
-        options.Cookie.HttpOnly = true;
-        options.Cookie.Name = "Asp.Net.Core.Authefication-cookie";
-        options.ExpireTimeSpan = TimeSpan.FromHours(8);
-
-        options.LoginPath = "/Auth/Login";
-        options.LogoutPath = "/Auth/Logout";
-        options.AccessDeniedPath = "/Auth/AccessDenied";
-    });*/
-/*.AddGoogle("Google", options =>
-{
-    options.ClientId = "";
-    options.ClientSecret = "";
-
-    //options.CallbackPath = "/singin-google";
-    //options.SignInScheme = "cookie";
-
-    options.Events = new OAuthEvents
-    {
-        OnCreatingTicket = e =>
-        {
-            e.Principal
-        }
-    };
-});*/
-
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AuthUser", new AuthorizationPolicyBuilder()
@@ -104,8 +76,11 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddRoleManager<RoleManager<ApplicationRole>>()
     .AddDefaultTokenProviders(); 
 
-builder.Services.Configure<IdentityOptions>(options => 
+builder.Services.Configure<IdentityOptions>(options =>
 {
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.,@-+";
+    options.User.RequireUniqueEmail = true;
+    
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
@@ -116,9 +91,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
-
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.,@-+";
-    options.User.RequireUniqueEmail = true;
 });
 
 builder.Services.AddIdentityServer()
