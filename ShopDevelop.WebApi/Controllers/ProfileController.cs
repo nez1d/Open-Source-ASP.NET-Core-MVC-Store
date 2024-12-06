@@ -26,4 +26,25 @@ public class ProfileController : BaseController
         }
         return Ok();
     }
+    
+    [HttpGet]
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> EditProfile(Guid id)
+    {
+        return Ok();
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> DeleterProfile(Guid id)
+    {
+        return Ok();
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> Logout(Guid id)
+    {
+        return Ok();
+    }
 }

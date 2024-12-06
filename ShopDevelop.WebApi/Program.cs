@@ -15,9 +15,17 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped(scope => ShoppingCartRepository.GetCart(scope));
+
+builder.Services.AddSession(options => {
+    options.Cookie.Name = ".AspNetCore.Cookies-Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddIdentityServer(options =>
 {
@@ -57,11 +65,6 @@ builder.Services.AddAuthentication(config =>
     {
         options.Cookie.Name = "tasty-cookies";
     });
-
-/*builder.Services.AddMediatR(config =>
-    config.RegisterServicesFromAssemblies(
-        typeof(CreateProductCommandHandler).Assembly, 
-        typeof(CreateProductCommand).Assembly));*/
 
 builder.Services.AddApplication();
 builder.Services.AddPersistence(configuration);
