@@ -3,7 +3,7 @@
 public class Product
 {
     public Guid Id { get; set; }
-    public int Article { get; set; }
+    public uint Article { get; set; }
     public string ProductName { get; set; }
     public decimal Price { get; set; }
     public decimal? OldPrice { get; set; }
@@ -16,7 +16,7 @@ public class Product
     public string ImagePath { get; set; }
     public string ImageMiniPath { get; set; }
     public double Rating { get; set; }
-    public IEnumerable<Review> Reviews { get; set; }
+    public IEnumerable<Review>? Reviews { get; set; }
     public Guid ReviewId { get; set; }
     public ProductDetail Details { get; set; }
     public Category Category { get; set; }
