@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using MediatR;
+using ShopDevelop.Application.Entities.Category.Commands.Create;
 using ShopDevelop.Application.Entities.User.Queries.GetProfile;
 
 namespace ShopDevelop.Application;
@@ -13,6 +14,7 @@ public static class DependencyInjection
     {
         services.AddMediatR(x =>
                 x.RegisterServicesFromAssemblies(
+                    typeof(CreateCategoryCommand).Assembly,
                     typeof(GetMiniProductListQuery).Assembly,
                     typeof(GetUserProfileQuery).Assembly));
 

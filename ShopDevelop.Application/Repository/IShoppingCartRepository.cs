@@ -4,7 +4,7 @@ namespace ShopDevelop.Application.Repository;
 
 public interface IShoppingCartRepository
 {
-    /*/// <summary>
+    /// <summary>
     /// Adding a product in the Shopping Cart.
     /// </summary>
     /// <param name="ShoppingCartId">Id of Shopping Cart.</param>
@@ -23,18 +23,17 @@ public interface IShoppingCartRepository
     /// </summary>
     /// <param name="ShoppingCartId">Id of Shopping Cart.</param>
     /// <returns></returns>
-    Task ClearCart(Guid ShoppingCartId);*/
+    Task ClearCart(Guid ShoppingCartId);
     /// <summary>
     /// Get all a Shopping Cart Items.
     /// </summary>
     /// <param name="ShoppingCartId">Id of Shopping Cart.</param>
     /// <returns>Return list Shopping Cart Items.</returns>
     Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems();
-    /*/// <summary>
+    /// <summary>
     /// Getting a Shopping Cart total sum value. 
     /// </summary>
     /// <param name="ShoppingCartId">Id of Shopping Cart.</param>
     /// <returns>Return total value.</returns>
-    Task<decimal> GetShoppingCartTotal(Guid ShoppingCartId);*/
-    
+    Task<decimal> GetShoppingCartTotal(Guid ShoppingCartId);
 }

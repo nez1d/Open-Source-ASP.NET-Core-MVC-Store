@@ -12,5 +12,5 @@ public class CreateProductCommand : IRequest<Guid>
     public string ShortDescription { get; set; }
     public uint InStock { get; set; }
     public bool IsFavorite { get; set; }
-    public Category Category { get; set; }
+    public Domain.Models.Category Category { get; set; }
 }

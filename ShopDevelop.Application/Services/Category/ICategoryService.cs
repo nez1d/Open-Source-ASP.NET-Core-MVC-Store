@@ -2,9 +2,33 @@
 
 public interface ICategoryService
 {
-    Task<Guid> CreateCategory(Domain.Models.Category category);
-    Task EditCategory(Guid id);
-    Task DeleteCategory(Guid id);
-    Task<Domain.Models.Category> GetCategoryById(Guid id);
+    /// <summary>
+    /// Create new Category.
+    /// </summary>
+    /// <param name="category">Category entity.</param>
+    /// <returns>Return Category Id.</returns>
+    Task<Guid> CreateCategoryAsync(Domain.Models.Category category);
+    /// <summary>
+    /// Edit a Category.
+    /// </summary>
+    /// <param name="id">Category Id.</param>
+    /// <returns></returns>
+    Task EditCategoryAsync(Domain.Models.Category category);
+    /// <summary>
+    /// Delete a Category.
+    /// </summary>
+    /// <param name="id">Category Id.</param>
+    /// <returns></returns>
+    Task DeleteCategoryAsync(Guid id);
+    /// <summary>
+    /// Get Category by Id.
+    /// </summary>
+    /// <param name="id">Category Id.</param>
+    /// <returns>Return a Category entity.</returns>
+    Task<Domain.Models.Category> GetCategoryByIdAsync(Guid id);
+    /// <summary>
+    /// Get all Categories.
+    /// </summary>
+    /// <returns>Return List a Categories.</returns>
     Task<IEnumerable<Domain.Models.Category>> GetAllCategory();
 }

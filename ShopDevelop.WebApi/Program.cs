@@ -5,6 +5,8 @@ using ShopDevelop.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ShopDevelop.Application.Services.Category;
+using ShopDevelop.Application.Services.Review;
 using ShopDevelop.Application.Services.User;
 using ShopDevelop.Persistence.Repository;
 
@@ -15,8 +17,14 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<ReviewRepository>();
+
+builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped(scope => ShoppingCartRepository.GetCart(scope));
