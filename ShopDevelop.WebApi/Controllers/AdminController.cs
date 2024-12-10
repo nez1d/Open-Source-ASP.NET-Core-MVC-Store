@@ -17,5 +17,4 @@ public class AdminController : BaseController
         await roleManager.CreateAsync(new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" });
         return Ok(await roleManager.Roles.ToListAsync());
     }
-}
-*/
+}*/

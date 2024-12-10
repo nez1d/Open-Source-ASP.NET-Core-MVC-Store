@@ -13,20 +13,26 @@ public class ProductService : IProductService
         (this.mediator, this.productRepository) = 
         (mediator, productRepository);
 
-    public async Task<bool> AddNewProduct(Domain.Models.Product product)
+    public async Task<bool> AddNewProductAsync(Domain.Models.Product product)
     {
-        var result = await productRepository.Create(product);
+        var result = await productRepository
+            .Create(product) != Guid.Empty;
 
-        if (result != null)
-        {
+        if (result)
             return true;
-        }
+
         return false;
     }
 
-    public async Task EditProduct(Domain.Models.Product product)
+    public async Task EditProductAsync(Domain.Models.Product product)
     {
+        var model = await productRepository.GetById(product.Id);
         await productRepository.Update(product);
+    }
+
+    public Task DeleteProductAsync(Guid id)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task DeleteProduct(Guid id)
@@ -34,7 +40,7 @@ public class ProductService : IProductService
         await productRepository.Delete(id);
     }
 
-    public async Task<IEnumerable<MiniProductLookupDto>> GetAllProducts()
+    public async Task<IEnumerable<MiniProductLookupDto>> GetAllProductsAsync()
     {
         try
         {
@@ -46,7 +52,7 @@ public class ProductService : IProductService
         return null;
     }
 
-    public async Task<Domain.Models.Product> GetById(Guid? id)
+    public async Task<Domain.Models.Product> GetByIdAsync(Guid? id)
     {
         try
         {
@@ -57,27 +63,27 @@ public class ProductService : IProductService
         return null;
     }
 
-    public async Task<decimal> CalculateDiscountByPrice(decimal price, decimal oldPrice)
+    public async Task<decimal> CalculateDiscountByPriceAsync(decimal price, decimal oldPrice)
     {
         return (price / oldPrice) * 100;
     }
 
-    public async Task<decimal> CalculateDiscountByPercent(decimal price, decimal discountPercent)
+    public async Task<decimal> CalculateDiscountByPercentAsync(decimal price, decimal discountPercent)
     {
         return price * discountPercent;
     }
 
-    public async Task<decimal> RatingCalculate()
+    public async Task<decimal> RatingCalculateAsync()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<int> ReviewsCalculate()
+    public async Task<int> ReviewsCalculateAsync()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<int> CreateActicule()
+    public async Task<int> CreateActiculeAsync()
     {
         throw new NotImplementedException();
     }

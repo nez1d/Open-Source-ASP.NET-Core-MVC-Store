@@ -23,6 +23,7 @@ public class ProductRepository : IProductRepository
         var model = GetById(product.Id);
         if (model != null)
         {
+            /*await context.Entry<Product>(model).State = EntityState.Detached;*/
             context.Products.Update(product);
             await context.SaveChangesAsync();
         }

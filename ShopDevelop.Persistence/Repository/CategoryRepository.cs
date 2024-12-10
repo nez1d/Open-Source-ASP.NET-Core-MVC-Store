@@ -18,17 +18,6 @@ public class CategoryRepository : ICategoryRepository
         return category.Id;
     }
 
-    public async Task Delete(Guid id)
-    {
-        var category = GetById(id);
-        if (category == null)
-        {
-            throw new ArgumentException();
-        }
-        /*context.Categories.Remove(category);*/
-        await context.SaveChangesAsync();
-    }
-
     public async Task Update(Category category)
     {
         var model = GetById(category.Id);
@@ -39,11 +28,22 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
+    public async Task Delete(Guid id)
+    {
+        var category = await GetById(id);     
+        if (category == null)
+        {
+            throw new ArgumentException();
+        }
+        context.Categories.Remove(category);
+        await context.SaveChangesAsync();
+    }
+
     public async Task<IEnumerable<Category>> GetAll()
     {
-        return context.Categories
+        return await context.Categories
             .Where(category => category.Id != null)
-            .ToList();
+            .ToListAsync();
     }
 
     public async Task<Category> GetById(Guid id)

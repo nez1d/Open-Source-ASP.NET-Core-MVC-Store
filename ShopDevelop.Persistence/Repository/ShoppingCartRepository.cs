@@ -69,7 +69,17 @@ public class ShoppingCartRepository : IShoppingCartRepository
         await context.SaveChangesAsync();
         return isValidAmount;
     }
-    
+
+    public Task<uint> RemoveFromCart(Product product)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ClearCart(Guid ShoppingCartId)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems()
     {
         return ShoppingCartItems ??
@@ -77,7 +87,12 @@ public class ShoppingCartRepository : IShoppingCartRepository
                    .Where(c => c.ShoppingCartId == SCId)
                    .Include(s => s.Product));
     }
-    
+
+    public Task<decimal> GetShoppingCartTotal(Guid ShoppingCartId)
+    {
+        throw new NotImplementedException();
+    }
+
     /*public async Task<uint> RemoveFromCart(Product product)
     {
         var cart = GetCart(serviceProvider);

@@ -20,7 +20,7 @@ public class HomeController : BaseController
     [Authorize(Roles = "AuthUser")]
     public async Task<ActionResult> GetHomeProductList()
     {
-        var products = await productService.GetAllProducts();
+        var products = await productService.GetAllProductsAsync();
         return Ok(products);
     }
     
