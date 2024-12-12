@@ -21,9 +21,9 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .Property(category => category.ImagePath)
             .HasMaxLength(250)
             .IsRequired();
-        builder
+        /*builder
             .HasMany(category => category.Products)
             .WithOne(product => product.Category)
-            .HasForeignKey(product => product.CategoryId);
+            .HasForeignKey(product => product.CategoryId);*/
     }
 }

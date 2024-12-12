@@ -2,20 +2,26 @@ using ShopDevelop.Application;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Application.Services.Product;
 using ShopDevelop.Persistence;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Application.Services.Review;
 using ShopDevelop.Application.Services.User;
 using ShopDevelop.Persistence.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+var connectionString = builder.Configuration.GetValue<string>("DefaultConnection");
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDbContext>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

@@ -19,11 +19,10 @@ public static class DependencyInjection
                 typeof(CreateCategoryCommandHandler).Assembly,
                 typeof(GetMiniProductListHandler).Assembly,
                 typeof(GetUserProfileHandler).Assembly));
-
-        var connectionString = configuration["DefaultConnection"];
+        
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql("Server=localhost;Port=5438;DataBase=ShopDevelop; User Id=postgres;Password=postgres ;Include Error Detail=True");
         });
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetService<ApplicationDbContext>());

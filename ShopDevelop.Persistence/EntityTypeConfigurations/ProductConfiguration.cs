@@ -53,9 +53,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMany(product => product.Reviews)
             .WithOne(review => review.Product)
             .HasForeignKey(review => review.ProductId);
-        builder
+        /*builder
             .HasOne(product => product.Category)
-            .WithMany(category => category.Products);
+            .WithMany(category => category.Products);*/
         builder
             .HasOne(product => product.Seller)
             .WithMany(seller => seller.Products);

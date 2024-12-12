@@ -9,24 +9,30 @@ namespace ShopDevelop.Application.Services.Category;
 public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository categoryRepository;
-    private readonly ISender mediator;
+    /*private readonly ISender mediator;*/
     private ICategoryService categoryService;
 
     public CategoryService(ICategoryRepository categoryRepository) =>
         this.categoryRepository = categoryRepository;
     
-    public async Task<Guid> CreateCategoryAsync(Domain.Models.Category category)
+    public async Task<Guid> CreateCategoryAsync(string name, string description)
     {
-        try
+        var category = new Domain.Models.Category
+        {
+            Name = name,
+            Description = description,
+            ImagePath = "/source/images/category.img"
+        };
+        /*try
         {
             var entity = await mediator.Send(new CreateCategoryCommand());
             return category.Id;
         }
         catch (Exception ex) { }
         
-        return Guid.Empty;
-        /*var result = await categoryRepository.Create(category);
-        return category.Id;*/
+        return Guid.Empty;*/
+        var result = await categoryRepository.Create(category);
+        return category.Id;
     }
 
     public async Task EditCategoryAsync(Domain.Models.Category category)
