@@ -7,7 +7,7 @@ public interface ICategoryService
     /// </summary>
     /// <param name="category">Category entity.</param>
     /// <returns>Return Category Id.</returns>
-    Task<Guid> CreateCategoryAsync(Domain.Models.Category category);
+    Task<Guid> CreateCategoryAsync(string name, string description);
     /// <summary>
     /// Edit a Category.
     /// </summary>

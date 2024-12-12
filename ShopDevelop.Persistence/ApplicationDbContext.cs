@@ -3,22 +3,27 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
+using ShopDevelop.Persistence.EntityTypeConfigurations;
 
 namespace ShopDevelop.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly IConfiguration _configuration;
+    private IApplicationDbContext _iApplicationDbContextImplementation;
+    /*private readonly IConfiguration _configuration;
     public ApplicationDbContext(IConfiguration configuration) =>
-        _configuration = configuration;
+        _configuration = configuration;*/
+    
+    public ApplicationDbContext(DbContextOptions options)
+        : base(options) { }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder builder)
+    /*protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
-        builder.UseNpgsql(_configuration
+        /*builder.UseNpgsql(_configuration
             .GetConnectionString("DefaultConnection"))
             .UseLoggerFactory(CreateLoggerFactory())
-            .EnableSensitiveDataLogging();
-    }
+            .EnableSensitiveDataLogging();#1#
+    }*/
 
     public ILoggerFactory CreateLoggerFactory() =>
         LoggerFactory.Create(builder => { builder.AddConsole(); });
@@ -38,7 +43,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public async Task<int> SaveChangesAsync()
     {
-        return await this.SaveChangesAsync();
+        return await base.SaveChangesAsync();
     }
 
     public DbSet<ApplicationUser> Users { get; set; }

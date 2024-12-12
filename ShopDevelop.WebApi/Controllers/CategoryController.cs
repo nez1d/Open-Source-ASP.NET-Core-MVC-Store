@@ -1,30 +1,25 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Services.Category;
-using ShopDevelop.Application.Services.Product;
 using ShopDevelop.Domain.Models;
-using ShopDevelop.WebApi.ViewModels;
 
 namespace ShopDevelop.WebApi.Controllers;
 
-[Route("api/[controller]/[action]/{id?}")]
 [ApiController]
+[Route("api/[controller]/[action]")]
 public class CategoryController : BaseController
 {
     private readonly ICategoryService categoryService;
     public CategoryController(ICategoryService categoryService) =>
-        this.categoryService = categoryService;
-
+        (this.categoryService) = (categoryService);
 
     [HttpPost]
-    [Authorize(Roles = "Manager")]
-    public async Task<IActionResult> CreateCategory(CategoryViewModel model)
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> CreateCategory(string name, string description)
     {
-        /*var category = await categoryService.CreateCategoryAsync(model);
+        await categoryService.CreateCategoryAsync(name, description);
         
-        return Ok(category);*/
-
-        return BadRequest();  
+        return Ok();
     }
 
     [HttpPost]
