@@ -13,22 +13,25 @@ public class ShoppingCartRepository : IShoppingCartRepository
     public ShoppingCartRepository(ApplicationDbContext context) =>
             (this.context) = (context);
     
-    public Guid SCId { get; set; }
+    public static Guid SCId { get; set; }
 
     public IEnumerable<ShoppingCartItem> ShoppingCartItems { get; set; }
+    //TODO: rozobratsia pochemu ShoppingCartId == Guid.Empty 
     
     public static ShoppingCart GetCart(IServiceProvider services)
     {
         ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
         var context = services.GetService<ApplicationDbContext>();
-        string cartId = session.GetString(".AspNetCore.Cookies-Session") ?? Guid.NewGuid().ToString();
         
+        string cartId = session.GetString(".AspNetCore.Cookies-Session") ?? Guid.NewGuid().ToString();
         session.SetString(".AspNetCore.Cookies-Session", cartId);
-
+        
+        SCId = Guid.Parse(cartId); 
+        
         return new ShoppingCart() { ShoppingCartId = cartId }; 
     }
     
-    public async Task<bool> AddToCart(Guid ShoppingCartId, Product product, int amount)
+    public async Task<bool> AddToCart(Product product, int amount)
     {
         if(product.InStock == 0 || amount == 0)
         {
@@ -37,7 +40,7 @@ public class ShoppingCartRepository : IShoppingCartRepository
 
         var shoppingCartItem = context.ShoppingCartItems.SingleOrDefault(
             item => item.Product.Id == product.Id && 
-                    item.ShoppingCartId == ShoppingCartId);
+                    item.ShoppingCartId == SCId);
 
         var isValidAmount = true;
 
@@ -48,7 +51,7 @@ public class ShoppingCartRepository : IShoppingCartRepository
             }
             shoppingCartItem = new ShoppingCartItem
             {
-                ShoppingCartId = ShoppingCartId,
+                ShoppingCartId = SCId,
                 Product = product,
                 Amount = (uint)Math.Min(product.InStock, amount)
             };
@@ -70,9 +73,17 @@ public class ShoppingCartRepository : IShoppingCartRepository
         return isValidAmount;
     }
 
-    public Task<uint> RemoveFromCart(Product product)
+    public async Task<uint> RemoveFromCart(Product product)
     {
-        throw new NotImplementedException();
+        var shoppingCartItem = await context.ShoppingCartItems.SingleOrDefaultAsync(
+            s => s.Product.Id == product.Id && s.ShoppingCartId == SCId);
+        if (shoppingCartItem != null)
+        {
+            context.ShoppingCartItems.Remove(shoppingCartItem);
+            await context.SaveChangesAsync();
+        }
+
+        return 1;
     }
 
     public Task ClearCart(Guid ShoppingCartId)
@@ -95,7 +106,7 @@ public class ShoppingCartRepository : IShoppingCartRepository
 
     /*public async Task<uint> RemoveFromCart(Product product)
     {
-        var cart = GetCart(serviceProvider);
+        var cart = GetCart();
         
         var shoppingCartItem = context.ShoppingCartItems
             .SingleOrDefault(item => item.Product.Id == product.Id
@@ -116,9 +127,9 @@ public class ShoppingCartRepository : IShoppingCartRepository
         }
         await context.SaveChangesAsync();
         return amount;
-    }
+    }*/
     
-    public async Task ClearCart(Guid ShoppingCartId)
+    /*public async Task ClearCart(Guid ShoppingCartId)
     {
         var item = context
             .ShoppingCartItems.Where(cart => 

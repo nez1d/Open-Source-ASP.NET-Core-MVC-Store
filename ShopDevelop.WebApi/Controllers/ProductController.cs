@@ -5,7 +5,7 @@ using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.WebApi.Controllers;
 
-[Route("api/[controller]/[action]/{id?}")]
+[Route("api/[controller]/[action]/")]
 [ApiController]
 public class ProductController : BaseController
 {
@@ -14,6 +14,7 @@ public class ProductController : BaseController
         this.productService = productService;
 
     [HttpGet]
+    [Route("api/[controller]/[action]/{id?}")]
     public async Task<IActionResult> Index(Guid? id)
     {
         if(id != null)
@@ -25,14 +26,24 @@ public class ProductController : BaseController
     }
 
     [HttpPost]
-    [Authorize(Roles = "Manager")]
-    public async Task<IActionResult> CreateProduct(Product model)
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> CreateProduct(
+        string name, decimal price, decimal oldPrice,
+        string description, string shortDescription, 
+        uint inStock, bool isAvailable)
     {
-        var product = await productService.AddNewProductAsync(model);
-        if(product)
-            return Ok(model.Id);
-
-        return BadRequest();  
+        var product = new Product
+        {
+            ProductName = name,
+            Price = price,
+            OldPrice = oldPrice,
+            Description = description,
+            ShortDescription = shortDescription,
+            InStock = inStock,
+            IsAvailable = isAvailable,
+        };
+        var data = await productService.AddNewProductAsync(product);
+        return Ok();
     }
 
     [HttpPost]
