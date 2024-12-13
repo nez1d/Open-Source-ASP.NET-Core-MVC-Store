@@ -1,22 +1,60 @@
 ﻿using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
 using ShopDevelop.Application.Repository;
 using MediatR;
+using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Application.Services.Product;
 
 public class ProductService : IProductService
 {
     private readonly ISender mediator;
-    private readonly IProductRepository productRepository;
+    private readonly IProductRepository productRepository;    
+    private readonly ICategoryRepository categoryRepository;
     public ProductService(ISender mediator,
-        IProductRepository productRepository) =>
-        (this.mediator, this.productRepository) = 
-        (mediator, productRepository);
+        IProductRepository productRepository,
+        ICategoryRepository categoryRepository) =>
+        (this.mediator, this.productRepository, this.categoryRepository) = 
+        (mediator, productRepository, categoryRepository);
 
     public async Task<bool> AddNewProductAsync(Domain.Models.Product product)
     {
+        var dicount = Convert.ToInt32(
+            await CalculateDiscountByPriceAsync(
+                price: product.Price, 
+                oldPrice: product.OldPrice));
+        var article = Convert.ToUInt32(await CreateActiculeAsync());
+
+        var category = await  categoryRepository.GetById(Guid.Parse("0193b8a1-2d86-788d-a529-a4b93935047e"));
+
+        Domain.Models.Seller seller = new Domain.Models.Seller
+        {
+            Name = "Seller",
+            Description = "Seller",
+            ImagePath = "/Seller",
+            ImageFooterPath = "/Seller"
+        };
+        
+        var data = new Domain.Models.Product
+        {
+            ProductName = product.ProductName,
+            Price = product.Price,
+            OldPrice = product.OldPrice,
+            Discount = dicount,
+            Description = product.Description,
+            ShortDescription = product.ShortDescription,
+            Article = article,
+            InStock = product.InStock,
+            IsAvailable = product.IsAvailable,
+            ImagePath = "/",
+            ImageMiniPath = "/",
+            Category = category,
+            CategoryId = Guid.Parse("0193b8a1-2d86-788d-a529-a4b93935047e"),
+            Seller = seller,
+            SellerId = seller.Id,
+        };
+        
         var result = await productRepository
-            .Create(product) != Guid.Empty;
+            .Create(data) != Guid.Empty;
 
         if (result)
             return true;
@@ -85,6 +123,8 @@ public class ProductService : IProductService
 
     public async Task<int> CreateActiculeAsync()
     {
-        throw new NotImplementedException();
+        Random random = new Random();
+        
+        return random.Next(100000000, 999999999);
     }
 }

@@ -3,13 +3,13 @@
 public class Product
 {
     public Guid Id { get; set; }
-    public uint Article { get; set; }
     public string ProductName { get; set; }
     public decimal Price { get; set; }
-    public decimal? OldPrice { get; set; }
+    public decimal OldPrice { get; set; }
     public int? Discount { get; set; }
     public string Description { get; set; }
     public string ShortDescription { get; set; }
+    public uint Article { get; set; }
     public uint InStock { get; set; }
     public bool IsFavorite { get; set; }
     public bool IsAvailable { get; set; }

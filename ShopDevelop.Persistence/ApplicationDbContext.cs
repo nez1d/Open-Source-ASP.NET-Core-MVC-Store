@@ -47,6 +47,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     }
 
     public DbSet<ApplicationUser> Users { get; set; }
+    public DbSet<Seller> Sellers { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductDetail> ProductDedails { get; set; }
     public DbSet<Category> Categories { get; set; }
