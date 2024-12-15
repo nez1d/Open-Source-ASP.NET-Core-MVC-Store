@@ -55,6 +55,15 @@ public class CategoryService : ICategoryService
     {
         throw new NotImplementedException();
     }
+    
+    public async Task<Domain.Models.Category> GetByName(string name)
+    {
+        var category = await categoryRepository.GetByName(name);
+        if (category != null)
+            return category;
+
+        return null;
+    }
 
     public Task<IEnumerable<Domain.Models.Category>> GetAllCategory()
     {

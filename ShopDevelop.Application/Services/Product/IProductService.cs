@@ -4,13 +4,14 @@ namespace ShopDevelop.Application.Services.Product;
 
 public interface IProductService
 {
-    
     /// <summary>
     /// Adding new product in database.
     /// </summary>
     /// <param name="product">New product entity.</param>
+    /// <param name="sellerId">Seller Id.</param>
+    /// <param name="categoryName">Category name.</param>
     /// <returns></returns>
-    Task<bool> AddNewProductAsync(Domain.Models.Product product);
+    Task<bool> AddNewProductAsync(Domain.Models.Product product, string categoryName, Guid sellerId);
     /// <summary>
     /// Edit exist product on database.
     /// </summary>

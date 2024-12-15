@@ -27,6 +27,12 @@ public interface ICategoryRepository
     /// <returns>Return a category entity.</returns>
     Task<Domain.Models.Category> GetById(Guid id);
     /// <summary>
+    /// Vet category by cagetory name.
+    /// </summary>
+    /// <param name="name">Category name</param>
+    /// <returns></returns>
+    Task<Domain.Models.Category> GetByName(string name);
+    /// <summary>
     /// Get all categories.
     /// </summary>
     /// <returns>Return List Cagetory entities.</returns>

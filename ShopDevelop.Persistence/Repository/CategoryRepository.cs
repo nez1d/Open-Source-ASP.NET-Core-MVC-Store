@@ -13,9 +13,15 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<Guid> Create(Category category)
     {
-        await context.Categories.AddAsync(category);
-        await context.SaveChangesAsync();
-        return category.Id;
+        var result = await this.GetByName(category.Name);
+        if (result == null)
+        {
+            await context.Categories.AddAsync(category);
+            await context.SaveChangesAsync();
+            return category.Id;    
+        }
+        
+        return Guid.Empty;
     }
 
     public async Task Update(Category category)
@@ -50,5 +56,15 @@ public class CategoryRepository : ICategoryRepository
     {
         return await context.Categories
             .FirstOrDefaultAsync(category => category.Id == id);
+    }
+
+    public async Task<Category> GetByName(string name)
+    {
+        var category = await context.Categories
+            .FirstOrDefaultAsync(category => category.Name == name);
+        if (category != null)
+            return category;
+
+        return null;
     }
 }

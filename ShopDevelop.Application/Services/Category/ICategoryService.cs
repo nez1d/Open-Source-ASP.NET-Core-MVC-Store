@@ -27,6 +27,12 @@ public interface ICategoryService
     /// <returns>Return a Category entity.</returns>
     Task<Domain.Models.Category> GetCategoryByIdAsync(Guid id);
     /// <summary>
+    /// Vet category by category name.
+    /// </summary>
+    /// <param name="name">Category name</param>
+    /// <returns></returns>
+    Task<Domain.Models.Category> GetByName(string name);
+    /// <summary>
     /// Get all Categories.
     /// </summary>
     /// <returns>Return List a Categories.</returns>

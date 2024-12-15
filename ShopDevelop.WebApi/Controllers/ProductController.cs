@@ -30,7 +30,8 @@ public class ProductController : BaseController
     public async Task<IActionResult> CreateProduct(
         string name, decimal price, decimal oldPrice,
         string description, string shortDescription, 
-        uint inStock, bool isAvailable)
+        uint inStock, bool isAvailable, string categoryName,
+        Guid sellerId)
     {
         var product = new Product
         {
@@ -42,7 +43,7 @@ public class ProductController : BaseController
             InStock = inStock,
             IsAvailable = isAvailable,
         };
-        var data = await productService.AddNewProductAsync(product);
+        var data = await productService.AddNewProductAsync(product, categoryName, sellerId);
         return Ok();
     }
 
