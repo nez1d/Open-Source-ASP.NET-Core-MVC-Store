@@ -10,29 +10,26 @@ public class ProductService : IProductService
     private readonly ISender mediator;
     private readonly IProductRepository productRepository;    
     private readonly ICategoryRepository categoryRepository;
+    private readonly ISellerRepository sellerRepository;
     public ProductService(ISender mediator,
         IProductRepository productRepository,
-        ICategoryRepository categoryRepository) =>
-        (this.mediator, this.productRepository, this.categoryRepository) = 
-        (mediator, productRepository, categoryRepository);
+        ICategoryRepository categoryRepository,
+        ISellerRepository sellerRepository) =>
+        (this.mediator, this.productRepository, this.categoryRepository, 
+            this.sellerRepository) = 
+        (mediator, productRepository, categoryRepository, sellerRepository);
 
-    public async Task<bool> AddNewProductAsync(Domain.Models.Product product)
+    public async Task<bool> AddNewProductAsync(Domain.Models.Product product, string categoryName, Guid sellerId)
     {
-        var dicount = Convert.ToInt32(
-            await CalculateDiscountByPriceAsync(
-                price: product.Price, 
-                oldPrice: product.OldPrice));
+        var dicount = Convert.ToInt32(await CalculateDiscountByPriceAsync(
+            price: product.Price, 
+            oldPrice: product.OldPrice));
+        
         var article = Convert.ToUInt32(await CreateActiculeAsync());
 
-        var category = await  categoryRepository.GetById(Guid.Parse("0193b8a1-2d86-788d-a529-a4b93935047e"));
+        var category = await categoryRepository.GetByName(categoryName);
 
-        Domain.Models.Seller seller = new Domain.Models.Seller
-        {
-            Name = "Seller",
-            Description = "Seller",
-            ImagePath = "/Seller",
-            ImageFooterPath = "/Seller"
-        };
+        var seller = await sellerRepository.GetById(sellerId);
         
         var data = new Domain.Models.Product
         {
