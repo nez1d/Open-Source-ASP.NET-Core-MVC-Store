@@ -9,39 +9,26 @@ namespace ShopDevelop.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private IApplicationDbContext _iApplicationDbContextImplementation;
-    /*private readonly IConfiguration _configuration;
-    public ApplicationDbContext(IConfiguration configuration) =>
-        _configuration = configuration;*/
-    
     public ApplicationDbContext(DbContextOptions options)
         : base(options) { }
-
-    /*protected override void OnConfiguring(DbContextOptionsBuilder builder)
-    {
-        /*builder.UseNpgsql(_configuration
-            .GetConnectionString("DefaultConnection"))
-            .UseLoggerFactory(CreateLoggerFactory())
-            .EnableSensitiveDataLogging();#1#
-    }*/
 
     public ILoggerFactory CreateLoggerFactory() =>
         LoggerFactory.Create(builder => { builder.AddConsole(); });
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /*modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new ProductDetailConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         modelBuilder.ApplyConfiguration(new OrderConfiguraion());
         modelBuilder.ApplyConfiguration(new ReviewConfiguration());
-        modelBuilder.ApplyConfiguration(new ShoppingCartItemConfiguration());*/
+        modelBuilder.ApplyConfiguration(new ShoppingCartItemConfiguration());
         base.SaveChangesAsync();
         base.OnModelCreating(modelBuilder);
     }
 
-    public async Task<int> SaveChangesAsync()
+    public async Task<int> SaveChangesAsync() 
     {
         return await base.SaveChangesAsync();
     }

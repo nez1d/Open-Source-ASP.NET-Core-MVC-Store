@@ -6,7 +6,7 @@ using ShopDevelop.Domain.Models;
 namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
-[Route("{id}/[controller]/[action]")]
+[Route("[controller]/[action]")]
 public class SellerController : BaseController
 {
     private readonly ISellerService sellerService;
@@ -19,7 +19,6 @@ public class SellerController : BaseController
         string name, string description)
     {
         await sellerService.CreateSellerAsync(name, description, "/", "/");
-        
         return Ok();
     }
 
@@ -28,7 +27,6 @@ public class SellerController : BaseController
     public async Task<IActionResult> EditSeller(Seller model)
     {
         await sellerService.EditSellerAsync(model);
-        
         return Ok();  
     }
 
@@ -37,7 +35,6 @@ public class SellerController : BaseController
     public async Task<IActionResult> DeleteSeller(Guid id)
     {
         await sellerService.DeleteSellerAsync(id);
-
         return Ok();
     }
 }

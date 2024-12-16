@@ -27,4 +27,8 @@
     <ProjectReference Include="..\ShopDevelop.Persistence\ShopDevelop.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

@@ -60,7 +60,6 @@ public class ProductController : BaseController
     public async Task<IActionResult> DeleteProduct(Guid id)
     {
         var product = productService.DeleteProductAsync(id);
-
         return Ok();
     }
 }
