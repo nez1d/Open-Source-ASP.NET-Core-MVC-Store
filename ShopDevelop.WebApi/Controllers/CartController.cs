@@ -10,17 +10,17 @@ namespace ShopDevelop.WebApi.Controllers;
 [Route("api/[controller]/[action]")]
 public class CartController : BaseController
 {
-    private readonly IShoppingCartRepository repository;
+    private readonly ShoppingCartService shoppingCartService;
     private readonly IProductService productService;
-    public CartController(IShoppingCartRepository repository,
+    public CartController(ShoppingCartService shoppingCartService,
         IProductService productService) =>
-        (this.repository, this.productService) = (repository, productService);
+        (this.shoppingCartService, this.productService) = (shoppingCartService, productService);
     
     [HttpGet]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> GetShoppingCart()
     {
-        var items = await repository.GetShoppingCartItems();
+        var items = await shoppingCartService.GetShoppingCartItems();
         return Ok(items);
     }
     
@@ -29,7 +29,7 @@ public class CartController : BaseController
     public async Task<IActionResult> AddToCart(Guid id, int amount)
     {
         var product = await productService.GetByIdAsync(id);
-        await repository.AddToCart(product, 1);
+        await shoppingCartService.AddToCart(product, 1);
         return Ok();
     }
     
@@ -38,7 +38,7 @@ public class CartController : BaseController
     public async Task<IActionResult> RemoveFromCart(Guid id)
     {
         var product = await productService.GetByIdAsync(id);
-        await repository.RemoveFromCart(product);
+        await shoppingCartService.RemoveFromCart(product);
         return Ok();
     }
     
@@ -46,6 +46,15 @@ public class CartController : BaseController
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> ClearCart()
     {
+        /*await shoppingCartService.ClearCart();*/
+        return Ok();
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> GetAllTotalValue()
+    {
+        /*await shoppingCartService.GetShoppingCartTotal();*/
         return Ok();
     }
 }
