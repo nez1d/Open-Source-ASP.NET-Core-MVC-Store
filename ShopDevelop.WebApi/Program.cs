@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Application.Services.Seller;
 using ShopDevelop.Domain.Interfaces;
 
@@ -23,7 +24,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
 });
+
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -32,15 +35,13 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ISellerRepository, SellerRepository>();
 builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<ReviewRepository>();
-builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped(scope => ShoppingCartRepository.GetCart(scope));
+builder.Services.AddScoped(scope => ShoppingCartService.GetCart(scope));
 
 builder.Services.AddSession(options => {
-    options.Cookie.Name = ".AspNetCore.Cookies-Session";
-    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.Name = ".AspNetCore.Cookies.Session";
+    options.IdleTimeout = TimeSpan.FromHours(24);
     options.Cookie.IsEssential = true;
 });
 
@@ -114,6 +115,8 @@ app.UseSwaggerUI(config =>
     config.RoutePrefix = string.Empty;
     config.SwaggerEndpoint("swagger/v1/swagger.json", "Shop API");
 });
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

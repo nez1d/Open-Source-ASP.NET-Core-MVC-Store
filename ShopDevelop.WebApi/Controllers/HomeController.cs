@@ -23,31 +23,6 @@ public class HomeController : BaseController
         var products = await productService.GetAllProductsAsync();
         return Ok(products);
     }
-    
-    [HttpPost]
-    public async Task<ActionResult> AddProduct()
-    {
-        var product = new Product
-        {
-            Article = 000000001,
-            ProductName = "Test",
-            Price = 1900,
-            OldPrice = 2016,
-            Discount = 23423,
-            Description = "Test",
-            ShortDescription = "Test",
-            InStock = 52,
-            IsFavorite = true,
-            IsAvailable = true,
-            ImagePath = "fwawefawefwea",
-            ImageMiniPath = "ffewafweafwe",
-            Rating = 5,
-            Details = null
-        };
-        
-        await productRepository.Create(product);
-        return Ok();
-    }
 
     /*[HttpGet("token")]
     public dynamic GetToken()
