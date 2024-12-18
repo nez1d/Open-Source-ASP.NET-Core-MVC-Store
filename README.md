@@ -27,8 +27,14 @@ dotnet tool update --global dotnet-ef
 ```
 dotnet ef migrations add initial -c ApplicationDbContext --project ./ShopDevelop.Persistence -s "E:\Projects\C#\ASP.NET Core\ShopDeveloped\ShopDevelop.WebApi"
 ```
+```
+dotnet ef migrations add initial -c ApplicationDbContext --project ./ShopDevelop.Persistence -s "/home/renx1ee/Documents/Projects/C#/ASP.Net Core/ShopDeveloped/ShopDevelop.WebApi"
+```
 
 #### Migration update
 ```
 dotnet ef database update -c ApplicationDbContext --project ./ShopDevelop.Persistence -s "E:\Projects\C#\ASP.NET Core\ShopDeveloped\ShopDevelop.WebApi" --verbose
+```
+```
+dotnet ef database update -c ApplicationDbContext --project ./ShopDevelop.Persistence -s "/home/renx1ee/Documents/Projects/C#/ASP.Net Core/ShopDeveloped/ShopDevelop.WebApi"
 ```
