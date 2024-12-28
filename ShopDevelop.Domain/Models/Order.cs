@@ -1,4 +1,6 @@
-﻿namespace ShopDevelop.Domain.Models;
+﻿using ShopDevelop.Domain.Enums;
+
+namespace ShopDevelop.Domain.Models;
 
 public class Order
 {
@@ -8,6 +10,7 @@ public class Order
     public string Country { get; set; }
     public uint Amount { get; set; } 
     public string ZipCode { get; set; }
+    public DeliveryStatus Status { get; set; }
     public decimal OrderTotal { get; set; }
     public DateTime CreatedDate { get; set; }
     public ApplicationUser User { get; set; }

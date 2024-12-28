@@ -50,7 +50,7 @@ public class CartController : BaseController
         return Ok();
     }
 
-    [HttpPost]
+    [HttpGet]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> GetAllTotalValue()
     {

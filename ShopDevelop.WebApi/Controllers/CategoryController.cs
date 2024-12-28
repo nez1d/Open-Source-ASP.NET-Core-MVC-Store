@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Domain.Models;
 
+
 namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
@@ -33,7 +34,7 @@ public class CategoryController : BaseController
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> DeleteCategory(Guid id)
     {
-        var Category = categoryService.DeleteCategoryAsync(id);
+        await categoryService.DeleteCategoryAsync(id);
         return Ok();
     }
 }
