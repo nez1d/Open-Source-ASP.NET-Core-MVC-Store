@@ -7,8 +7,7 @@ namespace ShopDevelop.Identity.DuendeServer.Data;
 
 public class AuthDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
-    public AuthDbContext(DbContextOptions options)
-            : base(options) { }
+    public AuthDbContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
