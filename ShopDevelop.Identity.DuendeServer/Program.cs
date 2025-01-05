@@ -1,4 +1,4 @@
-using ShopDevelop.Identity.DuendeServer.Data;
+ using ShopDevelop.Identity.DuendeServer.Data;
 using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 using ShopDevelop.Domain.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using ShopDevelop.Identity.DuendeServer.Service.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetValue<string>("DefaultConnection");
@@ -104,7 +105,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddControllers();
 
-/*builder.Services.AddScoped<IIdentityService, IdentityService>();*/
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 var app = builder.Build();
 

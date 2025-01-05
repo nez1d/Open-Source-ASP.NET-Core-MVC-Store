@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShopDevelop.Application\ShopDevelop.Application.csproj" />
+    <ProjectReference Include="..\ShopDevelop.Identity.DuendeServer\ShopDevelop.Identity.DuendeServer.csproj" />
     <ProjectReference Include="..\ShopDevelop.Persistence\ShopDevelop.Persistence.csproj" />
   </ItemGroup>
 

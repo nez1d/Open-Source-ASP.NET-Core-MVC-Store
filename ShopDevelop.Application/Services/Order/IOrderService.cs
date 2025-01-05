@@ -11,8 +11,9 @@ public interface IOrderService
     /// <param name="city">Delivery city.</param>
     /// <param name="country">Delivery country.</param>
     /// <param name="productId">Product Id.</param>
+    /// <param name="user">Application User Model.</param>
     /// <returns></returns>
-    Task CreateOrderAsync(string address, string city, string country, Guid productId);
+    Task CreateOrderAsync(string address, string city, string country, Guid productId, ApplicationUser user);
     /// <summary>
     /// Update Order.
     /// </summary>

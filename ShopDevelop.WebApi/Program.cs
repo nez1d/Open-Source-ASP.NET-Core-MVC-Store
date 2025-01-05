@@ -9,10 +9,15 @@ using ShopDevelop.Persistence.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Application.Services.Seller;
 using ShopDevelop.Domain.Interfaces;
+using ShopDevelop.Domain.Models;
+using ShopDevelop.Identity.DuendeServer.Data;
+using ShopDevelop.Identity.DuendeServer.Service.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -25,7 +30,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
+builder.Services.AddDbContext<AuthDbContext>(optoins =>
+{
+    optoins.UseNpgsql(connectionString);
+});
+
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+builder.Services.AddScoped<AuthDbContext>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -37,6 +48,8 @@ builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<ReviewRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped(scope => ShoppingCartService.GetCart(scope));
 
 builder.Services.AddSession(options => {

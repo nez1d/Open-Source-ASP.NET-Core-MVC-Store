@@ -7,6 +7,14 @@ namespace ShopDevelop.Application.Services.Identity;
 
 public class IdentityService /*: IIdentityService*/
 {
+    private readonly UserManager<ApplicationUser> userManager;
+    public IdentityService(UserManager<ApplicationUser> userManager) => 
+        (this.userManager) = (userManager);
+
+    public async Task<ApplicationUser> GetUserById(Guid userId)
+    {
+        return await userManager.FindByIdAsync(userId.ToString());
+    }
     /*private readonly UserManager<ApplicationUser> userManager;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory;
     private readonly IAuthorizationService authorizationService;

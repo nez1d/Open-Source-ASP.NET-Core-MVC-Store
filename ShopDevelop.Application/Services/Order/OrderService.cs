@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Application.Services.Product;
 using ShopDevelop.Domain.Enums;
+using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Application.Services.Category;
@@ -13,31 +14,20 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository orderRepository;
     private readonly IProductService productService;
-    private readonly UserManager<ApplicationUser> userManager;
     private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly UserManager<ApplicationUser> userManager;
+    private IOrderService orderServiceImplementation;
     public OrderService(IOrderRepository orderRepository,
-        UserManager<ApplicationUser> userManager,
         IProductService productService,
         IHttpContextAccessor httpContextAccessor)
     {
         this.orderRepository = orderRepository;
-        this.userManager = userManager;
         this.productService = productService;
         this.httpContextAccessor = httpContextAccessor;
     }
-
-    public async Task<ApplicationUser> GetUserBySession()
-    {
-        string userId = httpContextAccessor.HttpContext.
-            User.FindFirst("UserId").ToString();
-        
-        return userManager.Users.SingleOrDefault(x => 
-            x.Id == Guid.Parse(userId));
-    }
     
-    public async Task CreateOrderAsync(string address, string city, string country, Guid productId)
+    public async Task CreateOrderAsync(string address, string city, string country, Guid productId, ApplicationUser user)
     {
-        var user = await GetUserBySession();
         var product = await productService.GetByIdAsync(productId);
         var order = new Order
         { 
@@ -45,8 +35,8 @@ public class OrderService : IOrderService
             City = city,
             Country = country,
             Amount = 1,
-            ZipCode = await CreateZipCodeAsync(),
-            Status = DeliveryStatus.AwaitingConfirmation,
+            /*ZipCode = await CreateZipCodeAsync(),
+            Status = DeliveryStatus.AwaitingConfirmation,*/
             OrderTotal = 1,
             CreatedDate = DateTime.UtcNow,
             User = user,
@@ -54,7 +44,6 @@ public class OrderService : IOrderService
             Product = product,
             ProductId = productId
         };
-        
         await orderRepository.Create(order);
     }
 

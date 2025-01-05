@@ -9,8 +9,8 @@ public class Order
     public string City { get; set; }
     public string Country { get; set; }
     public uint Amount { get; set; } 
-    public string ZipCode { get; set; }
-    public DeliveryStatus Status { get; set; }
+    /*public string ZipCode { get; set; }
+    public DeliveryStatus Status { get; set; }*/
     public decimal OrderTotal { get; set; }
     public DateTime CreatedDate { get; set; }
     public ApplicationUser User { get; set; }
