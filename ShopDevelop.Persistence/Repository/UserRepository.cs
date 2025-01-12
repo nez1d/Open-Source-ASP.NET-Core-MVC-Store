@@ -25,7 +25,9 @@ public class UserRepository : IUserRepository
 
     public async Task<ApplicationUser> GetUserById(Guid id)
     {
-        return await this.context.Users
-            .FirstOrDefaultAsync(user => user.Id == id);
+        /*return await this.context.Users
+            .FirstOrDefaultAsync(user => Guid.Parse(user.Id) == id);*/
+        
+        throw new NotImplementedException();
     }
 }

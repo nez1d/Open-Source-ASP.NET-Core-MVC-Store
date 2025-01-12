@@ -10,7 +10,12 @@ public class JwtProvider
 {
     public string GenerateToken(ApplicationUser user)
     {
-        Claim[] claims = [new(ClaimTypes.Role, "AuthUser")];
+        Claim[] claims = 
+        [
+            new("UserId", user.Id.ToString()),
+            new(ClaimTypes.Role, "AuthUser"),
+            new(ClaimTypes.Name, user.Email!)
+        ];
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthOptions.KEY)),
@@ -25,4 +30,40 @@ public class JwtProvider
 
         return tokenValue;
     }
+
+    public string GetUserId(string token)
+    {
+        var key = Encoding.UTF8.GetBytes(AuthOptions.KEY);
+        var handler = new JwtSecurityTokenHandler();
+        var validation = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+        
+        var claims = handler.ValidateToken(token, validation, out var tokenSecure);
+        var userId = claims.FindFirstValue("UserId");
+        
+        return userId;
+    }
+    
+    /*public Guid GetUserGmail(string token)
+    {
+        var key = Encoding.UTF8.GetBytes(AuthOptions.KEY);
+        var handler = new JwtSecurityTokenHandler();
+        var validation = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+        
+        var claims = handler.ValidateToken(token, validation, out var tokenSecure);
+        var userId = claims.FindFirstValue("UserId");
+        
+        return Guid.Parse(userId);
+    }*/
 }

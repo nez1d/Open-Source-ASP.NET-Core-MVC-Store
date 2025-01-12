@@ -4,7 +4,6 @@ namespace ShopDevelop.Domain.Interfaces
 {
     public interface IApplicationDbContext 
     {
-        DbSet<ApplicationUser> Users { get; set; }
         DbSet<Seller> Sellers { get; set; }
         DbSet<Product> Products { get; set; }
         DbSet<ProductDetail> ProductDedails { get; set; }

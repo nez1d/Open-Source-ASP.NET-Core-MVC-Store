@@ -20,7 +20,7 @@ public class RegisterModel : PageModel
     private readonly JwtProvider jwtProvider;
 
     public RegisterModel(SignInManager<ApplicationUser> signInManager,
-                         UserManager<ApplicationUser> userManager) =>
+        UserManager<ApplicationUser> userManager) =>
         (this.signInManager, this.userManager, this.jwtProvider) = 
         (signInManager, userManager, jwtProvider = new JwtProvider());
     
