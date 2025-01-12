@@ -10,10 +10,10 @@ public interface IOrderService
     /// <param name="address">Delivery address.</param>
     /// <param name="city">Delivery city.</param>
     /// <param name="country">Delivery country.</param>
-    /// <param name="productId">Product Id.</param>
+    /// <param name="product">Product Model.</param>
     /// <param name="user">Application User Model.</param>
     /// <returns></returns>
-    Task CreateOrderAsync(string address, string city, string country, Guid productId, ApplicationUser user);
+    Task<bool> CreateOrderAsync(string address, string city, string country, Domain.Models.Product product, ApplicationUser user);
     /// <summary>
     /// Update Order.
     /// </summary>

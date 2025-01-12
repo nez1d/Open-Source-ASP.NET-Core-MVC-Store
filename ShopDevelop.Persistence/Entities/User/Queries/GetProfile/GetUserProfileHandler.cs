@@ -1,11 +1,6 @@
-﻿using ShopDevelop.Domain.Interfaces;
-using ShopDevelop.Application.Entities.User.Queries.GetProfile;
+﻿using ShopDevelop.Application.Entities.User.Queries.GetProfile;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Application.Services.User;
-using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Persistence.Entities.User.Queries.GetProfile;
 
@@ -20,7 +15,7 @@ public class GetUserProfileHandler(IUserRepository userRepository)
 
         return new UserProfileLookupDto
         {
-            Id = user.Id,
+            Id = Guid.Parse(user.Id),
             FirstName = user.FirstName,
             Email = user.Email,
             Phone = user.Phone,

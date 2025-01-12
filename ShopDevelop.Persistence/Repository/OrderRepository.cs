@@ -45,7 +45,7 @@ public class OrderRepository : IOrderRepository
     public async Task<Order> GetById(Guid id)
     {
         return await context.Orders
-            .FirstOrDefaultAsync(order => order.User.Id == id);
+            .FirstOrDefaultAsync(order => Guid.Parse(order.User.Id) == id);
     }
 
     public async Task<IEnumerable<Order>> GetByUserId(Guid userId)

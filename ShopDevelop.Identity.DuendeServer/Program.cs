@@ -1,4 +1,4 @@
- using ShopDevelop.Identity.DuendeServer.Data;
+using ShopDevelop.Identity.DuendeServer.Data;
 using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 using ShopDevelop.Domain.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
-using ShopDevelop.Identity.DuendeServer.Service.Identity;
+using ShopDevelop.Identity.DuendeServer.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetValue<string>("DefaultConnection");
@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AuthDbContext>(optoins =>
 {
     optoins.UseNpgsql(connectionString);
 });
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -101,11 +102,12 @@ builder.Services.AddIdentityServer()
     .AddInMemoryClients(Configuration.Clients)
     .AddDeveloperSigningCredential();
 
+builder.Services.AddScoped<JwtProvider>();
+builder.Services.AddScoped<UserService>();
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddControllers();
-
-builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 var app = builder.Build();
 
@@ -156,6 +158,14 @@ app.UseAuthorization();
 app.UseIdentityServer();
 
 app.UseHttpsRedirection();
+
+/*app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+    HttpOnly = HttpOnlyPolicy.Always,
+    Secure = CookieSecurePolicy.Always
+});*/
+
 app.UseStaticFiles();
 
 app.UseRouting();

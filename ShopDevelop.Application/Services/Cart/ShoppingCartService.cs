@@ -4,7 +4,6 @@ using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace ShopDevelop.Application.Services.Cart;
 
 public class ShoppingCartService
@@ -18,12 +17,15 @@ public class ShoppingCartService
     
     public static ShoppingCartService GetCart(IServiceProvider services)
     {
-        ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
+        ISession session = services.GetRequiredService<IHttpContextAccessor>()?
+            .HttpContext.Session;
         var context = services.GetService<IApplicationDbContext>();
-        string cartId = session.GetString(".AspNetCore.Cookies.Session") ?? Guid.NewGuid().ToString();
+        string cartId = session.GetString(".AspNetCore.Cookies.Session") 
+            ?? Guid.NewGuid().ToString();
 
         session.SetString(".AspNetCore.Cookies.Session", cartId);
-        return new ShoppingCartService(context) { ShoppingCartId = Guid.Parse(cartId) };
+        return new ShoppingCartService(context) 
+            { ShoppingCartId = Guid.Parse(cartId) };
     }
 
     public async Task<string> GetShoppingCartId()

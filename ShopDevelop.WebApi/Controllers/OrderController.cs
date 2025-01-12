@@ -1,13 +1,14 @@
-using System.Security.Claims;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Owin;
 using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Application.Services.Category;
+using ShopDevelop.Application.Services.Product;
 using ShopDevelop.Domain.Models;
 using ShopDevelop.Identity.DuendeServer.Data;
-using ShopDevelop.Identity.DuendeServer.Service.Identity;
+using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -18,59 +19,56 @@ public class OrderController : BaseController
     private readonly ShoppingCartService shoppingCartService;
     private readonly IOrderService orderService;
     private readonly UserManager<ApplicationUser> userManager;
-    private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly JwtProvider jwtProvider;
     
     public OrderController(ShoppingCartService shoppingCartService,
-            IOrderService orderService,
+            IOrderService orderService, 
             UserManager<ApplicationUser> userManager,
-            IHttpContextAccessor httpContextAccessor) =>
-        (this.shoppingCartService, this.orderService, this.userManager, 
-            this.httpContextAccessor) = 
-        (shoppingCartService, orderService, userManager, 
-            httpContextAccessor);
-
-    [HttpGet]
-    public async Task<ApplicationUser> Get()
-    {
-        var userId = User.FindFirst("UserId")?.Value;
-
-        if (userId is not null)
-        {
-            var manager = HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
-            return await manager.FindByIdAsync(userId);    
-        }
-        
-        return null;
-    }
+            JwtProvider jwtProvider) =>
+        (this.shoppingCartService, this.orderService,
+            this.userManager, this.jwtProvider) = 
+        (shoppingCartService, orderService, 
+            userManager, jwtProvider);
 
     [HttpPost]
     [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> Create(string adderss, string city, string counry)
+    public async Task<IActionResult> Create(string address, string city, string country)
     {
         var items = await shoppingCartService.GetShoppingCartItems();
 
         if (items.Count() == 0)
         {
-            return BadRequest();   
+            return BadRequest("Items count is not null");   
         }
-
-        try
-        {
-            var user = await Get();
-            
-            foreach (var item in items)
-            {
-                await orderService.CreateOrderAsync(
-                    address: adderss,
-                    city: city, 
-                    country: counry,
-                    productId: item.Product.Id,
-                    user: user);
-            }
-        }
-        catch (Exception ex) { }
         
-        return Ok();
+        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        
+        var id = jwtProvider.GetUserId(accessToken);
+
+        if (id != null)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            var product = items.FirstOrDefault().Product;
+
+            if (user is not null)
+            {
+                var order = await orderService.CreateOrderAsync(
+                    address: address,
+                    city: city,
+                    country: country,
+                    product: product,
+                    user: user);
+
+                if (order)
+                {
+                    return Ok();
+                }
+            }
+            
+            return BadRequest("User is null. \nuserId: " + id);
+        }
+        
+        return BadRequest();
     }
     
     [HttpGet]

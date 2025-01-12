@@ -6,5 +6,7 @@
         public uint Amount { get; set; }
         public Guid ShoppingCartId { get; set; }
         public Product Product { get; set; }
+        
+        /*public Guid ApplicationUserId { get; set; }*/
     }
 }

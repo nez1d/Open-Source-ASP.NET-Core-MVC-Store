@@ -13,38 +13,35 @@ namespace ShopDevelop.Application.Services.Category;
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository orderRepository;
-    private readonly IProductService productService;
-    private readonly IHttpContextAccessor httpContextAccessor;
-    private readonly UserManager<ApplicationUser> userManager;
-    private IOrderService orderServiceImplementation;
-    public OrderService(IOrderRepository orderRepository,
-        IProductService productService,
-        IHttpContextAccessor httpContextAccessor)
-    {
-        this.orderRepository = orderRepository;
-        this.productService = productService;
-        this.httpContextAccessor = httpContextAccessor;
-    }
+    public OrderService(IOrderRepository orderRepository) =>
+        (this.orderRepository) = (orderRepository);
     
-    public async Task CreateOrderAsync(string address, string city, string country, Guid productId, ApplicationUser user)
+    public async Task<bool> CreateOrderAsync(
+        string address, 
+        string city, 
+        string country, 
+        Domain.Models.Product product, 
+        ApplicationUser user)
     {
-        var product = await productService.GetByIdAsync(productId);
-        var order = new Order
-        { 
-            Address = address,
-            City = city,
-            Country = country,
-            Amount = 1,
-            /*ZipCode = await CreateZipCodeAsync(),
-            Status = DeliveryStatus.AwaitingConfirmation,*/
-            OrderTotal = 1,
-            CreatedDate = DateTime.UtcNow,
-            User = user,
-            UserId = user.Id,
-            Product = product,
-            ProductId = productId
-        };
-        await orderRepository.Create(order);
+        if (product is not null)
+        {
+            var order = new Order
+            { 
+                Address = address,
+                City = city,
+                Country = country,
+                Amount = 1,
+                OrderTotal = product.Price,
+                CreatedDate = DateTime.UtcNow,
+                User = user,
+                UserId = Guid.Parse(user.Id),
+                Product = product,
+                ProductId = product.Id
+            };
+            await orderRepository.Create(order);
+            return true;
+        }
+        return false;
     }
 
     public async Task UpdateOrderAsync(Order order)

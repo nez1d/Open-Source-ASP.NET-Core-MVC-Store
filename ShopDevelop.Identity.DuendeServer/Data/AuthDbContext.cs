@@ -6,8 +6,8 @@ using ShopDevelop.Domain.Models;
 namespace ShopDevelop.Identity.DuendeServer.Data;
 
 public class AuthDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
-{
-    public AuthDbContext(DbContextOptions options) : base(options) { }
+{ 
+    public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -20,7 +20,7 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser, ApplicationRole,
         builder.Entity<IdentityUserLogin<string>>(entity =>
             entity.ToTable(name: "UserLogins"));
         builder.Entity<IdentityUserToken<string>>(entity =>
-            entity.ToTable(name: "UserTockens"));
+            entity.ToTable(name: "UserTokens"));
         builder.Entity<IdentityRoleClaim<string>>(entity =>
             entity.ToTable(name: "RoleClaim"));
 
