@@ -38,5 +38,5 @@ public interface IOrderRepository
     /// </summary>
     /// <param name="userId">User Id.</param>
     /// <returns>Return List Orders.</returns>
-    Task<IEnumerable<Order>> GetByUserId(Guid userId);
+    Task<IEnumerable<Order>> GetByUserId(string userId);
 }

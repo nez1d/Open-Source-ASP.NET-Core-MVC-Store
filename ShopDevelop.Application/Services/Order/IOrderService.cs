@@ -17,9 +17,12 @@ public interface IOrderService
     /// <summary>
     /// Update Order.
     /// </summary>
-    /// <param name="order">Order Entity.</param>
+    /// <param name="orderId">Order Id.</param>
+    /// <param name="address">Delivery address.</param>
+    /// <param name="city">Delivery city.</param>
+    /// <param name="country">Delivery country.</param>
     /// <returns></returns>
-    Task UpdateOrderAsync(Order order);
+    Task UpdateOrderAsync(Guid orderId, string address, string city, string country);
     /// <summary>
     /// Delete Order.
     /// </summary>
@@ -42,5 +45,5 @@ public interface IOrderService
     /// </summary>
     /// <param name="userId">User Id.</param>
     /// <returns>Return List Orders.</returns>
-    Task<IEnumerable<Order>> GetOrdersByUserIdAsync(Guid userId);
+    Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId);
 }

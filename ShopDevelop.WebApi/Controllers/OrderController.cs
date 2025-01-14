@@ -32,14 +32,13 @@ public class OrderController : BaseController
 
     [HttpPost]
     [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> Create(string address, string city, string country)
+    public async Task<IActionResult> CreateOrder(string address, string city, string country)
     {
         var items = await shoppingCartService.GetShoppingCartItems();
 
         if (items.Count() == 0)
-        {
             return BadRequest("Items count is not null");   
-        }
+        
         
         string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
         
@@ -60,27 +59,45 @@ public class OrderController : BaseController
                     user: user);
 
                 if (order)
-                {
                     return Ok();
-                }
             }
-            
             return BadRequest("User is null. \nuserId: " + id);
         }
-        
         return BadRequest();
     }
     
-    [HttpGet]
-    [Authorize("AuthUser")]
-    public async Task CheckoutOrderAsync()
+    [HttpPost]
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> UpdateOrder(Guid orderId, string address, string city, string country)
     {
-        var items = await shoppingCartService.GetShoppingCartItems();
-        shoppingCartService.ShoppingCartItems = items;
+        if (orderId == Guid.Empty)
+            return BadRequest("Invalid order id");    
+        
+        await orderService.UpdateOrderAsync(orderId, address, city, country);
+        return Ok();
+    }
+    
+    [HttpPost]
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> DeleteOrder(Guid orderId)
+    {
+        await orderService.DeleteOrderAsync(orderId);
+        return Ok();
+    }
 
-        if (items.Count() == 0)
-        {
-            return;
-        }
+    [HttpGet]
+    [Authorize(Roles = "AuthUser")]
+    public async Task<IActionResult> GetOrders()
+    {
+        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        
+        var id = jwtProvider.GetUserId(accessToken);
+        
+        var items = await orderService.GetOrdersByUserIdAsync(id);
+        
+        if(!items.Any())
+            return Ok("The number of orders is zero.");
+        
+        return Ok(items);
     }
 }
