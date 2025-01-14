@@ -66,9 +66,9 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
             .HasForeignKey(review => review.UserId);
         builder
             .HasMany(user => user.CartItems);
-        builder
+        /*builder
             .HasMany(user => user.Orders)
             .WithOne(review => review.User)
-            .HasForeignKey(review => review.UserId); 
+            .HasForeignKey(review => review.UserId);*/ 
     }
 }

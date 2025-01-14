@@ -28,9 +28,8 @@ public class OrderRepository : IOrderRepository
     {
         var order = await GetById(id);     
         if (order == null)
-        {
             throw new ArgumentException();
-        }
+        
         context.Orders.Remove(order);
         await context.SaveChangesAsync();
     }
@@ -45,11 +44,12 @@ public class OrderRepository : IOrderRepository
     public async Task<Order> GetById(Guid id)
     {
         return await context.Orders
-            .FirstOrDefaultAsync(order => Guid.Parse(order.User.Id) == id);
+            .FirstOrDefaultAsync(order => order.Id == id);
     }
 
-    public async Task<IEnumerable<Order>> GetByUserId(Guid userId)
+    public async Task<IEnumerable<Order>> GetByUserId(string userId)
     {
-        return null;
+        return context.Orders
+            .Where(order => order.User.Id == userId);
     }
 }

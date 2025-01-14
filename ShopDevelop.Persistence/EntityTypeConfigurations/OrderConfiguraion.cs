@@ -33,10 +33,10 @@ public class OrderConfiguraion : IEntityTypeConfiguration<Order>
         builder
             .Property(order => order.CreatedDate)
             .IsRequired();
-        builder
+        /*builder
             .HasOne(order => order.User)
             .WithMany(user => user.Orders)
-            .HasForeignKey(user => user.UserId);
+            .HasForeignKey(user => user.UserId);*/
         builder
             .HasOne(order => order.Product);
     }

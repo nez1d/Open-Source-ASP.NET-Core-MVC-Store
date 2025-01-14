@@ -18,5 +18,4 @@ public class ApplicationUser : IdentityUser, IUser<string>
     public IEnumerable<Review>? Reviews { get; set; }
     public IEnumerable<ShoppingCartItem>? CartItems { get; set; }
     public IEnumerable<Order>? Orders { get; set; }
-    public Guid? OrderId { get; set; }
 }

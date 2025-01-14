@@ -75,19 +75,19 @@ public class ShoppingCartService
         return isValidAmount;
     }
 
-    public async Task<uint> RemoveFromCart(Domain.Models.Product product)
+    public async Task<bool> RemoveFromCart(Domain.Models.Product product)
     {
         var shoppingCartItem = await context.ShoppingCartItems
             .SingleOrDefaultAsync(s => s.Product.Id == product.Id 
                 && s.ShoppingCartId == ShoppingCartId);
-        
-        if (shoppingCartItem != null)
-        {
-            context.ShoppingCartItems.Remove(shoppingCartItem);
-            await context.SaveChangesAsync();
-        }
 
-        return 1;
+        if (shoppingCartItem == null)
+            return false;
+        
+        context.ShoppingCartItems.Remove(shoppingCartItem);
+        await context.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task ClearCart(Guid ShoppingCartId)
