@@ -4,7 +4,7 @@ using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Persistence.EntityTypeConfigurations;
 
-public class OrderConfiguraion : IEntityTypeConfiguration<Order>
+public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {
@@ -37,8 +37,8 @@ public class OrderConfiguraion : IEntityTypeConfiguration<Order>
             .HasOne(order => order.User)
             .WithMany(user => user.Orders)
             .HasForeignKey(user => user.UserId);*/
-        builder
-            .HasOne(order => order.Product);
+        /*builder
+            .HasOne(order => order.Product);*/
     }
 }
 

@@ -19,6 +19,7 @@ public class ShoppingCartService
     {
         ISession session = services.GetRequiredService<IHttpContextAccessor>()?
             .HttpContext.Session;
+        
         var context = services.GetService<IApplicationDbContext>();
         string cartId = session.GetString(".AspNetCore.Cookies.Session") 
             ?? Guid.NewGuid().ToString();
@@ -33,29 +34,30 @@ public class ShoppingCartService
         throw new NotImplementedException();
     }
     
-    public async Task<bool> AddToCart(Domain.Models.Product product, int amount)
+    public async Task<bool> AddToCart(
+        Domain.Models.Product product, 
+        int amount, 
+        string userId)
     {
         if(product.InStock == 0 || amount == 0)
-        {
             return false;
-        }
-
+        
         var shoppingCartItem = context.ShoppingCartItems.SingleOrDefault(
             item => item.Product.Id == product.Id && 
-                    item.ShoppingCartId == ShoppingCartId);
+                item.ShoppingCartId == ShoppingCartId);
 
         var isValidAmount = true;
 
         if(shoppingCartItem == null){
             if(amount > product.InStock)
-            {
                 isValidAmount = false;
-            }
+            
             shoppingCartItem = new ShoppingCartItem
             {
                 ShoppingCartId = ShoppingCartId,
                 Product = product,
-                Amount = (uint)Math.Min(product.InStock, amount)
+                Amount = (uint)Math.Min(product.InStock, amount),
+                ApplicationUserId = userId
             };
             context.ShoppingCartItems.Add(shoppingCartItem);
         }

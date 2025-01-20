@@ -13,7 +13,6 @@ public class Order
     public DeliveryStatus Status { get; set; }
     public decimal OrderTotal { get; set; }
     public DateTime CreatedDate { get; set; }
-    public ApplicationUser User { get; set; }
-    public Product Product { get; set; }
+    public string ApplicationUserId { get; set; }
     public Guid ProductId { get; set; }
 }
