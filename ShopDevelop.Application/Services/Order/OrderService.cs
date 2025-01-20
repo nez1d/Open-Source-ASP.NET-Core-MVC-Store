@@ -41,10 +41,10 @@ public class OrderService : IOrderService
                 Status = DeliveryStatus.AwaitingConfirmation,
                 OrderTotal = product.Price,
                 CreatedDate = DateTime.UtcNow,
-                User = user,
-                Product = product,
+                ApplicationUserId = user.Id,
                 ProductId = product.Id
             };
+            
             var result = await orderRepository.Create(order);
             
             if(result != Guid.Empty)

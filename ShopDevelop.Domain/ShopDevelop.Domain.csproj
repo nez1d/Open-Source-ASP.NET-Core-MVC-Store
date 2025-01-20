@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Folder Include="Contracts\" />
-    <Folder Include="Enumss\" />
+    <Folder Include="Models\DTO\" />
   </ItemGroup>
 
 </Project>

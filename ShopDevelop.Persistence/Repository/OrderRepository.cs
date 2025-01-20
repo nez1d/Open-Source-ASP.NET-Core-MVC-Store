@@ -50,6 +50,6 @@ public class OrderRepository : IOrderRepository
     public async Task<IEnumerable<Order>> GetByUserId(string userId)
     {
         return context.Orders
-            .Where(order => order.User.Id == userId);
+            .Where(order => order.ApplicationUserId == userId);
     }
 }

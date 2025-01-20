@@ -55,7 +55,6 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped(scope => ShoppingCartService.GetCart(scope));
-builder.Services.AddScoped<ShoppingCartService>();
 builder.Services.AddScoped<JwtProvider>();
 
 builder.Services.AddSession(options => {

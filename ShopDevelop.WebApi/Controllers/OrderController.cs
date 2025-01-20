@@ -39,7 +39,6 @@ public class OrderController : BaseController
         if (items.Count() == 0)
             return BadRequest("Items count is not null");   
         
-        
         string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
         
         var id = jwtProvider.GetUserId(accessToken);
