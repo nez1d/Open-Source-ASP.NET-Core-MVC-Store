@@ -1,4 +1,4 @@
-﻿using ShopDevelop.Domain.Models;
+﻿/*using ShopDevelop.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -55,9 +55,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasForeignKey(review => review.ProductId);
         /*builder
             .HasOne(product => product.Category)
-            .WithMany(category => category.Products);*/
+            .WithMany(category => category.Products);#1#
         builder
             .HasOne(product => product.Seller)
             .WithMany(seller => seller.Products);
     }
-}
+}*/

@@ -48,7 +48,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ISellerRepository, SellerRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ReviewRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
@@ -119,7 +119,7 @@ var app = builder.Build();
 
 app.UseRouting();
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+/*app.UseCors("AllowAll");*/
 
 app.UseHsts();
 app.UseCors(x => x
