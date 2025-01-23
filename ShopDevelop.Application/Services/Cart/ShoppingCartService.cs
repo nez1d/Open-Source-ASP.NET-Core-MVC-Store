@@ -6,13 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ShopDevelop.Application.Services.Cart;
 
-public class ShoppingCartService
+public class ShoppingCartService 
 {
     private readonly IApplicationDbContext context;
     public ShoppingCartService(IApplicationDbContext context) =>
             (this.context) = (context);
     
     public Guid ShoppingCartId { get; set; }
+
     public IEnumerable<ShoppingCartItem> ShoppingCartItems { get; set; }
     
     public static ShoppingCartService GetCart(IServiceProvider services)
@@ -21,17 +22,12 @@ public class ShoppingCartService
             .HttpContext.Session;
         
         var context = services.GetService<IApplicationDbContext>();
-        string cartId = session.GetString(".AspNetCore.Cookies.Session") 
+        string cartId = session.GetString("CartId") 
             ?? Guid.NewGuid().ToString();
 
-        session.SetString(".AspNetCore.Cookies.Session", cartId);
+        session.SetString("CartId", cartId);
         return new ShoppingCartService(context) 
             { ShoppingCartId = Guid.Parse(cartId) };
-    }
-
-    public async Task<string> GetShoppingCartId()
-    {
-        throw new NotImplementedException();
     }
     
     public async Task<bool> AddToCart(
@@ -102,12 +98,14 @@ public class ShoppingCartService
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems()
+    public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(/*string userId*/)
     {
-        return ShoppingCartItems ??
-               (ShoppingCartItems = context.ShoppingCartItems
+        return ShoppingCartItems = context.ShoppingCartItems
                    .Where(c => c.ShoppingCartId == ShoppingCartId)
-                   .Include(s => s.Product));
+                   .Include(s => s.Product);
+        
+        /*return context.ShoppingCartItems
+            .Where(item => item.ApplicationUserId == userId);*/
     }
 
     public async Task<decimal> GetShoppingCartTotal(Guid ShoppingCartId)

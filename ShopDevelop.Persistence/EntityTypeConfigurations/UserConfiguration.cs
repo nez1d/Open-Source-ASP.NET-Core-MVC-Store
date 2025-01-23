@@ -52,7 +52,7 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
             .Property(user => user.ImageFooterPath)
             .HasMaxLength(250)
             .IsRequired();
-        builder
+        /*builder
             .HasMany(user => user.Reviews)
             .WithOne(review => review.User)
             .HasForeignKey(review => review.UserId);
@@ -65,7 +65,7 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
             .WithOne(review => review.User)
             .HasForeignKey(review => review.UserId);
         builder
-            .HasMany(user => user.CartItems);
+            .HasMany(user => user.CartItems);*/
         /*builder
             .HasMany(user => user.Orders)
             .WithOne(review => review.User)

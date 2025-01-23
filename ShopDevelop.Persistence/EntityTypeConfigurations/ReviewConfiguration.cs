@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ShopDevelop.Domain.Models;
 
@@ -13,11 +14,12 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder
             .HasOne(review => review.Product)
             .WithMany(product => product.Reviews);
-        builder
+        /*builder
             .HasOne(review => review.User)
-            .WithMany(user => user.Reviews);
+            .WithMany(user => user.Reviews);#1#
         builder
             .Property(review => review.CreatedDate)
             .IsRequired();
     }
 }
+*/

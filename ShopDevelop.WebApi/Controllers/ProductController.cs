@@ -13,18 +13,6 @@ public class ProductController : BaseController
     public ProductController(IProductService productService) =>
         this.productService = productService;
 
-    [HttpGet]
-    [Route("api/[controller]/[action]/{id?}")]
-    public async Task<IActionResult> Index(Guid? id)
-    {
-        if(id != null)
-        {
-            var productPage = await productService.GetByIdAsync(id);
-            return Ok(productPage);
-        }
-        return Ok();
-    }
-
     [HttpPost]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> CreateProduct(
@@ -60,6 +48,18 @@ public class ProductController : BaseController
     public async Task<IActionResult> DeleteProduct(Guid id)
     {
         var product = productService.DeleteProductAsync(id);
+        return Ok();
+    }
+    
+    [HttpGet]
+    [Route("api/[controller]/[action]/{id?}")]
+    public async Task<IActionResult> Index(Guid? id)
+    {
+        if(id != null)
+        {
+            var productPage = await productService.GetByIdAsync(id);
+            return Ok(productPage);
+        }
         return Ok();
     }
 }

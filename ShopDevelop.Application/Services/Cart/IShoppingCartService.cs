@@ -10,13 +10,13 @@ public interface IShoppingCartService
     /// <param name="product">Product.</param>
     /// <param name="amount">Numbers of products.</param>
     /// <returns>Return result of adding to Shopping Cart.</returns>
-    Task<bool> AddToCart(Domain.Models.Product product, int amount);
+    Task<bool> AddToCart(Domain.Models.Product product, int amount, string userId);
     /// <summary>
     /// Remove product from Shopping Cart.
     /// </summary>
     /// <param name="product">Product to removed.</param>
     /// <returns>Return count of the removing.</returns>
-    Task<uint> RemoveFromCart(Domain.Models.Product product);
+    Task<bool> RemoveFromCart(Domain.Models.Product product);
     /// <summary>
     /// Clear a Shopping Cart.
     /// </summary>
