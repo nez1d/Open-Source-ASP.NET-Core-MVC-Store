@@ -22,7 +22,7 @@ public class CategoryController : BaseController
         return Ok();
     }
 
-    [HttpPost]
+    [HttpPatch]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> EditCategory(Category model)
     {
@@ -30,7 +30,7 @@ public class CategoryController : BaseController
         return Ok();  
     }
 
-    [HttpPost]
+    [HttpDelete]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> DeleteCategory(Guid id)
     {

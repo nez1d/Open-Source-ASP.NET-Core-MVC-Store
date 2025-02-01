@@ -1,16 +1,20 @@
-using ShopDevelop.Identity.DuendeServer.Models;
+/*using ShopDevelop.Identity.DuendeServer.Models;
 using ShopDevelop.Identity.DuendeServer.Service;
 using RegisterUserRequest = ShopDevelop.Identity.DuendeServer.Models.RegisterUserRequest;
 
-namespace ShopDevelop.Identity.DuendeServer.Endpoints;
+namespace ShopDevelop.Identity.DuendeServer.Data.Endpoints;
 
 public static class UsersEndpoints
 {
     public static IEndpointRouteBuilder MapUsersEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("register", Register);
+        app.MapPost("/api/register", Register);
 
-        app.MapPost("login", Login);
+        app.MapPost("/api/login", Login);
+
+        app.MapPost("/api/restore-password", RestorePassword);
+
+        app.MapPost("/api/restore-email", RestoreEmail);
 
         return app;
     }
@@ -35,4 +39,14 @@ public static class UsersEndpoints
         
         return Results.Ok();
     }
-}
+
+    private static async Task<IResult> RestorePassword()
+    {
+        return Results.Ok();
+    }
+    
+    private static async Task<IResult> RestoreEmail()
+    {
+        return Results.Ok();
+    }
+}*/

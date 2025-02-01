@@ -119,7 +119,6 @@ var app = builder.Build();
 
 app.UseRouting();
 app.UseHttpsRedirection();
-/*app.UseCors("AllowAll");*/
 
 app.UseHsts();
 app.UseCors(x => x

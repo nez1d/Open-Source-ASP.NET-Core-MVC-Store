@@ -43,7 +43,7 @@ public class CartController : BaseController
         return BadRequest();
     }
     
-    [HttpPost]
+    [HttpDelete]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> RemoveFromCart(Guid id)
     {
@@ -52,7 +52,7 @@ public class CartController : BaseController
         return Ok();
     }
     
-    [HttpPost]
+    [HttpDelete]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> ClearCart()
     {
