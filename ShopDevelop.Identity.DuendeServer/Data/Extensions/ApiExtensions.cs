@@ -2,16 +2,15 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using ShopDevelop.Identity.DuendeServer.Endpoints;
 
-namespace ShopDevelop.Identity.DuendeServer.Extensions;
+namespace ShopDevelop.Identity.DuendeServer.Data.Extensions;
 
 public static class ApiExtensions
 {
-    public static void AppMappedEndpoints(this IEndpointRouteBuilder app)
+    /*public static void AppMappedEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapUsersEndpoints();
-    }
+    }*/
 
     public static void AddApiAuthentication(
         this IServiceCollection services,

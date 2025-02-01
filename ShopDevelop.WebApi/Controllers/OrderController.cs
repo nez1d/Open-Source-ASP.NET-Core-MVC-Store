@@ -65,7 +65,7 @@ public class OrderController : BaseController
         return BadRequest();
     }
     
-    [HttpPost]
+    [HttpPatch]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> UpdateOrder(Guid orderId, string address, string city, string country)
     {
@@ -76,7 +76,7 @@ public class OrderController : BaseController
         return Ok();
     }
     
-    [HttpPost]
+    [HttpDelete]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> DeleteOrder(Guid orderId)
     {

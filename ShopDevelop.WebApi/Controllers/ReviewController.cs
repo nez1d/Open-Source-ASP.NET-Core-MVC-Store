@@ -46,7 +46,7 @@ public class ReviewController : BaseController
         return BadRequest("Invalid review.");
     }
     
-    [HttpPost]
+    [HttpPatch]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> Update(
         Guid reviewId, 
@@ -71,7 +71,7 @@ public class ReviewController : BaseController
         return Ok();
     }
     
-    [HttpPost]
+    [HttpDelete]
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> Delete(Guid reviewId)
     {

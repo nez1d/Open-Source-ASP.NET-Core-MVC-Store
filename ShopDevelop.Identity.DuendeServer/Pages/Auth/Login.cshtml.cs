@@ -7,6 +7,7 @@ using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 using ShopDevelop.Identity.DuendeServer.ViewModels;
 using System.Security.Claims;
 using ShopDevelop.Domain.Models;
+using ShopDevelop.Identity.DuendeServer.Service;
 
 namespace ShopDevelop.Identity.DuendeServer.Pages;
 
@@ -16,11 +17,15 @@ public class LoginModel : PageModel
     private readonly SignInManager<ApplicationUser> signInManager;
     private readonly UserManager<ApplicationUser> userManager;
     private readonly JwtProvider jwtProvider;
+    private readonly UserService userService;
 
     public LoginModel(SignInManager<ApplicationUser> signInManager,
-                      UserManager<ApplicationUser> userManager) =>
-        (this.signInManager, this.userManager, this.jwtProvider) =
-        (signInManager, userManager, jwtProvider = new JwtProvider());
+                      UserManager<ApplicationUser> userManager,
+                      UserService userService) =>
+        (this.signInManager, this.userManager, this.jwtProvider,
+            this.userService) =
+        (signInManager, userManager, jwtProvider = new JwtProvider(),
+            userService);
 
     [BindProperty]
     public LoginViewModel model { get; set; }
@@ -36,7 +41,17 @@ public class LoginModel : PageModel
                 return Page();
             }
 
-            var claims = new List<Claim>
+            var data = await userService.CheckEmailConfirmed(model.Email);
+            
+            if (!data)
+                return BadRequest("Email is not confirmed!");
+
+            var result = await userService.LogIn(user.Email, model.Password);
+            
+            if (!result)
+                return BadRequest("Error while logging in!");
+
+            /*var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, model.Email),
                 new Claim(ClaimTypes.Role, "AuthUser")
@@ -54,7 +69,7 @@ public class LoginModel : PageModel
 
             this.HttpContext.Response.Cookies.Append("tasty-cookies", token);
 
-            await this.HttpContext.SignInAsync(claimsPrincipal);
+            await this.HttpContext.SignInAsync(claimsPrincipal);*/
 
             return Redirect("https://localhost:7005/index.html");
         }

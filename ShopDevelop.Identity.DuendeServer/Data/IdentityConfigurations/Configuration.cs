@@ -1,6 +1,7 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using IdentityModel;
+using ShopDevelop.Identity.DuendeServer.Data.Helpers;
 
 namespace ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 

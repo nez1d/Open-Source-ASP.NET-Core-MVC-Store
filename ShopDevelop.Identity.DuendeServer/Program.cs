@@ -83,6 +83,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.,@-+";
     options.User.RequireUniqueEmail = true;
     
+    options.SignIn.RequireConfirmedEmail = true;
+    
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
@@ -104,10 +106,12 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddScoped<JwtProvider>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddRazorPages();
 
 builder.Services.AddControllers();
+/*builder.Services.AddSwaggerGen();*/
 
 var app = builder.Build();
 
@@ -168,11 +172,19 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+/*app.UseSwagger();
+app.UseSwaggerUI(config =>
+{
+    config.RoutePrefix = string.Empty;
+    config.SwaggerEndpoint("swagger/v1/swagger.json", "Shop API");
+});*/
+
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
 app.MapRazorPages();
 
 app.Run();

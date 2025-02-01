@@ -9,6 +9,9 @@ using ShopDevelop.Domain.Models;
 using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
 using ShopDevelop.Identity.DuendeServer.ViewModels;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using ShopDevelop.Identity.DuendeServer.Data.Helpers;
+using ShopDevelop.Identity.DuendeServer.Service;
 
 namespace ShopDevelop.Identity.DuendeServer.Pages;
 
@@ -18,16 +21,22 @@ public class RegisterModel : PageModel
     private readonly SignInManager<ApplicationUser> signInManager;
     private readonly UserManager<ApplicationUser> userManager;
     private readonly JwtProvider jwtProvider;
+    private readonly EmailService emailService;
+    private readonly UserService userService;
 
     public RegisterModel(SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager) =>
-        (this.signInManager, this.userManager, this.jwtProvider) = 
-        (signInManager, userManager, jwtProvider = new JwtProvider());
+        UserManager<ApplicationUser> userManager, 
+        EmailService emailService,
+        UserService userService) =>
+        (this.signInManager, this.userManager, this.jwtProvider, 
+            this.emailService, this.userService) = 
+        (signInManager, userManager, jwtProvider = new JwtProvider(), 
+            emailService, userService);
     
 
     [BindProperty]
     public RegisterViewModel model { get; set; }
-
+    
     public async Task<IActionResult> OnPost()
     {
         if (ModelState.IsValid)
@@ -35,17 +44,37 @@ public class RegisterModel : PageModel
             var user = new ApplicationUser
             {
                 UserName = model.Email,
-                Email = model.Email,
-                EmailConfirmed = true
+                Email = model.Email
             };
+            
             var result = await userManager.CreateAsync(user, model.Password);
+            
             if (result.Succeeded)
             {
-                var claims = new List<Claim>
+                var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                
+                var confirmationLink = Url.Page("ConfirmEmail", "Auth",
+                    new { email = user.Email, code = code },
+                    HttpContext.Request.Scheme);
+                
+                await emailService.SendEmailAsync(user.Email, "ConfirmEmail", 
+                    $"<a href='{confirmationLink}'>link</a>");
+
+                bool emailStatus = await userManager.IsEmailConfirmedAsync(user);
+                
+                if (!emailStatus)
+                    return BadRequest("Check your email.");
+
+                var loginResult = await userService.LogIn(user.Email, user.PasswordHash);
+
+                if (!loginResult)
+                    return BadRequest("User email confirmation failed.");        
+                
+                /*var claims = new List<Claim>
                 {
                     new (ClaimTypes.Name, model.Email),
                     new (ClaimTypes.Role, "AuthUser"),
-                    new ("UserId", user.Id.ToString())
+                    new ("UserId", user.Id)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, "pwd", ClaimTypes.Name, ClaimTypes.Role);
@@ -59,11 +88,11 @@ public class RegisterModel : PageModel
 
                 this.HttpContext.Response.Cookies.Append("tasty-cookies", token);
 
-                await this.HttpContext.SignInAsync(claimsPrincipal);
+                await this.HttpContext.SignInAsync(claimsPrincipal);*/
 
                 return Redirect("http://localhost:5185/index.html");
             }
-            ModelState.AddModelError(string.Empty, "Error occurred");
+            return BadRequest("User Creation Failed");
         }
         return Page();
     }

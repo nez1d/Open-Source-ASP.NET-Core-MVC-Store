@@ -35,7 +35,7 @@ public class ProductController : BaseController
         return Ok();
     }
 
-    [HttpPost]
+    [HttpPatch]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> EditProduct(Product model)
     {

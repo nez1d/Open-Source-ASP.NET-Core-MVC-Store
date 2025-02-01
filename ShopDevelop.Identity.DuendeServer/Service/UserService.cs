@@ -16,26 +16,60 @@ public class UserService
 {
     private readonly UserManager<ApplicationUser> userManager;
     private readonly JwtProvider jwtProvider;
+    private readonly SignInManager<ApplicationUser> signInManager;
+    private readonly IHttpContextAccessor httpContextAccessor;
 
     public UserService(UserManager<ApplicationUser> userManager,
-        JwtProvider jwtProvider) =>
-            (this.userManager, this.jwtProvider) = 
-            (userManager, jwtProvider);
+        JwtProvider jwtProvider,
+        SignInManager<ApplicationUser> signInManager,
+        IHttpContextAccessor httpContextAccessor) =>
+            (this.userManager, this.jwtProvider, this.signInManager, 
+                this.httpContextAccessor) = 
+            (userManager, jwtProvider, signInManager, 
+                httpContextAccessor);
 
     public async Task Register(string email, string password) { }
 
-    public async Task<string> Login( 
-        string email, 
-        string password)
+    public async Task<bool> LogIn(string email, string password)
     {
         var user = await userManager.FindByEmailAsync(email);
+        
+        if(user == null)
+            return false;
 
+        var claims = new List<Claim>
+        {
+            new (ClaimTypes.Name, email),
+            new (ClaimTypes.Role, "AuthUser"),
+            new ("UserId", user.Id)
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, "pwd", ClaimTypes.Name, ClaimTypes.Role);
+        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+        await httpContextAccessor.HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            claimsPrincipal);
+
+        var token = jwtProvider.GenerateToken(user);
+
+        httpContextAccessor.HttpContext.Response.Cookies.Append("tasty-cookies", token);
+
+        await httpContextAccessor.HttpContext.SignInAsync(claimsPrincipal);
+
+        return true;
+    }
+
+    public async Task<bool> CheckEmailConfirmed(string email)
+    {
+        var user = await userManager.FindByEmailAsync(email);
         if (user != null)
         {
-            var token = jwtProvider.GenerateToken(user);
-            return token;
+            bool emailStatus = await userManager.IsEmailConfirmedAsync(user);
+            
+            if (emailStatus)
+                return true;
         }
-        
-        return "";
+        return false;
     }
 }

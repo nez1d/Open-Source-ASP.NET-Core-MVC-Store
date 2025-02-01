@@ -1,4 +1,4 @@
-﻿namespace ShopDevelop.Identity.DuendeServer.Data;
+﻿namespace ShopDevelop.Identity.DuendeServer.Data.Helpers;
 
 public class AuthConstants
 {
