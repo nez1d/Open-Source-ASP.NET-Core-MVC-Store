@@ -7,8 +7,11 @@ public class EmailService
 {
     public async Task SendEmailAsync(string email, string subject, string message)
     {
+        string emailFrom = "";
+        string password = "";
+        
         var emailToSend = new MimeMessage();
-        emailToSend.From.Add(MailboxAddress.Parse("nezidnezid6@gmail.com"));
+        emailToSend.From.Add(MailboxAddress.Parse(emailFrom));
         emailToSend.To.Add(MailboxAddress.Parse(email));
         emailToSend.Subject = subject;
         emailToSend.Body = new TextPart(MimeKit.Text.TextFormat.Html)
@@ -19,7 +22,7 @@ public class EmailService
         using (var client = new SmtpClient())
         {
             await client.ConnectAsync("smtp.gmail.com", 465, true);
-            client.Authenticate("nezidnezid6@gmail.com", "gsht bfbj bvrm zujt");
+            client.Authenticate(email, password);
             await client.SendAsync(emailToSend);
 
             await client.DisconnectAsync(true);
