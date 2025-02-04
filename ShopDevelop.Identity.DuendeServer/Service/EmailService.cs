@@ -7,8 +7,8 @@ public class EmailService
 {
     public async Task SendEmailAsync(string email, string subject, string message)
     {
-        string emailFrom = "";
-        string password = "";
+        string emailFrom = "nezidnezid6@gmail.com";
+        string password = "gsht bfbj bvrm zujt";
         
         var emailToSend = new MimeMessage();
         emailToSend.From.Add(MailboxAddress.Parse(emailFrom));

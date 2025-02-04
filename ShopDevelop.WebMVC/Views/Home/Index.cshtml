@@ -1,6 +1,7 @@
-﻿<!-- Catalog Section -->
-<section class="catalog" id="catalog">
-    <ul class="catalog__list-products">
-        @await Html.PartialAsync("CatalogTShirtsPartial")
-    </ul>
+<section class="product__section">
+    <div class="container">
+        <ul class="catalog__items">
+            @await Html.PartialAsync("CatalogItemPartial")
+        </ul>
+    </div>
 </section>

@@ -1,0 +1,25 @@
+@page
+@model ShopDevelop.WebMVC.Pages.Security.ConfirmEmail
+
+@{
+    Layout = "_Layout";
+}
+
+<section class="auth" id="auth">
+    <div class="container">
+        <div class="auth__inner">
+            <form asp-route-returnUrl="" class="auth-form" method="post">
+                <input type="hidden" name="returnUrl" value="" />
+
+                <h1 class="auth-title">Confirm Email</h1>
+                <p class="auth-other-text-info log-other-text-info">Please, check your email and follow to link for
+                    confirm your email. </p>
+
+                <p class="auth-other-text">Don't you have an account?</p>
+                <a class="auth-login__link" asp-page="/Register">Register</a>
+                <br>
+                <button class="btn-submit" type="submit">CHECK VERIFY</button>
+            </form>
+        </div>
+    </div>
+</section>

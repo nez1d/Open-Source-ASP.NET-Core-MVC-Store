@@ -1,32 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using ShopDevelop.WebMVC.ViewModes;
+using ShopDevelop.WebMVC.ViewModels;
 
 namespace ShopDevelop.WebMVC.Controllers;
 
 public class HomeController : Controller
 {
-    private Uri _baseAddress = new Uri("https://localhost:7005/api");
-    private readonly HttpClient _client;
+    private Uri address = new Uri("http://localhost:5185/api");
+    private readonly HttpClient httpClient;
+
     public HomeController()
     {
-        _client = new HttpClient();
-        _client.BaseAddress = _baseAddress;
+        httpClient = new HttpClient();
+        httpClient.BaseAddress = address;
     }
-
+    
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<ActionResult> Index()
     {
-        var productViewModel = new List<ProductViewModel>();
-        HttpResponseMessage responseMessage = _client.GetAsync(
-            _client.BaseAddress + "/Home/GetHomeProductList").Result;
-
-        if (responseMessage.IsSuccessStatusCode)
+        string apiRequest = "/Home/GetHomeProductList";
+        var model = new List<CatalogViewModel>();
+        
+        try
         {
-            string data = responseMessage.Content.ReadAsStringAsync().Result;
-            productViewModel = JsonConvert.DeserializeObject<List<ProductViewModel>>(data);
-        }
+            HttpResponseMessage responseMessage = httpClient
+                .GetAsync(httpClient.BaseAddress + apiRequest).Result;
 
-        return View(productViewModel);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string content = await responseMessage.Content.ReadAsStringAsync();
+                model = JsonConvert.DeserializeObject<List<CatalogViewModel>>(content);
+            }    
+        }
+        catch (Exception ex)
+        {
+            return Redirect("/Error");
+        } 
+        
+        return View(model);
     }
 }
