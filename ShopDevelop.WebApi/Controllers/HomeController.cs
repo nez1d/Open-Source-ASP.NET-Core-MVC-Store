@@ -17,7 +17,6 @@ public class HomeController : BaseController
             (this.productService, this.productRepository) = (productService, productRepository);
 
     [HttpGet]
-    [Authorize(Roles = "AuthUser")]
     public async Task<ActionResult> GetHomeProductList()
     {
         var products = await productService.GetAllProductsAsync();

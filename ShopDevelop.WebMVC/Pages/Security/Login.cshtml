@@ -1,0 +1,40 @@
+@page
+@model ShopDevelop.WebMVC.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<section class="auth" id="auth">
+    <div class="container">
+        <div class="auth__inner">
+            <form class="auth-form" asp-route-returnUrl="@ViewBag.returnUrl" method="post">
+                <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl"/>
+
+                <h1 class="auth-title">Log In</h1>
+                <p class="auth-other-text-info log-other-text-info">Welcome back, we've missed you!</p>
+
+                <h4 class="auth-subtitle">BASIC INFORMATION</h4>
+
+                <input asp-for="@Model.Email" class="auth-input" type="email" placeholder="Email"
+                       id="login-input" class="login-input">
+                <br>
+                <span class="auth-validation-span" asp-validation-for="@Model.Email"></span>
+                <input asp-for="@Model.Password" type="password" class="auth-input" class="pass-input"
+                       placeholder="Password" id="pass-input">
+                <br>
+                <span class="auth-validation-span" asp-validation-for="@Model.Password"></span>
+
+                <br>
+                <label class="rememberme-label" for="rememberme">Remember me</label>
+                <input asp-for="@Model.RememberMe" class="rememberme-input" name="rememberme" type="checkbox" value="false">
+                <a class="forgot-pass">Forgot your password?</a>
+
+                <p class="auth-other-text log-other-text">Don't you have an account?</p>
+                <a class="auth-login__link" asp-page="/security/register">Register</a>
+                <br>
+                <button class="btn-submit" type="submit">LOG IN</button>
+            </form>
+        </div>
+    </div>
+</section>

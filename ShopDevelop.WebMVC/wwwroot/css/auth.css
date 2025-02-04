@@ -1,0 +1,239 @@
+:root {
+    --background-section-color: #dedede;
+    --input-border: #999;
+    --text-color-input: #000;
+    --dm-sans-font: "DM Sans", sans-serif;
+    --login-blue-color: #1F41BB;
+    --other-dark-color: #494949;
+    --main-color: #111827;
+}
+
+body {
+    font-family: var(--dm-sans-font);
+    color: var(--main-color);
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.auth__inner {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.info__section {
+    width: 850px;
+    height: 850px;
+    background-color: var(--background-section-color);
+}
+
+.auth-form {
+    max-width: 480px;
+    height: 850px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--main-color);
+    margin-top: 50px;
+    /* border: 1px solid var(--background-section-color); */
+}
+
+.auth-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.auth-other-text-info {
+    font-size: 18px;
+    margin-bottom: 40px;
+    line-height: 1.3;
+}
+
+.auth-subtitle {
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.auth-input {
+    width: 420px;
+    height: 35px;
+    border: 1px solid var(--input-border);
+    font-size: 16px;
+    color: var(--text-color-input);
+    outline: none;
+    margin-bottom: 15px;
+    padding: 0 20px;
+}
+
+.auth-other-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--other-dark-color);
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+.auth-login__link {
+    color: var(--login-blue-color);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: .5s;
+}
+
+.auth-login__link:hover {
+    text-decoration: underline;
+}
+
+.btn-submit {
+    margin-top: 40px;
+    font-size: 18px;
+    font-weight: 500;
+    width: 300px;
+    padding: 15px 0;
+    border: 2px solid var(--text-color-input);
+    transition: .5s;
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: transparent;
+    color: #000;
+    cursor: pointer;
+}
+
+.rememberme-label {
+    text-align: left;
+}
+
+.rememberme-input {
+    width: 19px;
+    height: 19px;
+    margin-left: 5px;
+}
+
+.forgot-pass {
+    margin-left: 115px;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.forgot-pass:hover {
+    opacity: 80%;
+}
+
+.log-other-text-info {
+    margin-top: 10px;
+}
+
+.log-other-text {
+    margin-top: 80px;
+}
+
+.auth-validation-span {
+    color: red;
+}
+
+.user-input {
+    display: flex;
+    justify-content: center;
+}
+
+.code-input {
+    margin: 20px 15px;
+    height: 50px;
+    width: 50px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-family: arimo;
+    font-size: 1.2rem;
+    background: #eef2f3;
+    font-family: var(--dm-sans-font);
+}
+
+@media (max-width: 500px) {
+    .auth-form {
+        margin-top: 0px;
+        max-width: 340px;
+    }
+
+    .auth-title {
+        font-size: 24px;
+    }
+
+    .auth-input {
+        width: 350px;
+    }
+
+    .btn-submit {
+        width: 300px;
+        margin-top: 20px;
+    }
+
+    .code-input {
+        margin: 10px 10px;
+        height: 40px;
+        width: 40px;
+    }
+}
+
+@media (max-width: 400px) {
+    .auth-input {
+        width: 300px;
+    }
+}
+
+@media (max-width: 350px) {
+
+    .auth-form {
+        max-width: 280px;
+    }
+
+    .auth-title {
+        font-size: 22px;
+    }
+
+    .auth-input {
+        width: 250px;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .auth-subtitle {
+        font-size: 16px;
+    }
+
+    .auth-other-text-info {
+        margin-bottom: 30px;
+        font-size: 16px;
+    }
+
+    .auth-other-text {
+        margin-top: 10px;
+    }
+
+    .btn-submit {
+        width: 250px;
+        font-size: 16px;
+        padding: 12px 0px;
+    }
+
+    .code-input {
+        margin: 5px 5px;
+        height: 40px;
+        width: 40px;
+    }
+}

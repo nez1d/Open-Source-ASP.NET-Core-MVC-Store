@@ -1,38 +1,69 @@
-﻿<header class="header" id="header">
-    <div class="container">
-        <a class="logo" href="/Home/Index">NezidStore</a>
-        <a class="categories" href="#">Categories</a>
+<header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo">
+                    <img src="~/images/header/logo.svg" alt="logo">
+                </a>
+                <ul class="menu">
+                    <li class="menu__list">
+                        <a href="/" class="menu__link">HOME</a>
+                    </li>
+                    <li class="menu__list">
+                        <a href="#" class="menu__link">MEN</a>
+                    </li>
+                    <li class="menu__list">
+                        <a href="#" class="menu__link">WOMAN</a>
+                    </li>
+                    <li class="menu__list">
+                        <a href="#" class="menu__link">ABOUT</a>
+                    </li>
+                </ul>
+                <ul class="control">
+                    <li class="control__list">
+                        <div class="search__inner">
+                            <img class="control__image-search" src="~/images/header/search.svg" alt="">
+                            <input class="control__search-input" type="text">
+                        </div>
+                    </li>
+                    <li class="control__list control__menu__btn">
+                        <a href="#" class="basket">
+                            <div class="control__list__inner">
+                                <img class="control__image" src="~/images/header/basket.svg" alt="">
+                            </div>
+                        </a>
+                    </li>
+                    @{
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="control__list control__menu__btn">
+                                <a asp-page="/security/profile" class="profile">
+                                    <div class="control__list__inner">
+                                        <img class="control__image" src="~/images/header/profile.svg" alt="">
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="control__list control__menu__btn">
+                                <a asp-page="/security/login" class="profile">
+                                    <div class="control__list__inner">
+                                        <img class="control__image" src="~/images/header/profile.svg" alt="">
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    }
+                    <li class="control__list">
+                        <button class="menu__btn">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </li>
+                </ul>
 
-        <input class="search" type="text" name="" id="" placeholder="Search Product">
-
-        <nav class="nav">
-            <ul class="menu-list">
-                <li class="menu-item delivery-item">
-                    <a class="menu-link" href="#">
-                        <img class="menu-link__img" src="~/images/Header/delivery.svg" alt="delivery">
-                    </a>
-                </li>
-                <li class="menu-item message-item">
-                    <a class="menu-link " href="#">
-                        <img class="menu-link__img" src="~/images/Header/message.svg" alt="message">
-                    </a>
-                </li>
-                <li class="menu-item like-item">
-                    <a class="menu-link" href="#">
-                        <img class="menu-link__img" src="~/images/Header/like.svg" alt="like">
-                    </a>
-                </li>
-                <li class="menu-item  cart-item">
-                    <a asp-controller="Cart" asp-action="Index" class="menu-link">
-                        <img class="menu-link__img" src="~/images/Header/cart.png" alt="cart">
-                    </a>
-                </li>
-                <li class="menu-item user-item">
-                    <a asp-controller="Account" asp-action="Profile" class="menu-link">
-                        <img class="menu-link__img" src="~/images/Header/user.svg" alt="user">
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</header>
+            </nav>
+        </div>
+    </header>
