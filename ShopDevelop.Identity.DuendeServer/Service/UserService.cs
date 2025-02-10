@@ -1,42 +1,72 @@
-using Duende.IdentityServer.Stores.Serialization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using ShopDevelop.Domain.Models;
 using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
-using ShopDevelop.Identity.DuendeServer.ViewModels;
 using System.Security.Claims;
+using System.Security.Policy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace ShopDevelop.Identity.DuendeServer.Service;
 
-public class UserService 
+public class UserService : ControllerBase
 {
     private readonly UserManager<ApplicationUser> userManager;
     private readonly JwtProvider jwtProvider;
-    private readonly SignInManager<ApplicationUser> signInManager;
     private readonly IHttpContextAccessor httpContextAccessor;
 
-    public UserService(UserManager<ApplicationUser> userManager,
-        JwtProvider jwtProvider,
-        SignInManager<ApplicationUser> signInManager,
-        IHttpContextAccessor httpContextAccessor) =>
-            (this.userManager, this.jwtProvider, this.signInManager, 
-                this.httpContextAccessor) = 
-            (userManager, jwtProvider, signInManager, 
-                httpContextAccessor);
+    public UserService(JwtProvider jwtProvider,
+        UserManager<ApplicationUser> userManager,
+        IHttpContextAccessor httpContextAccessor)
+    {
+        this.userManager = userManager;
+        this.jwtProvider = jwtProvider;
+        this.httpContextAccessor = httpContextAccessor;
+    }
 
-    public async Task Register(string email, string password) { }
+    public async Task<bool> Register(string email, string password)
+    {
+        var userExist = await userManager.FindByEmailAsync(email);
+        if (userExist != null)
+            return false;
+        
+        var user = new ApplicationUser
+        {    
+            UserName = email,
+            Email = email
+        };
+            
+        var result = await userManager.CreateAsync(user, password);
 
-    public async Task<bool> LogIn(string email, string password)
+        if (result.Succeeded)
+        {
+            bool emailStatus = await CheckEmailConfirmed(email);
+
+            if (emailStatus)
+                return false;
+
+            var loginResult = await this.Login(user.Email, user.PasswordHash);
+
+            if (!loginResult)
+                return false;
+        }
+        return true;
+    }
+
+    public async Task<bool> Login(string email, string password)
     {
         var user = await userManager.FindByEmailAsync(email);
         
         if(user == null)
             return false;
-
+        
+        var result = await userManager.CheckPasswordAsync(user, password);
+        
+        if(result)
+            return false;
+        
         var claims = new List<Claim>
         {
             new (ClaimTypes.Name, email),
@@ -58,6 +88,27 @@ public class UserService
         await httpContextAccessor.HttpContext.SignInAsync(claimsPrincipal);
 
         return true;
+    }
+    
+    public async Task ConfirmEmail(string email)
+    {
+        /*var user = await userManager.FindByEmailAsync(email);
+
+        if (user == null)
+            return;
+        
+        var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        
+        var confirmationLink = urlHelper.Action(
+            action: "ConfirmEmail",
+            controller: "Auth",
+            values: new { email = email, code = code },
+            protocol: httpContextAccessor.HttpContext.Request.Scheme);
+        
+        await emailService.SendEmailAsync(
+            email: email, 
+            subject: "Confirm Email",
+            message: $"<a href=''>link</a>");*/
     }
 
     public async Task<bool> CheckEmailConfirmed(string email)

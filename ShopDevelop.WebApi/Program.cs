@@ -38,7 +38,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddSignInManager<SignInManager<ApplicationUser>>()
     .AddUserManager<UserManager<ApplicationUser>>()
-    .AddDefaultTokenProviders(); 
+    .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddScoped<AuthDbContext>();
@@ -57,7 +57,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped(scope => ShoppingCartService.GetCart(scope));
 builder.Services.AddScoped<JwtProvider>();
 
-builder.Services.AddSession(options => {
+builder.Services.AddSession(options =>
+{
     options.Cookie.Name = ".AspNetCore.Cookies.Session";
     options.IdleTimeout = TimeSpan.FromHours(24);
     options.Cookie.IsEssential = true;
