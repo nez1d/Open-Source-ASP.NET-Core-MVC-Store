@@ -1,3 +1,4 @@
+/*
 using Duende.IdentityServer.Stores.Serialization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -18,20 +19,15 @@ namespace ShopDevelop.Identity.DuendeServer.Pages;
 [AllowAnonymous]
 public class RegisterModel : PageModel
 {
-    private readonly SignInManager<ApplicationUser> signInManager;
     private readonly UserManager<ApplicationUser> userManager;
-    private readonly JwtProvider jwtProvider;
     private readonly EmailService emailService;
     private readonly UserService userService;
 
-    public RegisterModel(SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager, 
+    public RegisterModel(UserManager<ApplicationUser> userManager, 
         EmailService emailService,
         UserService userService) =>
-        (this.signInManager, this.userManager, this.jwtProvider, 
-            this.emailService, this.userService) = 
-        (signInManager, userManager, jwtProvider = new JwtProvider(), 
-            emailService, userService);
+        (this.userManager, this.emailService, this.userService) = 
+        (userManager, emailService, userService);
     
 
     [BindProperty]
@@ -42,7 +38,7 @@ public class RegisterModel : PageModel
         if (ModelState.IsValid)
         {
             var user = new ApplicationUser
-            {
+            {    
                 UserName = model.Email,
                 Email = model.Email
             };
@@ -65,12 +61,12 @@ public class RegisterModel : PageModel
                 if (!emailStatus)
                     return BadRequest("Check your email.");
 
-                var loginResult = await userService.LogIn(user.Email, user.PasswordHash);
+                var loginResult = await userService.Login(user.Email, user.PasswordHash);
 
                 if (!loginResult)
                     return BadRequest("User email confirmation failed.");        
                 
-                /*var claims = new List<Claim>
+                var claims = new List<Claim>
                 {
                     new (ClaimTypes.Name, model.Email),
                     new (ClaimTypes.Role, "AuthUser"),
@@ -88,7 +84,7 @@ public class RegisterModel : PageModel
 
                 this.HttpContext.Response.Cookies.Append("tasty-cookies", token);
 
-                await this.HttpContext.SignInAsync(claimsPrincipal);*/
+                await this.HttpContext.SignInAsync(claimsPrincipal);
 
                 return Redirect("http://localhost:5185/index.html");
             }
@@ -113,5 +109,6 @@ public class RegisterModel : PageModel
                                                    issuer: "ExampleIssuer",
                                                    expires: DateTime.UtcNow.AddHours(12));
         return handler.WriteToken(token);
-    }*/
+    }#1#
 }
+*/

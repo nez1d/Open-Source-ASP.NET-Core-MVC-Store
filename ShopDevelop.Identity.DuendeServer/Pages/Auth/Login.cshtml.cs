@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication;
+/*using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +46,7 @@ public class LoginModel : PageModel
             if (!data)
                 return BadRequest("Email is not confirmed!");
 
-            var result = await userService.LogIn(user.Email, model.Password);
+            var result = await userService.Login(user.Email, model.Password);
             
             if (!result)
                 return BadRequest("Error while logging in!");
@@ -69,10 +69,10 @@ public class LoginModel : PageModel
 
             this.HttpContext.Response.Cookies.Append("tasty-cookies", token);
 
-            await this.HttpContext.SignInAsync(claimsPrincipal);*/
+            await this.HttpContext.SignInAsync(claimsPrincipal);#1#
 
             return Redirect("https://localhost:7005/index.html");
         }
         return Page();
     }
-}
+}*/

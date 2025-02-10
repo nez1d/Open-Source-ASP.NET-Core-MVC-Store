@@ -1,4 +1,5 @@
-﻿@page
+﻿@*
+@page
 @model ShopDevelop.Identity.DuendeServer.Pages.RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -12,7 +13,7 @@
     <div class="container">
         <div class="register__inner">
             <form  class="register-form" method="post">
-                @* <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" /> *@
+                $1$ <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" /> #1#
 
                 <h1 class="reg-title">Register</h1>
                 <p class="reg-other-text-info">Create an account so you can start shopping.</p>
@@ -30,3 +31,4 @@
         </div>
     </div>
 </section>
+*@
