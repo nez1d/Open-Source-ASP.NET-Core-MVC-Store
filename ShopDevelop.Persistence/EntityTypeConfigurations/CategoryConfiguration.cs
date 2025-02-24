@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Persistence.EntityTypeConfigurations;
+
 public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
@@ -11,19 +12,23 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
         builder
             .Property(category => category.Name)
-            .HasMaxLength(25)
+            .HasMaxLength(30)
             .IsRequired();
+        
         builder
             .Property(category => category.Description)
-            .HasMaxLength(150)
-            .IsRequired();
+            .HasMaxLength(200)
+            .IsRequired(false);
+        
         builder
             .Property(category => category.ImagePath)
-            .HasMaxLength(250)
+            .HasMaxLength(200)
             .IsRequired();
-        /*builder
+        
+        builder
             .HasMany(category => category.Products)
             .WithOne(product => product.Category)
-            .HasForeignKey(product => product.CategoryId);*/
+            .HasForeignKey(product => product.CategoryId);
+            
     }
 }

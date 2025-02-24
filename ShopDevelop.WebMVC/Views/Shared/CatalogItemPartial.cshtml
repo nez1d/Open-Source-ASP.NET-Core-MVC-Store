@@ -1,9 +1,11 @@
 @{
+    var num = 1;
     foreach (var product in Model)
     {
+        string imgPath = "~/images/catalog/product_" + num + ".jpg";
         <li class="catalog__item">
             <a href="#" class="catalog__item-image__inner">
-                <img class="catalog__item__img" src="~/images/catalog/product_1.jpg" alt="">
+                <img class="catalog__item__img" src="@Url.Content(imgPath)" alt="">
             </a>
             <div class="catalog__item-text__inner">
                 <a class="catalog__item__title" href="#!">@product.ProductName</a> <br>
@@ -21,5 +23,6 @@
                 </div>
             </div>
         </li>
+        num += 1;
     }
 }

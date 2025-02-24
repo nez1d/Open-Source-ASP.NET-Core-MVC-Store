@@ -1,8 +1,8 @@
-using System.Net.Mime;
+/*using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Services.Review;
-using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
+using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -118,4 +118,4 @@ public class ReviewController : BaseController
         var result = await reviewService.GetAllAsync();
         return Ok(result);
     }
-}
+}*/

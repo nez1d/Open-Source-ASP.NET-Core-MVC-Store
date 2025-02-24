@@ -5,15 +5,14 @@ namespace ShopDevelop.Application.Services.Seller;
 public class SellerService : ISellerService
 {
     private readonly ISellerRepository sellerRepository;
-
     public SellerService(ISellerRepository sellerRepository) =>
         this.sellerRepository= sellerRepository;
     
-    public async Task<Guid> CreateSellerAsync(
+    public async Task<int> CreateSellerAsync(
         string name, string description,
         string imagePath, string imageFooterPath)
     {
-        var seller = new Domain.Models.Seller
+        var seller = new Domain.Entities.Seller
         {
             Name = name,
             Description = description,
@@ -21,38 +20,39 @@ public class SellerService : ISellerService
             ImageFooterPath = imageFooterPath
         };
 
-        var result = await sellerRepository.Create(seller);
+        /*var result = await sellerRepository.Create(seller);*/
 
         return seller.Id;
     }
 
-    public Task<Guid> CreateSellerAsync(Domain.Models.Seller seller)
+    public Task<Guid> CreateSellerAsync(Domain.Entities.Seller seller)
     {
         throw new NotImplementedException();
     }
 
-    public async Task EditSellerAsync(Domain.Models.Seller seller)
+    public async Task EditSellerAsync(Domain.Entities.Seller seller)
     {
-        var model = await sellerRepository.GetById(seller.Id);
-        await sellerRepository.Update(seller);
+        /*var model = await sellerRepository.GetById(seller.Id);*/
+        /*await sellerRepository.Update(seller);*/
     }
 
     public async Task DeleteSellerAsync(Guid id)
     {
-        var result = await sellerRepository.GetById(id);
+        /*var result = await sellerRepository.GetById(id);
         if (result != null)
         {
             await sellerRepository.Delete(id);   
-        }
+        }*/
     }
     
-    public Task<IEnumerable<Domain.Models.Seller>> GetAllSellerAsync()
+    public Task<IEnumerable<Domain.Entities.Seller>> GetAllSellerAsync()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<Domain.Models.Seller> GetSellerByIdAsync(Guid id)
+    public async Task<Domain.Entities.Seller> GetSellerByIdAsync(uint id)
     {
         return await sellerRepository.GetById(id);
+        return null;
     }
 }

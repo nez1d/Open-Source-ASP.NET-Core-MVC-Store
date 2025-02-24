@@ -1,16 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Domain.Models;
-namespace ShopDevelop.Domain.Interfaces
+using ShopDevelop.Domain.Entities;
+using ShopDevelop.Domain.Entities.Products;
+
+namespace ShopDevelop.Application.Interfaces;
+
+public interface IApplicationDbContext 
 {
-    public interface IApplicationDbContext 
-    {
-        DbSet<Seller> Sellers { get; set; }
-        DbSet<Product> Products { get; set; }
-        DbSet<ProductDetail> ProductDetails { get; set; }
-        DbSet<Category> Categories { get; set; }
-        DbSet<Order> Orders { get; set; }
-        DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
-        DbSet<Review> Reviews { get; set; }
-        Task<int> SaveChangesAsync();
-    }
+    public DbSet<ApplicationUser> AspNetUsers { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductDetail> ProductDetails { get; set; }
+    public DbSet<ClothesProduct> ClothesProducts { get; set; }
+    public DbSet<ShoesProduct> ShoesProducts { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Seller> Sellers { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+    public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+    Task<int> SaveChangesAsync();
 }

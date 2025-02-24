@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Routing.Template;
+using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Domain.Interfaces;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Persistence.Repository;
 
@@ -11,7 +12,8 @@ public class ProductRepository : IProductRepository
     public ProductRepository(IApplicationDbContext context) =>
         this.context = context;
 
-    public async Task<Guid> Create(Product product)
+    public async Task<Guid> Create(Product product, 
+        CancellationToken cancellationToken)
     {
         await context.Products.AddAsync(product);
         await context.SaveChangesAsync();
@@ -55,7 +57,9 @@ public class ProductRepository : IProductRepository
 
     public IEnumerable<Product> GetByCategoryId(Guid categoryId)
     {
-        return context.Products
-            .Where(product => product.Category.Id == categoryId);
+        /*return context.Products
+            .Where(product => product.Category.Id == categoryId);*/
+
+        return null;
     }
 }

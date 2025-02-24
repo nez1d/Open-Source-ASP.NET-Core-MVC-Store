@@ -1,5 +1,4 @@
-using System.Collections;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.WebMVC.ViewModels;
 
@@ -10,5 +9,5 @@ public record CatalogViewModel(
     Seller Seller,
     decimal Rating,
     uint ReviewCount,
-    string ImagePath
+    string ImageMiniPath
 );

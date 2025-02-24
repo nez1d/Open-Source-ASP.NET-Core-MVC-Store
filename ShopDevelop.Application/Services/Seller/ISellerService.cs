@@ -7,7 +7,7 @@ public interface ISellerService
     /// </summary>
     /// <param name="seller">New Seller Entity.</param>
     /// <returns>Return Seller Id.</returns>
-    Task<Guid> CreateSellerAsync(
+    Task<int> CreateSellerAsync(
         string name, string description,
         string imagePath, string imageFooterPath);
     /// <summary>
@@ -15,7 +15,7 @@ public interface ISellerService
     /// </summary>
     /// <param name="seller">Seller Entity.</param>
     /// <returns></returns>
-    Task EditSellerAsync(Domain.Models.Seller seller);
+    Task EditSellerAsync(Domain.Entities.Seller seller);
     /// <summary>
     /// Delete a Seller Async.
     /// </summary>
@@ -26,11 +26,11 @@ public interface ISellerService
     /// Get all Sellers async.
     /// </summary>
     /// <returns>Return a list Sellers async.</returns>
-    Task<IEnumerable<Domain.Models.Seller>> GetAllSellerAsync();
+    Task<IEnumerable<Domain.Entities.Seller>> GetAllSellerAsync();
     /// <summary>
     /// Get a Seller by Id async.
     /// </summary>
     /// <param name="id">Seller Id.</param>
     /// <returns>Return Seller.</returns>
-    Task<Domain.Models.Seller> GetSellerByIdAsync(Guid id);
+    Task<Domain.Entities.Seller> GetSellerByIdAsync(uint id);
 }

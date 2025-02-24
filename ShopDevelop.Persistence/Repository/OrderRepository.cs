@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+/*using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Persistence.Repository;
@@ -52,4 +52,4 @@ public class OrderRepository : IOrderRepository
         return context.Orders
             .Where(order => order.ApplicationUserId == userId);
     }
-}
+}*/

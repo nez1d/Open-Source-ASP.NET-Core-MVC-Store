@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿/*
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using ShopDevelop.Domain.Interfaces;
-using ShopDevelop.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Application.Services.Cart;
 
@@ -31,7 +32,7 @@ public class ShoppingCartService
     }
     
     public async Task<bool> AddToCart(
-        Domain.Models.Product product, 
+        Domain.Entities.Product product, 
         int amount, 
         string userId)
     {
@@ -73,7 +74,7 @@ public class ShoppingCartService
         return isValidAmount;
     }
 
-    public async Task<bool> RemoveFromCart(Domain.Models.Product product)
+    public async Task<bool> RemoveFromCart(Domain.Entities.Product product)
     {
         var shoppingCartItem = await context.ShoppingCartItems
             .SingleOrDefaultAsync(s => s.Product.Id == product.Id 
@@ -98,14 +99,14 @@ public class ShoppingCartService
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(/*string userId*/)
+    public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(/*string userId#1#)
     {
         return ShoppingCartItems = context.ShoppingCartItems
                    .Where(c => c.ShoppingCartId == ShoppingCartId)
                    .Include(s => s.Product);
         
         /*return context.ShoppingCartItems
-            .Where(item => item.ApplicationUserId == userId);*/
+            .Where(item => item.ApplicationUserId == userId);#1#
     }
 
     public async Task<decimal> GetShoppingCartTotal(Guid ShoppingCartId)
@@ -116,3 +117,4 @@ public class ShoppingCartService
             .SumAsync();
     }
 }
+*/

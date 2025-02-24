@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ShopDevelop.Domain.Models;
 using ShopDevelop.Persistence.Repository;
 
 namespace ShopDevelop.WebApi.Controllers;
@@ -45,5 +44,5 @@ public class ProfileController : BaseController
     public async Task<IActionResult> Logout(Guid id)
     {
         return Ok();
-    }*/
-}
+    }#1#
+}*/

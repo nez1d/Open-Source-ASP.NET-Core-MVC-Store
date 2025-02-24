@@ -1,3 +1,4 @@
+using System.Reflection;
 using ShopDevelop.Application;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Application.Services.Product;
@@ -10,12 +11,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Data.Common.Mappings;
+using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Application.Services.Seller;
-using ShopDevelop.Domain.Interfaces;
-using ShopDevelop.Domain.Models;
-using ShopDevelop.Identity.DuendeServer.Data;
-using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
+using ShopDevelop.Domain.Entities;
+using ShopDevelop.Identity.DuendeServer.WebAPI.Data;
+using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
+using ShopDevelop.Persistence.Entities.Product.Command.Create;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -40,22 +43,11 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddUserManager<UserManager<ApplicationUser>>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-builder.Services.AddScoped<AuthDbContext>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<ISellerRepository, SellerRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IReviewService, ReviewService>();
-builder.Services.AddScoped<ISellerService, SellerService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped(scope => ShoppingCartService.GetCart(scope));
-builder.Services.AddScoped<JwtProvider>();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); 
 
 builder.Services.AddSession(options =>
 {
@@ -90,6 +82,7 @@ builder.Services.AddAuthentication(config =>
         options.Authority = "http://localhost:5261/";
         options.Audience = "NotesWebAPI";
         options.RequireHttpsMetadata = false;
+
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -115,6 +108,22 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin();
     });
 });
+
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+builder.Services.AddScoped<AuthDbContext>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<JwtProvider>();
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+builder.Services.AddScoped<ISellerService, SellerService>();
+builder.Services.AddScoped<ISellerRepository, SellerRepository>();
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

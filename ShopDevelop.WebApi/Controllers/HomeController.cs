@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Application.Services.Product;
-using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -14,13 +12,16 @@ public class HomeController : BaseController
     private readonly IProductRepository productRepository;
     public HomeController(IProductService productService,
         IProductRepository productRepository) =>
-            (this.productService, this.productRepository) = (productService, productRepository);
+            (this.productService, this.productRepository) = 
+            (productService, productRepository);
 
     [HttpGet]
     public async Task<ActionResult> GetHomeProductList()
     {
-        var products = await productService.GetAllProductsAsync();
-        return Ok(products);
+        /*var products = await productService.GetAllProductsAsync();#1#
+        /*return Ok(products);#1#
+
+        return null;
     }
 
     /*[HttpGet("token")]
@@ -40,5 +41,5 @@ public class HomeController : BaseController
                                                    issuer: "AuthServer",
                                                    expires: DateTime.UtcNow.AddHours(42));
         return handler.WriteToken(token);
-    }*/
-}
+    }#1#
+}*/
