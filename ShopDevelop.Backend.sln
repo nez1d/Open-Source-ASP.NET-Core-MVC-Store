@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDevelop.Domain", "ShopD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDevelop.Persistence", "ShopDevelop.Persistence\ShopDevelop.Persistence.csproj", "{20FA7C09-668C-4D9C-A59C-EB939B7C9F67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDevelop.Identity.DuendeServer", "ShopDevelop.Identity.DuendeServer\ShopDevelop.Identity.DuendeServer.csproj", "{21CD05E9-1ACA-402B-9AD4-59B03E9960DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDevelop.Identity.DuendeServer.WebAPI", "ShopDevelop.Identity.DuendeServer.WebAPI\ShopDevelop.Identity.DuendeServer.WebAPI.csproj", "{21CD05E9-1ACA-402B-9AD4-59B03E9960DD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{265FD3CF-2AE1-4B79-9570-C7BD742ADDAB}"
 EndProject
@@ -26,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopDevelop.WebMVC", "ShopDevelop.WebMVC\ShopDevelop.WebMVC.csproj", "{CF107F4C-5188-4E13-B85A-70E47A7F4F28}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopDevelop.Microservice.Cache", "ShopDevelop.Microservice.Cache\ShopDevelop.Microservice.Cache.csproj", "{6B1B9A9C-4EEB-4030-B16E-AF703F8368E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopDevelop.Microservice.Cache.Test", "ShopDevelop.Microservice.Cache.Test\ShopDevelop.Microservice.Cache.Test.csproj", "{420D9360-5B76-4563-A813-73EBCFB7A250}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{6B1B9A9C-4EEB-4030-B16E-AF703F8368E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B1B9A9C-4EEB-4030-B16E-AF703F8368E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B1B9A9C-4EEB-4030-B16E-AF703F8368E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{420D9360-5B76-4563-A813-73EBCFB7A250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{420D9360-5B76-4563-A813-73EBCFB7A250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{420D9360-5B76-4563-A813-73EBCFB7A250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{420D9360-5B76-4563-A813-73EBCFB7A250}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,9 +76,10 @@ Global
 		{ED2CD0FA-B705-4403-B6E4-B21C8ED3A868} = {D797B070-F701-426F-B37B-E02C9BCDB438}
 		{704133C5-85C9-4FC4-AC36-95574ABDF0B8} = {D797B070-F701-426F-B37B-E02C9BCDB438}
 		{20FA7C09-668C-4D9C-A59C-EB939B7C9F67} = {3D053D67-5661-43C3-BCE1-76CEF67A189E}
-		{21CD05E9-1ACA-402B-9AD4-59B03E9960DD} = {D797B070-F701-426F-B37B-E02C9BCDB438}
 		{CF107F4C-5188-4E13-B85A-70E47A7F4F28} = {E7F576C7-B064-48DE-BF25-A8F8FCEACD82}
 		{6B1B9A9C-4EEB-4030-B16E-AF703F8368E0} = {265FD3CF-2AE1-4B79-9570-C7BD742ADDAB}
+		{21CD05E9-1ACA-402B-9AD4-59B03E9960DD} = {E7F576C7-B064-48DE-BF25-A8F8FCEACD82}
+		{420D9360-5B76-4563-A813-73EBCFB7A250} = {EDB5BD6F-EE1F-46E4-A33B-66D518639E2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {057C7BB5-998A-46BB-97AF-CF22F6A756CA}

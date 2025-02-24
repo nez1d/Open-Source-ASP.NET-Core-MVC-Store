@@ -6,11 +6,13 @@ namespace ShopDevelop.WebMVC.Controllers;
 
 public class HomeController : Controller
 {
-    private Uri address = new Uri("http://localhost:5185/api");
+    private readonly ILogger logger;
+    private readonly Uri address = new Uri("http://localhost:5185/api");
     private readonly HttpClient httpClient;
 
-    public HomeController()
+    public HomeController(ILogger<HomeController> logger)
     {
+        this.logger = logger;
         httpClient = new HttpClient();
         httpClient.BaseAddress = address;
     }
@@ -35,8 +37,8 @@ public class HomeController : Controller
         catch (Exception ex)
         {
             return Redirect("/Error");
-        } 
-        
+        }
+
         return View(model);
     }
 }

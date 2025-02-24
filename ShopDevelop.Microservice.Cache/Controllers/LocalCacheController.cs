@@ -7,7 +7,7 @@ namespace ShopDevelop.Microservice.Cache.Controllers;
 [Route("api/[controller]")]
 public class LocalCacheController : ControllerBase
 {
-    private const string keyName = "CacheKeyName";
+    private const string keyName = "KeyName";
     private readonly IMemoryCache memoryCache;
     
     public LocalCacheController(IMemoryCache memoryCache) => 

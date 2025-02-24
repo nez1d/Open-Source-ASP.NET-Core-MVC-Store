@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Persistence.EntityTypeConfigurations;
 
@@ -9,36 +9,51 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     public void Configure(EntityTypeBuilder<Order> builder)
     {
         builder.HasKey(order => order.Id);
-
+        
         builder
             .Property(order => order.Address)
-            .HasMaxLength(150)
+            .HasMaxLength(100)
+            .IsRequired();
+        
+        builder
+            .Property(order => order.City)
+            .HasMaxLength(25)
+            .IsRequired();
+        
+        builder
+            .Property(order => order.Country)
+            .HasMaxLength(25)
+            .IsRequired();
+        
+        builder
+            .Property(order => order.Amount)
+            .HasMaxLength(5)
+            .IsRequired();
+        
+        builder
+            .Property(order => order.ZipCode)
+            .HasMaxLength(6)
             .IsRequired();
 
         builder
-            .Property(order => order.City)
-            .HasMaxLength(50)
+            .Property(order => order.Status)
             .IsRequired();
-        builder
-            .Property(order => order.Country)
-            .HasMaxLength(50)
-            .IsRequired();
-        builder
-            .Property(order => order.Amount)
-            .IsRequired();
+        
         builder
             .Property(order => order.OrderTotal)
-            .HasMaxLength(50)
+            .HasMaxLength(10)
             .IsRequired();
+        
         builder
             .Property(order => order.CreatedDate)
             .IsRequired();
-        /*builder
-            .HasOne(order => order.User)
-            .WithMany(user => user.Orders)
-            .HasForeignKey(user => user.UserId);*/
-        /*builder
-            .HasOne(order => order.Product);*/
+        
+        builder
+            .Property(order => order.ApplicationUserId)
+            .IsRequired();
+        
+        builder
+            .Property(order => order.ProductId)
+            .IsRequired();
     }
 }
-

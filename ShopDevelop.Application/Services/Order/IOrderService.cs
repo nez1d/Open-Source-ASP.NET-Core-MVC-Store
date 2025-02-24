@@ -1,4 +1,4 @@
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Application.Services.Category;
 
@@ -13,7 +13,7 @@ public interface IOrderService
     /// <param name="product">Product Model.</param>
     /// <param name="user">Application User Model.</param>
     /// <returns></returns>
-    Task<bool> CreateOrderAsync(string address, string city, string country, Domain.Models.Product product, ApplicationUser user);
+    Task<bool> CreateOrderAsync(string address, string city, string country, Domain.Entities.Product product, ApplicationUser user);
     /// <summary>
     /// Update Order.
     /// </summary>

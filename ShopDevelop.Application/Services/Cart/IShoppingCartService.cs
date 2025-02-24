@@ -1,4 +1,4 @@
-﻿using ShopDevelop.Domain.Models;
+﻿using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Application.Services.Cart;
 
@@ -10,13 +10,13 @@ public interface IShoppingCartService
     /// <param name="product">Product.</param>
     /// <param name="amount">Numbers of products.</param>
     /// <returns>Return result of adding to Shopping Cart.</returns>
-    Task<bool> AddToCart(Domain.Models.Product product, int amount, string userId);
+    Task<bool> AddToCart(Domain.Entities.Product product, int amount, string userId);
     /// <summary>
     /// Remove product from Shopping Cart.
     /// </summary>
     /// <param name="product">Product to removed.</param>
     /// <returns>Return count of the removing.</returns>
-    Task<bool> RemoveFromCart(Domain.Models.Product product);
+    Task<bool> RemoveFromCart(Domain.Entities.Product product);
     /// <summary>
     /// Clear a Shopping Cart.
     /// </summary>

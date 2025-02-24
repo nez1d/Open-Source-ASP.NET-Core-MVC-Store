@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
+/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Services.Seller;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -37,4 +37,4 @@ public class SellerController : BaseController
         await sellerService.DeleteSellerAsync(id);
         return Ok();
     }
-}
+}*/

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNet.Identity;
+﻿/*using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Domain.Interfaces;
 using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Persistence.Repository;
@@ -26,8 +26,8 @@ public class UserRepository : IUserRepository
     public async Task<ApplicationUser> GetUserById(Guid id)
     {
         /*return await this.context.Users
-            .FirstOrDefaultAsync(user => Guid.Parse(user.Id) == id);*/
+            .FirstOrDefaultAsync(user => Guid.Parse(user.Id) == id);#1#
         
         throw new NotImplementedException();
     }
-}
+}*/

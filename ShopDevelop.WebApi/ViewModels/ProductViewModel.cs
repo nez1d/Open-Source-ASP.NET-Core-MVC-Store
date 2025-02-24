@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 public class ProductViewModel
 {

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using ShopDevelop.Microservice.Cache.Services;
 
 namespace ShopDevelop.Microservice.Cache.Controllers;
 
@@ -7,19 +8,18 @@ namespace ShopDevelop.Microservice.Cache.Controllers;
 [Route("api/[controller]")]
 public class GlobalCacheController : ControllerBase
 {
-    private const string keyName = "CacheKeyName";
-    private readonly IDistributedCache distributedCache;
-    public GlobalCacheController(IDistributedCache distributedCache) => 
-        this.distributedCache = distributedCache;
+    private readonly ILogger logger;
+    private readonly ICacheService cacheService;
+    public GlobalCacheController(ICacheService cacheService,
+        ILogger<GlobalCacheController> logger) => 
+        (this.cacheService, this.logger) = (cacheService, logger);
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> SetCache(string? data, int seconds = 10)
+    public async Task<IActionResult> SetCache(string? data, uint seconds = 600)
     {
-        data ??= DateTime.Now.ToString("F");
-        await distributedCache.SetStringAsync(keyName, data, new DistributedCacheEntryOptions
-        {
-            AbsoluteExpiration = DateTime.Now.AddSeconds(seconds)
-        });
+        logger.LogInformation("GlobalCacheController::SetCache");
+        
+        await cacheService.SetCacheAsync("", data, seconds);
         
         return Ok($"Data set to {data}");
     }
@@ -27,12 +27,10 @@ public class GlobalCacheController : ControllerBase
     [HttpGet("[action]")]
     public async Task<IActionResult> GetCache()
     {
-        var isExist = await distributedCache.GetStringAsync(keyName, HttpContext.RequestAborted);
-
-        var message = isExist is not null
-            ? $"Data in cache{isExist}"
-            : "No data in cache";
+        logger.LogInformation("GlobalCacheController::GetCache");
         
-        return Ok(message);
+        var result = await cacheService.GetCacheAsync("", this.HttpContext);
+
+        return Ok(result);
     }
 }

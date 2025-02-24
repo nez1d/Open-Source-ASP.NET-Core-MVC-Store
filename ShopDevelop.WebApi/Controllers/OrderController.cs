@@ -1,4 +1,4 @@
-using AutoMapper;
+/*using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Application.Services.Product;
-using ShopDevelop.Domain.Models;
-using ShopDevelop.Identity.DuendeServer.Data;
-using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
+using ShopDevelop.Domain.Entities;
+using ShopDevelop.Identity.DuendeServer.WebAPI.Data;
+using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -99,4 +99,4 @@ public class OrderController : BaseController
         
         return Ok(items);
     }
-}
+}*/

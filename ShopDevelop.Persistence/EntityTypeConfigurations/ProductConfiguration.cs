@@ -1,6 +1,7 @@
-﻿/*using ShopDevelop.Domain.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ShopDevelop.Domain.Entities;
+using ShopDevelop.Domain.Entities.Products;
 
 namespace ShopDevelop.Persistence.EntityTypeConfigurations;
 
@@ -8,56 +9,86 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.HasKey(product => product.Id);
+        builder.HasKey(x => x.Id);
 
-        builder
-            .Property(prodcut => prodcut.Article)
-            .HasMaxLength(9)
-            .IsRequired();
         builder
             .Property(product => product.ProductName)
             .HasMaxLength(150)
             .IsRequired();
+
         builder
             .Property(product => product.Price)
-            .HasMaxLength(15)
+            .HasMaxLength(20)
             .IsRequired();
+
+        builder.Property(product => product.OldPrice)
+            .HasMaxLength(20)
+            .IsRequired();
+
+        builder
+            .Property(product => product.Discount)
+            .HasMaxLength(3)
+            .IsRequired();
+
         builder
             .Property(product => product.Description)
-            .HasMaxLength(1000)
+            .HasMaxLength(500)
             .IsRequired();
-        builder
-            .Property(product => product.ShortDescription)
-            .HasMaxLength(250)
-            .IsRequired();
+
         builder
             .Property(product => product.InStock)
-            .HasMaxLength(10)
+            .HasMaxLength(10000)
             .IsRequired();
+        
         builder
             .Property(product => product.ImagePath)
-            .HasMaxLength(250)
+            .HasMaxLength(500)
             .IsRequired();
+        
         builder
             .Property(product => product.ImageMiniPath)
-            .HasMaxLength(250)
+            .HasMaxLength(500)
             .IsRequired();
+
+        builder
+            .Property(product => product.ImagesListPath)
+            .HasMaxLength(500)
+            .IsRequired(false);
+
         builder
             .Property(product => product.Rating)
-            .HasMaxLength(4)
-            .IsRequired();
-        builder
-            .HasOne(product => product.Details)
-            .WithOne(detail => detail.Product);
+            .HasMaxLength(1)
+            .IsRequired(false);
+        
         builder
             .HasMany(product => product.Reviews)
             .WithOne(review => review.Product)
-            .HasForeignKey(review => review.ProductId);
-        /*builder
+            .HasForeignKey(review => review.ProductId)
+            .IsRequired();
+        
+        builder
+            .HasOne(product => product.ProductDetail)
+            .WithOne(detail => detail.Product)
+            .HasForeignKey<Product>(product => product.ProductDetailId);
+
+        builder
             .HasOne(product => product.Category)
-            .WithMany(category => category.Products);#1#
+            .WithMany(detail => detail.Products)
+            .HasForeignKey(product => product.CategoryId);
+        
         builder
             .HasOne(product => product.Seller)
-            .WithMany(seller => seller.Products);
+            .WithMany(seller => seller.Products)
+            .HasForeignKey(product => product.SellerId);
+
+        builder
+            .HasOne(product => product.ClothesProduct)
+            .WithOne(clothesProduct => clothesProduct.Product)
+            .HasForeignKey<Product>(product => product.ClothesProductId);
+        
+        builder
+            .HasOne(product => product.ShoesProduct)
+            .WithOne(clothesProduct => clothesProduct.Product)
+            .HasForeignKey<Product>(product => product.ShoesProductId);
     }
-}*/
+}

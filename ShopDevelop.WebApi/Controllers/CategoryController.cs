@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
+/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Services.Category;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 
 namespace ShopDevelop.WebApi.Controllers;
@@ -37,4 +37,4 @@ public class CategoryController : BaseController
         await categoryService.DeleteCategoryAsync(id);
         return Ok();
     }
-}
+}*/

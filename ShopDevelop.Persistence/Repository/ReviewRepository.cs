@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Domain.Interfaces;
+/*using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.Application.Repository;
@@ -117,4 +117,4 @@ public class ReviewRepository : IReviewRepository
         
         return false;
     }
-}
+}*/

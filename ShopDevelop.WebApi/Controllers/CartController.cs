@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Authorization;
+/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Application.Services.Product;
-using ShopDevelop.Domain.Models;
-using ShopDevelop.Identity.DuendeServer.Data.IdentityConfigurations;
+using ShopDevelop.Domain.Entities;
+using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -56,7 +56,7 @@ public class CartController : BaseController
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> ClearCart()
     {
-        /*await shoppingCartService.ClearCart();*/
+        /*await shoppingCartService.ClearCart();#1#
         return Ok();
     }
     
@@ -72,7 +72,7 @@ public class CartController : BaseController
     [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> GetAllTotalValue()
     {
-        /*await shoppingCartService.GetShoppingCartTotal();*/
+        /*await shoppingCartService.GetShoppingCartTotal();#1#
         return Ok();
     }
-}
+}*/

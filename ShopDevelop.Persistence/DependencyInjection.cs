@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ShopDevelop.Domain.Interfaces;
-using ShopDevelop.Persistence.Entities.Category.Create;
-using ShopDevelop.Persistence.Entities.Product.Queries.GetMinimizedProducts;
-using ShopDevelop.Persistence.Entities.User.Queries.GetProfile;
+using ShopDevelop.Application.Data.Common.Mappings;
+using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Persistence.Entities.Product.Command.Create;
 
 namespace ShopDevelop.Persistence;
 
@@ -16,16 +15,16 @@ public static class DependencyInjection
     {
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
-                typeof(CreateCategoryCommandHandler).Assembly,
-                typeof(GetMiniProductListHandler).Assembly,
-                typeof(GetUserProfileHandler).Assembly));
+                typeof(CreateClothesProductCommandHandler).Assembly));
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql("Server=localhost;Port=5438;DataBase=ShopDevelop; User Id=postgres;Password=postgres ;Include Error Detail=True");
         });
+        
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetService<ApplicationDbContext>());
+        
         return services;
     }
 }

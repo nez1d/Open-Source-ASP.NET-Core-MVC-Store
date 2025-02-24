@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Domain.Interfaces;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Persistence.Repository;
 
 public class CategoryRepository : ICategoryRepository
 {
     private readonly IApplicationDbContext context;
+    private ICategoryRepository categoryRepositoryImplementation;
+
     public CategoryRepository(IApplicationDbContext context) =>
         this.context = context;
 
@@ -18,7 +20,7 @@ public class CategoryRepository : ICategoryRepository
         {
             await context.Categories.AddAsync(category);
             await context.SaveChangesAsync();
-            return category.Id;    
+            return Guid.Empty; /*category.Id; */
         }
         
         return Guid.Empty;
@@ -52,16 +54,22 @@ public class CategoryRepository : ICategoryRepository
             .ToListAsync();
     }
 
+    public Task<object> GetById(int categoryId)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Category> GetById(Guid id)
     {
-        return await context.Categories
-            .FirstOrDefaultAsync(category => category.Id == id);
+        return null; /*await context.Categories
+            .FirstOrDefaultAsync(category => category.Id == id);*/
     }
 
     public async Task<Category> GetByName(string name)
     {
         var category = await context.Categories
             .FirstOrDefaultAsync(category => category.Name == name);
+        
         if (category != null)
             return category;
 

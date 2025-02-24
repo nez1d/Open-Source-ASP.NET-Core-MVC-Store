@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Domain.Interfaces;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Persistence.Repository;
 
@@ -15,28 +15,28 @@ public class SellerRepository : ISellerRepository
     {
         await context.Sellers.AddAsync(seller);
         await context.SaveChangesAsync();
-        return seller.Id;
+        return Guid.Empty;
     }
 
     public async Task Update(Seller seller)
     {
-        var model = await GetById(seller.Id);
+        /*var model = await GetById(seller.Id);
         if (model != null)
         {
             context.Sellers.Update(model);
             await context.SaveChangesAsync();
-        }
+        }*/
     }
 
     public async Task Delete(Guid id)
     {
-        var seller = await GetById(id);     
+        /*var seller = await GetById(id);     
         if (seller == null)
         {
             throw new ArgumentException();
         }
         context.Sellers.Remove(seller);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync()*/;
     }
 
     public async Task<IEnumerable<Seller>> GetAll()
@@ -46,7 +46,7 @@ public class SellerRepository : ISellerRepository
             .ToListAsync();
     }
 
-    public async Task<Seller> GetById(Guid id)
+    public async Task<Seller> GetById(uint id)
     {
         return await context.Sellers
             .FirstOrDefaultAsync(seller => seller.Id == id);

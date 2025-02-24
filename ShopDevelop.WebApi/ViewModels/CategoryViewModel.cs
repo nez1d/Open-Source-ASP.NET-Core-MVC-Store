@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using ShopDevelop.Domain.Models;
 
 namespace ShopDevelop.WebApi.ViewModels;
 

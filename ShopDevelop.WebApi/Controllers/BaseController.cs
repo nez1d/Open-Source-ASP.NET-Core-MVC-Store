@@ -6,11 +6,11 @@ namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class BaseController : ControllerBase
+public abstract class BaseController : ControllerBase
 {
-    private IMediator _mediator;
+    private IMediator mediator;
     protected IMediator Mediator =>
-        _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+        mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
     internal Guid UserId => !User.Identity.IsAuthenticated
         ? Guid.Empty

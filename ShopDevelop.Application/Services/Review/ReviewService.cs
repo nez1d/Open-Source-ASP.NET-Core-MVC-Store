@@ -1,4 +1,4 @@
-﻿using ShopDevelop.Application.Repository;
+﻿/*using ShopDevelop.Application.Repository;
 
 namespace ShopDevelop.Application.Services.Review;
 
@@ -16,7 +16,7 @@ public class ReviewService : IReviewService
         List<string> imageUrls)
     {
         var likesUsersId = new List<string>();
-        var review = new Domain.Models.Review
+        var review = new Domain.Entities.Review
         {
             ProductId = productId,
             Message = text,
@@ -76,28 +76,28 @@ public class ReviewService : IReviewService
             await reviewRepository.Like(reviewId);
     }
     
-    public async Task<Domain.Models.Review> GetByIdAsync(Guid reviewId)
+    public async Task<Domain.Entities.Review> GetByIdAsync(Guid reviewId)
     {
         return await reviewRepository.GetById(reviewId);
     }
 
-    public async Task<IEnumerable<Domain.Models.Review>> GetAllByUserIdAsync(string userId)
+    public async Task<IEnumerable<Domain.Entities.Review>> GetAllByUserIdAsync(string userId)
     {
         return await reviewRepository.GetAllByUserId(userId);
     }
     
-    public async Task<IEnumerable<Domain.Models.Review>> GetFirstFiveByDateAsync(Guid productId)
+    public async Task<IEnumerable<Domain.Entities.Review>> GetFirstFiveByDateAsync(Guid productId)
     {
         
         return await reviewRepository.GetFirstByDate(5, productId, DateTime.UtcNow);
     }
     
-    public async Task<IEnumerable<Domain.Models.Review>> GetFirstFiveByRatingAsync(Guid productId)
+    public async Task<IEnumerable<Domain.Entities.Review>> GetFirstFiveByRatingAsync(Guid productId)
     {
         return await reviewRepository.GetFirstByRating(5, productId, 0, 5);
     }
 
-    public async Task<IEnumerable<Domain.Models.Review>> GetAllAsync()
+    public async Task<IEnumerable<Domain.Entities.Review>> GetAllAsync()
     {
         return await reviewRepository.GetAll();
     }
@@ -111,4 +111,4 @@ public class ReviewService : IReviewService
     {
         return false;
     }
-}
+}*/

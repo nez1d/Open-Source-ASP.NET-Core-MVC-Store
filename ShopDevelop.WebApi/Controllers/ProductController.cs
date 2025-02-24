@@ -1,41 +1,38 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShopDevelop.Application.Entities.Product.Commands.Create;
 using ShopDevelop.Application.Services.Product;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Domain.Dto.Product;
+using ShopDevelop.Domain.Entities;
+using ShopDevelop.Persistence.Entities.Product.Command.Create;
+using ShopDevelop.WebApi.ViewModels;
 
 namespace ShopDevelop.WebApi.Controllers;
 
-[Route("api/[controller]/[action]/")]
 [ApiController]
-public class ProductController : BaseController
+[Route("api/[controller]/[action]/")]
+public class ProductController(IMapper mapper) : BaseController
 {
-    private readonly IProductService productService;
-    public ProductController(IProductService productService) =>
-        this.productService = productService;
-
     [HttpPost]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> CreateProduct(
-        string name, decimal price, decimal oldPrice,
-        string description, string shortDescription, 
-        uint inStock, bool isAvailable, string categoryName,
-        Guid sellerId)
+    /*[Authorize(Roles = "AuthUser")]*/
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> CreateClothesProduct(CreateClothesProductDto model)
     {
-        var product = new Product
+        try
         {
-            ProductName = name,
-            Price = price,
-            OldPrice = oldPrice,
-            Description = description,
-            ShortDescription = shortDescription,
-            InStock = inStock,
-            IsAvailable = isAvailable,
-        };
-        var data = await productService.AddNewProductAsync(product, categoryName, sellerId);
+            var command = mapper.Map<CreateClothesProductCommand>(model);
+            var result = await Mediator.Send(command);
+        }
+        catch (Exception ex) { }
+        
         return Ok();
     }
 
-    [HttpPatch]
+    /*[HttpPatch]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> EditProduct(Product model)
     {
@@ -61,5 +58,5 @@ public class ProductController : BaseController
             return Ok(productPage);
         }
         return Ok();
-    }
+    }*/
 }

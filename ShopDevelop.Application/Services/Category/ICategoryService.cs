@@ -5,15 +5,17 @@ public interface ICategoryService
     /// <summary>
     /// Create new Category.
     /// </summary>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
     /// <param name="category">Category entity.</param>
     /// <returns>Return Category Id.</returns>
-    Task<Guid> CreateCategoryAsync(string name, string description);
+    Task<int> CreateCategoryAsync(string name, string description);
     /// <summary>
     /// Edit a Category.
     /// </summary>
     /// <param name="id">Category Id.</param>
     /// <returns></returns>
-    Task EditCategoryAsync(Domain.Models.Category category);
+    Task EditCategoryAsync(Domain.Entities.Category category);
     /// <summary>
     /// Delete a Category.
     /// </summary>
@@ -25,16 +27,16 @@ public interface ICategoryService
     /// </summary>
     /// <param name="id">Category Id.</param>
     /// <returns>Return a Category entity.</returns>
-    Task<Domain.Models.Category> GetCategoryByIdAsync(Guid id);
+    Task<Domain.Entities.Category> GetCategoryByIdAsync(Guid id);
     /// <summary>
     /// Vet category by category name.
     /// </summary>
     /// <param name="name">Category name</param>
     /// <returns></returns>
-    Task<Domain.Models.Category> GetByName(string name);
+    Task<Domain.Entities.Category> GetByName(string name);
     /// <summary>
     /// Get all Categories.
     /// </summary>
     /// <returns>Return List a Categories.</returns>
-    Task<IEnumerable<Domain.Models.Category>> GetAllCategory();
+    Task<IEnumerable<Domain.Entities.Category>> GetAllCategory();
 }

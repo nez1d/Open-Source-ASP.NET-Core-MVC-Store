@@ -1,4 +1,4 @@
-﻿using ShopDevelop.Domain.Models;
+﻿/*using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
 
@@ -23,4 +23,4 @@ public class MiniProductLookupDto
         Seller = seller;
         ImageMiniPath = imageMiniPath;
     }
-}
+}*/
