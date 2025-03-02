@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Product.Commands.Create;
-using ShopDevelop.Application.Services.Product;
 using ShopDevelop.Domain.Dto.Product;
-using ShopDevelop.Domain.Entities;
-using ShopDevelop.Persistence.Entities.Product.Command.Create;
-using ShopDevelop.WebApi.ViewModels;
 
 namespace ShopDevelop.WebApi.Controllers;
 

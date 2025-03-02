@@ -29,7 +29,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ShopDevelop.Application\ShopDevelop.Application.csproj" />
     <ProjectReference Include="..\ShopDevelop.Persistence\ShopDevelop.Persistence.csproj" />
-    <ProjectReference Include="..\ShopDevelop.WebMVC\ShopDevelop.WebMVC.csproj" />
   </ItemGroup>
 
 </Project>
