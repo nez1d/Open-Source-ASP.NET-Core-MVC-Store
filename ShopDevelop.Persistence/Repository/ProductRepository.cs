@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Routing.Template;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -15,10 +14,22 @@ public class ProductRepository : IProductRepository
     public async Task<Guid> Create(Product product, 
         CancellationToken cancellationToken)
     {
-        await context.Products.AddAsync(product);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.Products.AddAsync(product, cancellationToken);
+            product.ProductDetailId = product.ProductDetail.Id;
+            
+            if (product.ClothesProduct.Id != null)
+                product.ClothesProductId = product.ClothesProduct.Id;
+            else if(product.ClothesProduct.Id != null)
+                product.ShoesProductId = product.ShoesProduct.Id;
+            
+            await context.SaveChangesAsync();
+        }
+        catch (Exception ex) { }
+        
         return product.Id;
-    }
+     }
 
     public async Task Update(Product product)
     {
