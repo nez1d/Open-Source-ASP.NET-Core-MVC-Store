@@ -1,6 +1,6 @@
 namespace ShopDevelop.Domain.Dto.Product;
 
-public class CreateClothesProductDto
+public class CreateProductDto
 {
     public string ProductName { get; set; }
     public decimal Price { get; set; }

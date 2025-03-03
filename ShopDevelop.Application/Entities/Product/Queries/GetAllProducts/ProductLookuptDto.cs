@@ -1,4 +1,4 @@
-﻿/*using AutoMapper;
+﻿using AutoMapper;
 using ShopDevelop.Application.Data.Common.Mappings;
 
 namespace ShopDevelop.Application.Entities.Product.Queries.GetAllProducts;
@@ -13,4 +13,4 @@ public class ProductLookuptDto : IMapWith<Domain.Entities.Product>
             .ForMember(product => product.Id, opt =>
                 opt.MapFrom(product => product.Id));
     }
-}*/
+}

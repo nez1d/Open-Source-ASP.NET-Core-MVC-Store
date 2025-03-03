@@ -1,12 +1,14 @@
 using FluentValidation;
 
-namespace ShopDevelop.Application.Entities.Product.Commands.Create;
+namespace ShopDevelop.Application.Entities.Product.Commands.Update;
 
-public class CreateClothesProductCommandValidator 
-    : AbstractValidator<CreateClothesProductCommand>
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
-    public CreateClothesProductCommandValidator()
+    public UpdateProductCommandValidator()
     {
+        RuleFor(clothes => clothes.Id)
+            .NotEqual(Guid.Empty);
+        
         RuleFor(clothes => clothes.ProductName)
             .MaximumLength(150)
             .MinimumLength(10)

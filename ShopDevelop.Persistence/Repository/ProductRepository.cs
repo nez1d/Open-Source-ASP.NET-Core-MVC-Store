@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -7,12 +8,11 @@ namespace ShopDevelop.Persistence.Repository;
 
 public class ProductRepository : IProductRepository
 {
-    private readonly IApplicationDbContext context;
-    public ProductRepository(IApplicationDbContext context) =>
+    private readonly ApplicationDbContext context;
+    public ProductRepository(ApplicationDbContext context) =>
         this.context = context;
 
-    public async Task<Guid> Create(Product product, 
-        CancellationToken cancellationToken)
+    public async Task<Guid> Create(Product product, CancellationToken cancellationToken)
     {
         try
         {
@@ -31,24 +31,23 @@ public class ProductRepository : IProductRepository
         return product.Id;
      }
 
-    public async Task Update(Product product)
+    public async Task Update(Product product, CancellationToken cancellationToken)
     {
-        var model = GetById(product.Id);
-        if (model != null)
-        {
-            /*await context.Entry<Product>(model).State = EntityState.Detached;*/
-            context.Products.Update(product);
-            await context.SaveChangesAsync();
-        }
+        var model = await GetById(product.Id, cancellationToken);
+        if (model == null)
+            throw new NotFoundException(typeof(Product), product.Id);
+        
+        context.Entry<Product>(model).State = EntityState.Detached;
+        context.Products.Update(product);
+        await context.SaveChangesAsync();
     }
 
-    public async Task Delete(Guid id)
+    public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var product = await GetById(id);
+        var product = await GetById(id, cancellationToken);
         if (product == null)
-        {
-            throw new ArgumentException();
-        }
+            throw new NotFoundException(typeof(Product), id);
+        
         context.Products.Remove(product);
         await context.SaveChangesAsync();
     }
@@ -60,13 +59,21 @@ public class ProductRepository : IProductRepository
             .ToList();
     }
 
-    public async Task<Product?> GetById(Guid? id)
+    public async Task<Product?> GetById(Guid id, CancellationToken cancellationToken)
     {
         return await context.Products
-            .FirstOrDefaultAsync(product => product.Id == id);
+            .FirstOrDefaultAsync(product => 
+                product.Id == id, cancellationToken);
+    }
+    
+    public async Task<ProductDetail?> GetDetailsByProductId(Guid id, CancellationToken cancellationToken)
+    {
+        return await context.ProductDetails
+            .FirstOrDefaultAsync(details => 
+                details.ProductId == id, cancellationToken);
     }
 
-    public IEnumerable<Product> GetByCategoryId(Guid categoryId)
+    public IEnumerable<Product?> GetByCategoryId(Guid categoryId)
     {
         /*return context.Products
             .Where(product => product.Category.Id == categoryId);*/

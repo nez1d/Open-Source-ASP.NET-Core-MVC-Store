@@ -1,7 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics.CodeAnalysis;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Product.Commands.Create;
+using ShopDevelop.Application.Entities.Product.Commands.Delete;
+using ShopDevelop.Application.Entities.Product.Commands.Update;
+using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
 using ShopDevelop.Domain.Dto.Product;
 
 namespace ShopDevelop.WebApi.Controllers;
@@ -11,38 +15,72 @@ namespace ShopDevelop.WebApi.Controllers;
 public class ProductController(IMapper mapper) : BaseController
 {
     [HttpPost]
-    /*[Authorize(Roles = "AuthUser")]*/
     [AllowAnonymous]
+    /*[Authorize(Roles = "Seller")]*/
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> CreateClothesProduct(CreateClothesProductDto model)
+    public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto model)
     {
-        try
-        {
-            var command = mapper.Map<CreateClothesProductCommand>(model);
-            var result = await Mediator.Send(command);
-        }
-        catch (Exception ex) { }
-        
-        return Ok();
-    }
+        var command = mapper.Map<CreateClothesProductCommand>(model);
+        var result = await Mediator.Send(command);
 
-    /*[HttpPatch]
-    [Authorize(Roles = "Manager")]
-    public async Task<IActionResult> EditProduct(Product model)
-    {
-        await productService.EditProductAsync(model);
-        return Ok();
-    }
-
-    [HttpPost]
-    [Authorize(Roles = "Manager")]
-    public async Task<IActionResult> DeleteProduct(Guid id)
-    {
-        var product = productService.DeleteProductAsync(id);
+        if (result == Guid.Empty)
+            return BadRequest();
+            
         return Ok();
     }
     
+    [HttpPut]
+    /*[Authorize(Roles = "Seller")]*/
+    public async Task<IActionResult> EditProduct([FromBody] UpdateProductDto model)
+    {
+        var command = mapper.Map<UpdateProductCommand>(model);
+        await Mediator.Send(command);
+        return NoContent();
+    }
+    
+    [HttpDelete("{id}")]
+    /*[Authorize(Roles = "Seller")]*/
+    public async Task<IActionResult> DeleteProduct(Guid id)
+    {
+        var command = new DeleteProductCommand
+        {
+            ProductId = id,
+            UserId = UserId
+        };
+        await Mediator.Send(command);
+        return NoContent();
+    }
+
+    /*[HttpGet]
+    public async Task<ActionResult<ProducListVm>> GetAllProducts()
+    {
+        var query = new GetProductListQuery()
+        {
+            UserId = UserId
+        };
+        var result = await Mediator.Send(query);
+        return Ok();
+    }*/
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ProductDetailVm>> GetProductDetails(Guid id)
+    {
+        var query = new GetProductDetailsQuery()
+        {
+            Id = id
+        };
+        var result = await Mediator.Send(query);
+        return Ok();
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ProductDetailVm>> GetProduct(Guid id)
+    {
+        return Ok();
+    }
+
+    /*
     [HttpGet]
     [Route("api/[controller]/[action]/{id?}")]
     public async Task<IActionResult> Index(Guid? id)
