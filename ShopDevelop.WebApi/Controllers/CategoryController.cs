@@ -1,4 +1,4 @@
-/*using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Domain.Entities;
@@ -22,7 +22,7 @@ public class CategoryController : BaseController
         return Ok();
     }
 
-    [HttpPatch]
+    /*[HttpPatch]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> EditCategory(Category model)
     {
@@ -36,5 +36,5 @@ public class CategoryController : BaseController
     {
         await categoryService.DeleteCategoryAsync(id);
         return Ok();
-    }
-}*/
+    }*/
+}
