@@ -19,7 +19,7 @@ public static class DependencyInjection
     {
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
-                typeof(CreateClothesProductCommandHandler).Assembly,
+                typeof(CreateProductCommandHandler).Assembly,
                 typeof(UpdateProductCommandHandler).Assembly,
                 typeof(GetProductDetailsQueryHandler).Assembly));
         

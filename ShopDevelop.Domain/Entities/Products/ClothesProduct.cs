@@ -4,7 +4,6 @@ public class ClothesProduct
 {
     public Guid Id { get; set; }
     public Neckline? Neckline { get; set; }
-    
     public TheCut? TheCut { get; set; }
     public TypeOfPockets? TypeOfPockets { get; set; }
     public Gender? Gender { get; set; }
