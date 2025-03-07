@@ -29,7 +29,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
     {
         logger.LogInformation($"Handling {nameof(UpdateProductCommand)}");
 
-        var product = await productRepository.GetById(request.Id, cancellationToken);
+        var product = await productRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (product == null)
             throw new NotFoundException(typeof(Domain.Entities.Product), request.Id);
@@ -38,7 +38,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
         product.Description = request.Description;
         product.Price = request.Price;
 
-        await productRepository.Update(product, cancellationToken);
+        await productRepository.UpdateAsync(product, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(UpdateProductCommand)}");
     }

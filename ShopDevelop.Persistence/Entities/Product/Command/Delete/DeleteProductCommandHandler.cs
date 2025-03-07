@@ -22,7 +22,7 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
     {
         logger.LogInformation($"Handling {nameof(UpdateProductCommand)}");
         
-        await productRepository.Delete(request.ProductId, cancellationToken);
+        await productRepository.DeleteAsync(request.ProductId, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(UpdateProductCommand)}");
     }

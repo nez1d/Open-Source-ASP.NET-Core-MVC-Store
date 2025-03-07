@@ -28,7 +28,7 @@ public class GetProductDetailsQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetProductDetailsQuery)}");
 
-        var model = productRepository.GetDetailsByProductId(request.Id, cancellationToken);
+        var model = productRepository.GetDetailsByProductIdAsync(request.Id, cancellationToken);
         
         var result = mapper.Map<ProductDetailVm>(model);
         

@@ -9,7 +9,7 @@ using ShopDevelop.Application.Services.Seller;
 
 namespace ShopDevelop.Persistence.Entities.Product.Command.Create;
 
-public class CreateClothesProductCommandHandler 
+public class CreateProductCommandHandler 
     : IRequestHandler<CreateClothesProductCommand, Guid>
 {
     private readonly IProductRepository productRepository;
@@ -19,13 +19,13 @@ public class CreateClothesProductCommandHandler
     private readonly IMapper mapper;
     private readonly ILogger logger;
     
-    public CreateClothesProductCommandHandler(
+    public CreateProductCommandHandler(
         IProductService productService,
         IProductRepository productRepository,
         ICategoryService categoryService,
         ISellerService sellerService,
         IMapper mapper,
-        ILogger<CreateClothesProductCommandHandler> logger)
+        ILogger<CreateProductCommandHandler> logger)
     {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
@@ -57,7 +57,7 @@ public class CreateClothesProductCommandHandler
         product.Discount = discount;
         product.ProductDetail.Article = article; 
         
-        var result = await productRepository.Create(product, cancellationToken);
+        var result = await productRepository.CreateAsync(product, cancellationToken);
     
         logger.LogInformation($"Handled {nameof(CreateClothesProductCommand)}");
 
