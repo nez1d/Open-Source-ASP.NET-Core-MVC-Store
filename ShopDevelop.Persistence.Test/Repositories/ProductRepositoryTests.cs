@@ -78,6 +78,7 @@ public class ProductRepositoryTests : TestCommandBase
     }
 
     [Fact]
+    // TODO: Доделать проверку обновления.
     public async Task UpdateProductAsync_Success_Test()
     {
         // Arrange
@@ -97,15 +98,13 @@ public class ProductRepositoryTests : TestCommandBase
         
         await productRepository.UpdateAsync(product, CancellationToken.None);
         // Assert
-        /*Assert.NotNull(await context.Products
-            .FirstOrDefaultAsync(p => 
-                p.ProductName == updatedName && 
-                p.Description == updatedDescription)
-            );*/
-        
-            /*await productRepository.GetByIdAsync(
+        var result = await productRepository.GetByIdAsync(
             ProductContextFactory.ProductIdForUpdate,
-            CancellationToken.None)*/
+            CancellationToken.None
+        );
+        
+        Assert.Equal(updatedName, result?.ProductName);
+        Assert.Equal(updatedDescription, result?.Description);
     }
 
     [Fact]
@@ -114,9 +113,13 @@ public class ProductRepositoryTests : TestCommandBase
         // Arrange
         productRepository = new ProductRepository(context);
         // Act
+        
         // Assert
-        /*await Assert.ThrowsAsync<NotFoundException>(async () =>
-            await productRepository.UpdateAsync());*/
+        await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await productRepository.UpdateAsync(new Product
+            { Id = Guid.NewGuid() }, 
+            CancellationToken.None
+        ));
     }
     
     [Fact]
