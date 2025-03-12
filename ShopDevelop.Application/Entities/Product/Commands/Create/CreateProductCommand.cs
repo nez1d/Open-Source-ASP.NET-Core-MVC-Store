@@ -1,12 +1,10 @@
 ﻿using MediatR;
 using ShopDevelop.Domain.Entities;
 using ShopDevelop.Domain.Entities.Products;
-using ShopDevelop.Domain.Enums;
-using ShopDevelop.Domain.Enums.Clothes;
 
 namespace ShopDevelop.Application.Entities.Product.Commands.Create;
 
-public class CreateClothesProductCommand : IRequest<Guid>
+public class CreateProductCommand : IRequest<Guid>
 {
     public Guid Id { get; set; }
     public string ProductName { get; set; }
@@ -20,4 +18,5 @@ public class CreateClothesProductCommand : IRequest<Guid>
     public uint SellerId { get; set; }
     public ProductDetail ProductDetail { get; set; }
     public ClothesProduct ClothesProduct { get; set; }
+    public ShoesProduct ShoesProduct { get; set; }
 }

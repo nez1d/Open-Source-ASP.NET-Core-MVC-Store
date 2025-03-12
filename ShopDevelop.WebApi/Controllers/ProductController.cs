@@ -1,10 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Product.Commands.Create;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
 using ShopDevelop.Application.Entities.Product.Commands.Update;
+using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
+using ShopDevelop.Application.Entities.Product.Queries.GetProduct;
 using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
 using ShopDevelop.Domain.Dto.Product;
 
@@ -16,12 +17,11 @@ public class ProductController(IMapper mapper) : BaseController
 {
     [HttpPost]
     [AllowAnonymous]
-    /*[Authorize(Roles = "Seller")]*/
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto model)
     {
-        var command = mapper.Map<CreateClothesProductCommand>(model);
+        var command = mapper.Map<CreateProductCommand>(model);
         var result = await Mediator.Send(command);
 
         if (result == Guid.Empty)
@@ -31,7 +31,7 @@ public class ProductController(IMapper mapper) : BaseController
     }
     
     [HttpPut]
-    /*[Authorize(Roles = "Seller")]*/
+    [AllowAnonymous]
     public async Task<IActionResult> EditProduct([FromBody] UpdateProductDto model)
     {
         var command = mapper.Map<UpdateProductCommand>(model);
@@ -40,44 +40,39 @@ public class ProductController(IMapper mapper) : BaseController
     }
     
     [HttpDelete("{id}")]
-    /*[Authorize(Roles = "Seller")]*/
+    [AllowAnonymous]
     public async Task<IActionResult> DeleteProduct(Guid id)
     {
         var command = new DeleteProductCommand
         {
-            ProductId = id,
-            UserId = UserId
+            ProductId = id
         };
         await Mediator.Send(command);
         return NoContent();
     }
 
-    /*[HttpGet]
-    public async Task<ActionResult<ProducListVm>> GetAllProducts()
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<ActionResult<ProductMiniListVm>> GetProductList()
     {
-        var query = new GetProductListQuery()
+        var query = new GetMiniProductListQuery()
         {
-            UserId = UserId
+            Id = UserId
         };
         var result = await Mediator.Send(query);
-        return Ok();
-    }*/
+        return Ok(result);
+    }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProductDetailVm>> GetProductDetails(Guid id)
+    [AllowAnonymous]
+    public async Task<ActionResult<ProductVm>> GetProduct(Guid id)
     {
-        var query = new GetProductDetailsQuery()
+        var query = new GetProductQuery()
         {
             Id = id
         };
         var result = await Mediator.Send(query);
-        return Ok();
-    }
-    
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ProductDetailVm>> GetProduct(Guid id)
-    {
-        return Ok();
+        return Ok(result);
     }
 
     /*

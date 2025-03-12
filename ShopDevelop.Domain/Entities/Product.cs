@@ -1,6 +1,4 @@
-﻿using ShopDevelop.Domain.Interfaces;
-
-namespace ShopDevelop.Domain.Entities;
+﻿namespace ShopDevelop.Domain.Entities;
 
 public class Product
 {
@@ -18,11 +16,13 @@ public class Product
     public IEnumerable<Review>? Reviews { get; set; }
     public Category Category { get; set; }
     public int CategoryId { get; set; }
+    public string CategoryName { get; set; }
     public Seller Seller { get; set; }
+    public string SellerName { get; set; } 
     public int SellerId { get; set; }
     public ProductDetail ProductDetail { get; set; }
     public Guid ProductDetailId { get; set; }
-    public ClothesProduct ClothesProduct { get; set; }
+    public ClothesProduct? ClothesProduct { get; set; }
     public Guid ClothesProductId { get; set; }
     public ShoesProduct ShoesProduct { get; set; }
     public Guid ShoesProductId { get; set; }

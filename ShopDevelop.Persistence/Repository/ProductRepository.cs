@@ -2,6 +2,7 @@
 using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
+using ShopDevelop.Domain.Entities.Products;
 
 namespace ShopDevelop.Persistence.Repository;
 
@@ -16,6 +17,7 @@ public class ProductRepository : IProductRepository
         try
         {
             await context.Products.AddAsync(product, cancellationToken);
+            
             product.ProductDetailId = product.ProductDetail.Id;
             
             if (product.ClothesProduct.Id != null)
@@ -60,9 +62,29 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await context.Products
-            .FirstOrDefaultAsync(product => 
-                product.Id == id, cancellationToken);
+        return await context.Products.FirstOrDefaultAsync(product => 
+                product.Id == id, cancellationToken)
+                ?? throw new NotFoundException(typeof(Product), id);
+    }
+    
+    public async Task<ClothesProduct?> GetClothesByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var product = await context.ClothesProducts.FirstOrDefaultAsync(product => 
+                   product.Id == id, cancellationToken)
+                   ?? throw new NotFoundException(typeof(ClothesProduct), id);
+
+        product.Product = null;
+        return product;
+    }
+    
+    public async Task<ShoesProduct?> GetShoesByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var product = await context.ShoesProducts.FirstOrDefaultAsync(product => 
+                          product.Id == id, cancellationToken)
+                      ?? throw new NotFoundException(typeof(ShoesProduct), id);
+        
+        product.Product = null;
+        return product;
     }
     
     public async Task<ProductDetail?> GetDetailsByProductIdAsync(Guid id, CancellationToken cancellationToken)

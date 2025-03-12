@@ -78,7 +78,6 @@ public class ProductRepositoryTests : TestCommandBase
     }
 
     [Fact]
-    // TODO: Доделать проверку обновления.
     public async Task UpdateProductAsync_Success_Test()
     {
         // Arrange
