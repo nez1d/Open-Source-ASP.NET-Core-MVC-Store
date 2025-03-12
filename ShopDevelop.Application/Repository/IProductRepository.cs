@@ -1,4 +1,5 @@
 ﻿using ShopDevelop.Domain.Entities;
+using ShopDevelop.Domain.Entities.Products;
 using ShopDevelop.Domain.Interfaces.Repository;
 
 namespace ShopDevelop.Application.Repository;
@@ -10,6 +11,8 @@ public interface IProductRepository
     Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     Task<IEnumerable<Product>> GetAllAsync();
     Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<ClothesProduct?> GetClothesByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<ShoesProduct?> GetShoesByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<ProductDetail?> GetDetailsByProductIdAsync(Guid id, CancellationToken cancellationToken);
     Task<IEnumerable<Product?>> GetByCategoryIdAsync(Guid categoryId);
 }

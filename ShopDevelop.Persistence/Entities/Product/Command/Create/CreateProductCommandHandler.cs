@@ -10,7 +10,7 @@ using ShopDevelop.Application.Services.Seller;
 namespace ShopDevelop.Persistence.Entities.Product.Command.Create;
 
 public class CreateProductCommandHandler 
-    : IRequestHandler<CreateClothesProductCommand, Guid>
+    : IRequestHandler<CreateProductCommand, Guid>
 {
     private readonly IProductRepository productRepository;
     private readonly IProductService productService;
@@ -35,10 +35,10 @@ public class CreateProductCommandHandler
         this.logger = logger;
     }
 
-    public async Task<Guid> Handle(CreateClothesProductCommand request,
+    public async Task<Guid> Handle(CreateProductCommand request,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation($"Handling {nameof(CreateClothesProductCommand)}");
+        logger.LogInformation($"Handling {nameof(CreateProductCommand)}");
 
         var category = await categoryService.GetByName(request.CategoryName);
         var seller = await sellerService.GetSellerByIdAsync(request.SellerId);
@@ -46,20 +46,22 @@ public class CreateProductCommandHandler
         if (category == null || seller == null)
             return Guid.Empty;
         
-        var discount = await productService.CalculateDiscountByPriceAsync(request.Price, request.OldPrice);
+        var discount = await productService.CalculateDiscountByPriceAsync(
+                request.Price, request.OldPrice);
+        
         var article = await productService.CreateArticulAsync();
         
         var product = mapper.Map<Domain.Entities.Product>(request);
         
-        product.Category = category;
-        product.CategoryId = category.Id; 
-        product.Seller = seller;
+        product.CategoryId = category.Id;
+        product.CategoryName = request.CategoryName; 
         product.Discount = discount;
         product.ProductDetail.Article = article; 
+        product.SellerName = seller.Name; 
         
         var result = await productRepository.CreateAsync(product, cancellationToken);
     
-        logger.LogInformation($"Handled {nameof(CreateClothesProductCommand)}");
+        logger.LogInformation($"Handled {nameof(CreateProductCommand)}");
 
         return result;
     }

@@ -1,35 +1,40 @@
-/*using System.Data.Entity;
-using ShopDevelop.Application.Data.Common.Exceptions;
-using ShopDevelop.Application.Entities.Product.Commands.Create;
+using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
-using ShopDevelop.Persistence.Entities.Product.Command.Create;
+using ShopDevelop.Application.Repository;
 using ShopDevelop.Persistence.Entities.Product.Command.Delete;
+using ShopDevelop.Persistence.Repository;
 using ShopDevelop.Persistence.Test.Common;
 
 namespace ShopDevelop.Persistence.Test.Products.Commands;
 
 public class DeleteProductCommandHandlerTests : TestCommandBase
 {
+    private IProductRepository productRepository;
+    private readonly ILogger<DeleteProductCommandHandler> logger;
+    
+    public DeleteProductCommandHandlerTests(
+        ILogger<DeleteProductCommandHandler> logger) => 
+        (this.logger) = (logger);
+    
     [Fact]
-    public async Task DeleteProductCommandHandlerTest_Success()
+    public async Task DeleteProductCommandHandler_Success_Test()
     {
         // Arrange
-        var handler = new DeleteProductCommandHandler(context);
-
+        productRepository = new ProductRepository(context);
+        var handler = new DeleteProductCommandHandler(productRepository, logger);
         // Act
         await handler.Handle(new DeleteProductCommand
-        {
-            ProductId = ProductContextFactory.ProductIdForDelete,
-            UserId = ProductContextFactory.UserIdA
-        },
+        { ProductId = ProductContextFactory.ProductIdForDelete },
         CancellationToken.None);
-        
+
+        var result = productRepository.GetByIdAsync(
+            ProductContextFactory.ProductIdForDelete,
+            CancellationToken.None);
         // Assert
-        Assert.Null(context.Products.SingleOrDefault(product =>
-            product.Id == ProductContextFactory.ProductIdForDelete));
+        Assert.Null(result);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task DeleteProductCommandHandlerTest_FailOnWrongId()
     {
         // Arrange
@@ -71,5 +76,5 @@ public class DeleteProductCommandHandlerTests : TestCommandBase
                     UserId = ProductContextFactory.UserIdB
                 }, 
                 CancellationToken.None));
-    }
-}*/
+    }*/
+}

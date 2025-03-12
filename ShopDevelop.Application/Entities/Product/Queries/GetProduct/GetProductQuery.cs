@@ -1,8 +1,9 @@
 using MediatR;
+using ShopDevelop.Application.Entities.Product.Queries.GetProduct;
 
 namespace ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
 
-public class GetProductDetailsQuery : IRequest<ProductDetailVm>
+public class GetProductQuery : IRequest<ProductVm>
 {
     public Guid Id { get; set; }
 }
