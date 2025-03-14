@@ -19,7 +19,6 @@ public class ProductRepository : IProductRepository
             await context.Products.AddAsync(product, cancellationToken);
             
             product.ProductDetailId = product.ProductDetail.Id;
-
             var validProduct = ProductValidCheckerAsync(product);
 
             if (validProduct == null)
