@@ -1,6 +1,6 @@
 namespace ShopDevelop.Domain.Dto.Product;
 
-public class CreateProductDto
+public class CreateProductBaseDto
 {
     public string ProductName { get; set; }
     public decimal Price { get; set; }
@@ -10,7 +10,6 @@ public class CreateProductDto
     public string? ImagePath { get; set; }
     public string ImageMiniPath { get; set; }
     public List<string>? ImagesListPath { get; set; }
-    public string CategoryName { get; set; }
     public uint SellerId { get; set; }
     public string Brend { get; set; }
     public string? CountryOfManufacture { get; set; }
@@ -21,11 +20,4 @@ public class CreateProductDto
     public string? Composition { get; set; }
     public ColorStatus? Color { get; set; }
     public TypeOfPackaging? TypeOfPackaging { get; set; }
-    public Neckline? Neckline { get; set; }
-    public TheCut? TheCut { get; set; }
-    public TypeOfPockets? TypeOfPockets { get; set; }
-    public Gender? Gender { get; set; }
-    public Season? Season { get; set; }
-    public string? TakingCareOfThings { get; set; }
-    public IEnumerable<ClothesSizes> Sizes { get; set; }
 }

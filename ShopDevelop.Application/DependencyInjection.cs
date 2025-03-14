@@ -3,6 +3,8 @@ using System.Reflection;
 using FluentValidation;
 using ShopDevelop.Application.Data.Common.Mappings;
 using ShopDevelop.Application.Entities.Product.Commands.Create;
+using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
+using ShopDevelop.Application.Entities.Product.Commands.Create.Shoes;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
 using ShopDevelop.Application.Entities.Product.Commands.Update;
 using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
@@ -16,13 +18,17 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(
         this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddAutoMapper(typeof(CreateClothesProductMappingProfile));
+        services.AddAutoMapper(typeof(CreateShoesProducMappingProfile));
+        services.AddAutoMapper(typeof(UpdateProductMappingProfile));
+        services.AddAutoMapper(typeof(GetProductMappingProfile));
 
         services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
         
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
-                typeof(CreateProductCommand).Assembly,
+                typeof(CreateClothesProductCommand).Assembly,
+                typeof(CreateShoesProductCommand).Assembly,
                 typeof(UpdateProductCommand).Assembly,
                 typeof(DeleteProductCommand).Assembly,
                 typeof(GetProductQuery).Assembly,

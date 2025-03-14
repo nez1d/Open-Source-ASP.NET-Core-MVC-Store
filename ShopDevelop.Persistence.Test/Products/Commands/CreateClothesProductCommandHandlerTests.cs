@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Product.Commands.Create;
+using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Application.Services.Product;
@@ -11,11 +12,12 @@ using ShopDevelop.Domain.Enums;
 using ShopDevelop.Domain.Enums.Clothes;
 using ShopDevelop.Persistence.Test.Common;
 using ShopDevelop.Persistence.Entities.Product.Command.Create;
+using ShopDevelop.Persistence.Entities.Product.Command.Create.Clothes;
 using ShopDevelop.Persistence.Repository;
 
 namespace ShopDevelop.Persistence.Test.Products.Commands;
 
-public class CreateProductCommandHandlerTests : TestCommandBase
+public class CreateClothesProductCommandHandlerTests : TestCommandBase
 {
     private IProductRepository productRepository;
     private readonly IProductService productService;
@@ -23,7 +25,7 @@ public class CreateProductCommandHandlerTests : TestCommandBase
     private ICategoryService categoryService;
     private ISellerService sellerService;
     private readonly IMapper mapper;
-    private readonly ILogger<CreateProductCommandHandler> logger;
+    private readonly ILogger<CreateClothesProductCommandHandler> logger;
     
     [Fact]
     public async Task CreateProductCommandHandler_Success_Tests()
@@ -35,7 +37,7 @@ public class CreateProductCommandHandlerTests : TestCommandBase
         var sellerRepository = new SellerRepository(context);
         sellerService = new SellerService(sellerRepository);
         
-        var handler = new CreateProductCommandHandler(
+        var handler = new CreateClothesProductCommandHandler(
             productService: productService, 
             productRepository: productRepository, 
             categoryService: categoryService, 
@@ -43,7 +45,7 @@ public class CreateProductCommandHandlerTests : TestCommandBase
             mapper: mapper, 
             logger: logger);
         // Act
-        var productId = await handler.Handle(new CreateProductCommand
+        var productId = await handler.Handle(new CreateClothesProductCommand
         {   
             Id = Guid.NewGuid(),
             ProductName = "productName",
@@ -53,7 +55,6 @@ public class CreateProductCommandHandlerTests : TestCommandBase
             InStock = 32,
             ImagePath = "/images/main/img.png",
             ImageMiniPath = "/images/main/img.png",
-            CategoryName = "Clothes",
             SellerId = 1,
             ProductDetail = new ProductDetail
             {

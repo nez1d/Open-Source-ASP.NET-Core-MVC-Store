@@ -24,6 +24,6 @@ public class Product
     public Guid ProductDetailId { get; set; }
     public ClothesProduct? ClothesProduct { get; set; }
     public Guid ClothesProductId { get; set; }
-    public ShoesProduct ShoesProduct { get; set; }
+    public ShoesProduct? ShoesProduct { get; set; }
     public Guid ShoesProductId { get; set; }
 }

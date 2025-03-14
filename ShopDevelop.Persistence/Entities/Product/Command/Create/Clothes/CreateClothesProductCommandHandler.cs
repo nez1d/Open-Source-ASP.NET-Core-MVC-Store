@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ShopDevelop.Application.Entities.Product.Commands.Create;
+using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Application.Services.Product;
 using ShopDevelop.Application.Services.Seller;
 
-namespace ShopDevelop.Persistence.Entities.Product.Command.Create;
+namespace ShopDevelop.Persistence.Entities.Product.Command.Create.Clothes;
 
-public class CreateProductCommandHandler 
-    : IRequestHandler<CreateProductCommand, Guid>
+public class CreateClothesProductCommandHandler 
+    : IRequestHandler<CreateClothesProductCommand, Guid>
 {
     private readonly IProductRepository productRepository;
     private readonly IProductService productService;
@@ -19,13 +19,13 @@ public class CreateProductCommandHandler
     private readonly IMapper mapper;
     private readonly ILogger logger;
     
-    public CreateProductCommandHandler(
+    public CreateClothesProductCommandHandler(
         IProductService productService,
         IProductRepository productRepository,
         ICategoryService categoryService,
         ISellerService sellerService,
         IMapper mapper,
-        ILogger<CreateProductCommandHandler> logger)
+        ILogger<CreateClothesProductCommandHandler> logger)
     {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
@@ -35,12 +35,12 @@ public class CreateProductCommandHandler
         this.logger = logger;
     }
 
-    public async Task<Guid> Handle(CreateProductCommand request,
+    public async Task<Guid> Handle(CreateClothesProductCommand request,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation($"Handling {nameof(CreateProductCommand)}");
+        logger.LogInformation($"Handling {nameof(CreateClothesProductCommand)}");
 
-        var category = await categoryService.GetByName(request.CategoryName);
+        var category = await categoryService.GetByName("Clothes");
         var seller = await sellerService.GetSellerByIdAsync(request.SellerId);
 
         if (category == null || seller == null)
@@ -54,14 +54,14 @@ public class CreateProductCommandHandler
         var product = mapper.Map<Domain.Entities.Product>(request);
         
         product.CategoryId = category.Id;
-        product.CategoryName = request.CategoryName; 
+        product.CategoryName = category.Name; 
+        product.SellerName = seller.Name; 
         product.Discount = discount;
         product.ProductDetail.Article = article; 
-        product.SellerName = seller.Name; 
         
         var result = await productRepository.CreateAsync(product, cancellationToken);
     
-        logger.LogInformation($"Handled {nameof(CreateProductCommand)}");
+        logger.LogInformation($"Handled {nameof(CreateClothesProductCommand)}");
 
         return result;
     }
