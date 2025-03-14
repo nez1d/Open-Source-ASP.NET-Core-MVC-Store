@@ -1,11 +1,11 @@
 using FluentValidation;
 
-namespace ShopDevelop.Application.Entities.Product.Commands.Create;
+namespace ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
 
-public class CreateProductCommandValidator 
-    : AbstractValidator<CreateProductCommand>
+public class CreateClothesProductCommandValidator 
+    : AbstractValidator<CreateClothesProductCommand>
 {
-    public CreateProductCommandValidator()
+    public CreateClothesProductCommandValidator()
     {
         RuleFor(clothes => clothes.ProductName)
             .MaximumLength(150)
@@ -25,11 +25,6 @@ public class CreateProductCommandValidator
 
         RuleFor(clothes => clothes.ImagePath)
             .MaximumLength(500)
-            .NotEmpty()
-            .NotNull()
-            .WithMessage("");
-
-        RuleFor(clothes => clothes.CategoryName)
             .NotEmpty()
             .NotNull()
             .WithMessage("");

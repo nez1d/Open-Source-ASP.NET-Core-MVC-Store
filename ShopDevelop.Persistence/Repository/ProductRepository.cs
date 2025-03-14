@@ -19,11 +19,10 @@ public class ProductRepository : IProductRepository
             await context.Products.AddAsync(product, cancellationToken);
             
             product.ProductDetailId = product.ProductDetail.Id;
-            
-            if (product.ClothesProduct.Id != null)
-                product.ClothesProductId = product.ClothesProduct.Id;
-            else if(product.ClothesProduct.Id != null)
-                product.ShoesProductId = product.ShoesProduct.Id;
+            var validProduct = ProductValidCheckerAsync(product);
+
+            if (validProduct == null)
+                return Guid.Empty;
             
             await context.SaveChangesAsync();
         }
@@ -31,6 +30,21 @@ public class ProductRepository : IProductRepository
         
         return product.Id;
      }
+
+    public async Task<Product> ProductValidCheckerAsync(Product product)
+    {
+        if (product.ClothesProduct != null)
+        {
+            product.ClothesProductId = product.ClothesProduct.Id;
+            return product;
+        }
+        else if (product.ShoesProduct != null)
+        {
+            product.ShoesProductId = product.ShoesProduct.Id;
+            return product;
+        }
+        return null;
+    }
 
     public async Task UpdateAsync(Product product, CancellationToken cancellationToken)
     {

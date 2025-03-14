@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ShopDevelop.Application.Entities.Product.Commands.Create;
+using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
+using ShopDevelop.Application.Entities.Product.Commands.Create.Shoes;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
 using ShopDevelop.Application.Entities.Product.Commands.Update;
 using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
@@ -19,14 +20,29 @@ public class ProductController(IMapper mapper) : BaseController
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto model)
+    public async Task<IActionResult> CreateProductClothes([FromBody] CreateClothesProductDto model)
     {
-        var command = mapper.Map<CreateProductCommand>(model);
+        var command = mapper.Map<CreateClothesProductCommand>(model);
         var result = await Mediator.Send(command);
 
         if (result == Guid.Empty)
             return BadRequest();
-            
+
+        return Ok();
+    }
+    
+    [HttpPost]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> CreateProductShoes([FromBody] CreateShoesProductDto model)
+    {
+        var command = mapper.Map<CreateShoesProductCommand>(model);
+        var result = await Mediator.Send(command);
+
+        if (result == Guid.Empty)
+            return BadRequest();
+        
         return Ok();
     }
     

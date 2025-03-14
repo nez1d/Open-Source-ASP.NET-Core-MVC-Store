@@ -2,9 +2,9 @@
 using ShopDevelop.Domain.Entities;
 using ShopDevelop.Domain.Entities.Products;
 
-namespace ShopDevelop.Application.Entities.Product.Commands.Create;
+namespace ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
 
-public class CreateProductCommand : IRequest<Guid>
+public class CreateClothesProductCommand : IRequest<Guid>
 {
     public Guid Id { get; set; }
     public string ProductName { get; set; }
@@ -12,11 +12,9 @@ public class CreateProductCommand : IRequest<Guid>
     public decimal OldPrice { get; set; }
     public string Description { get; set; }
     public uint InStock { get; set; }
-    public string? ImagePath { get; set; }
+    public string ImagePath { get; set; }
     public string ImageMiniPath { get; set; }
-    public string CategoryName { get; set; }
     public uint SellerId { get; set; }
     public ProductDetail ProductDetail { get; set; }
     public ClothesProduct ClothesProduct { get; set; }
-    public ShoesProduct ShoesProduct { get; set; }
 }
