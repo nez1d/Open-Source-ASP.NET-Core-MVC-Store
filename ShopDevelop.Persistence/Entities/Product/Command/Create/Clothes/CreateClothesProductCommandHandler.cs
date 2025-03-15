@@ -58,6 +58,8 @@ public class CreateClothesProductCommandHandler
         product.SellerName = seller.Name; 
         product.Discount = discount;
         product.ProductDetail.Article = article; 
+        product.ImagePath = "sources/images/products/clothes/" + product.Id + ".jpg";
+        product.ImagePath = "sources/images/products/clothes/mini/" + product.Id + ".jpg";
         
         var result = await productRepository.CreateAsync(product, cancellationToken);
     

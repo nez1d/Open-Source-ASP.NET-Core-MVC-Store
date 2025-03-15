@@ -57,12 +57,8 @@ public class ProductController(IMapper mapper) : BaseController
     
     [HttpDelete("{id}")]
     [AllowAnonymous]
-    public async Task<IActionResult> DeleteProduct(Guid id)
+    public async Task<IActionResult> DeleteProduct([FromBody] DeleteProductCommand command)
     {
-        var command = new DeleteProductCommand
-        {
-            ProductId = id
-        };
         await Mediator.Send(command);
         return NoContent();
     }
@@ -81,12 +77,8 @@ public class ProductController(IMapper mapper) : BaseController
     
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<ActionResult<ProductVm>> GetProduct(Guid id)
+    public async Task<ActionResult<ProductVm>> GetProduct([FromBody] GetProductQuery query)
     {
-        var query = new GetProductQuery()
-        {
-            Id = id
-        };
         var result = await Mediator.Send(query);
         return Ok(result);
     }

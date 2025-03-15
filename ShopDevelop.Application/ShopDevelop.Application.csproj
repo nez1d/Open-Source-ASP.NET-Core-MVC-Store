@@ -24,4 +24,8 @@
     <ProjectReference Include="..\ShopDevelop.Domain\ShopDevelop.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\Category\Queries\" />
+  </ItemGroup>
+
 </Project>

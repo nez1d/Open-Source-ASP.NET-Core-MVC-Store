@@ -10,7 +10,7 @@ public class CategoryService : ICategoryService
     
     public async Task<int> CreateCategoryAsync(string name, string description)
     {
-        /*var category = new Domain.Entities.Category
+        var category = new Domain.Entities.Category
         {
             Name = name,
             Description = description,
@@ -23,10 +23,9 @@ public class CategoryService : ICategoryService
         }
         catch (Exception ex) { }
         
-        return Guid.Empty;#1#
-        var result = await categoryRepository.Create(category);
-        return category.Id;*/
-        return 0;
+        return Guid.Empty;*/
+        var result = await categoryRepository.CreateAsync(category, CancellationToken.None);
+        return category.Id;
     }
 
     public async Task EditCategoryAsync(Domain.Entities.Category category)
@@ -52,7 +51,7 @@ public class CategoryService : ICategoryService
     
     public async Task<Domain.Entities.Category> GetByName(string name)
     {
-        var category = await categoryRepository.GetByName(name);
+        var category = await categoryRepository.GetByNameAsync(name);
         
         if (category != null)
             return category;
@@ -60,8 +59,8 @@ public class CategoryService : ICategoryService
         return null;
     }
 
-    public Task<IEnumerable<Domain.Entities.Category>> GetAllCategory()
+    public async Task<IEnumerable<Domain.Entities.Category>> GetAllCategory()
     {
-        throw new NotImplementedException();
+        return await categoryRepository.GetAllAsync();
     }
 }

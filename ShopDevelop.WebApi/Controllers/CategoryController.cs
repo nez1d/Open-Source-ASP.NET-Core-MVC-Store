@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShopDevelop.Application.Entities.Category.Commands.Create;
+using ShopDevelop.Application.Entities.Category.Commands.Delete;
+using ShopDevelop.Application.Entities.Category.Commands.Update;
 using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Domain.Entities;
 
@@ -15,26 +18,38 @@ public class CategoryController : BaseController
         (this.categoryService) = (categoryService);
 
     [HttpPost]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> CreateCategory(string name, string description)
+    public async Task<IActionResult> CreateCategory(CreateCategoryCommand command)
     {
-        await categoryService.CreateCategoryAsync(name, description);
-        return Ok();
+        var result = await Mediator.Send(command);
+        if (result != 0)
+            return Created();
+        
+        return BadRequest();
     }
 
-    /*[HttpPatch]
-    [Authorize(Roles = "Manager")]
-    public async Task<IActionResult> EditCategory(Category model)
+    [HttpPatch]
+    public async Task<IActionResult> EditCategory(UpdateCategoryCommand model)
     {
-        await categoryService.EditCategoryAsync(model);
-        return Ok();  
+        await Mediator.Send(model); 
+        return NoContent();
     }
 
     [HttpDelete]
-    [Authorize(Roles = "Manager")]
-    public async Task<IActionResult> DeleteCategory(Guid id)
+    public async Task<IActionResult> DeleteCategory(DeleteCategoryCommand command)
     {
-        await categoryService.DeleteCategoryAsync(id);
+        await Mediator.Send(command);
+        return NoContent();
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAllCategories()
+    {
         return Ok();
-    }*/
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetCategoryById(int id)
+    {
+        return NotFound();
+    }
 }
