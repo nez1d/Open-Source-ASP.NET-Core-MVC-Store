@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -13,22 +14,23 @@ public class CategoryRepository : ICategoryRepository
     public CategoryRepository(IApplicationDbContext context) =>
         this.context = context;
 
-    public async Task<Guid> Create(Category category)
+    public async Task<int> CreateAsync(Category category, 
+        CancellationToken cancellationToken)
     {
-        var result = await this.GetByName(category.Name);
+        var result = await this.GetByNameAsync(category.Name);
         if (result == null)
         {
-            await context.Categories.AddAsync(category);
+            await context.Categories.AddAsync(category, cancellationToken);
             await context.SaveChangesAsync();
-            return Guid.Empty; /*category.Id; */
+            return category.Id;
         }
-        
-        return Guid.Empty;
+        return 0;
     }
 
-    public async Task Update(Category category)
+    public async Task UpdateAsync(Category category, 
+        CancellationToken cancellationToken)
     {
-        var model = GetById(category.Id);
+        var model = GetByIdAsync(category.Id);
         if (model != null)
         {
             context.Categories.Update(category);
@@ -36,9 +38,10 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
-    public async Task Delete(Guid id)
+    public async Task DeleteAsync(int id, 
+        CancellationToken cancellationToken)
     {
-        var category = await GetById(id);     
+        var category = await GetByIdAsync(id);     
         if (category == null)
         {
             throw new ArgumentException();
@@ -47,25 +50,21 @@ public class CategoryRepository : ICategoryRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Category>> GetAll()
+    public async Task<IEnumerable<Category>> GetAllAsync()
     {
         return await context.Categories
             .Where(category => category.Id != null)
             .ToListAsync();
     }
 
-    public Task<object> GetById(int categoryId)
+    public async Task<Category> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await context.Categories
+            .FirstOrDefaultAsync(category => category.Id == id)
+            ?? throw new NotFoundException(typeof(Category), id);
     }
 
-    public async Task<Category> GetById(Guid id)
-    {
-        return null; /*await context.Categories
-            .FirstOrDefaultAsync(category => category.Id == id);*/
-    }
-
-    public async Task<Category> GetByName(string name)
+    public async Task<Category> GetByNameAsync(string name)
     {
         var category = await context.Categories
             .FirstOrDefaultAsync(category => category.Name == name);
