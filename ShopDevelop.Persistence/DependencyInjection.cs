@@ -1,10 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShopDevelop.Application.Entities.Category.Queries.GetCategoryById;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Persistence.Entities.Category.Command.Create;
 using ShopDevelop.Persistence.Entities.Category.Command.Delete;
 using ShopDevelop.Persistence.Entities.Category.Command.Update;
+using ShopDevelop.Persistence.Entities.Category.Queries.GetAllCategories;
+using ShopDevelop.Persistence.Entities.Category.Queries.GetCategoryById;
+using ShopDevelop.Persistence.Entities.Category.Queries.GetCategoryByName;
 using ShopDevelop.Persistence.Entities.Product.Command.Create.Clothes;
 using ShopDevelop.Persistence.Entities.Product.Command.Create.Shoes;
 using ShopDevelop.Persistence.Entities.Product.Command.Update;
@@ -26,13 +30,16 @@ public static class DependencyInjection
                 typeof(CreateShoesProductCommandHandler).Assembly,
                 typeof(UpdateProductCommandHandler).Assembly,
                 typeof(GetProductQueryHandler).Assembly,
-                typeof(GetMiniProductListHandler).Assembly));
+                typeof(GetMiniProductListQueryHandler).Assembly));
         // Category
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
                 typeof(CreateCategoryCommandHandler).Assembly,
                 typeof(UpdateCategoryCommandHandler).Assembly,
-                typeof(DeleteCategoryCommandHandler).Assembly));
+                typeof(DeleteCategoryCommandHandler).Assembly,
+                typeof(GetAllCategoriesQueryHandler).Assembly,
+                typeof(GetCategoryByIdQueryHandler).Assembly,
+                typeof(GetCategoryByNameQueryHandler).Assembly));
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {

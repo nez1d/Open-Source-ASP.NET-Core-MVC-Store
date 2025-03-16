@@ -20,7 +20,7 @@ public class ProductController(IMapper mapper) : BaseController
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> CreateProductClothes([FromBody] CreateClothesProductDto model)
+    public async Task<IActionResult> CreateClothes([FromBody] CreateClothesProductDto model)
     {
         var command = mapper.Map<CreateClothesProductCommand>(model);
         var result = await Mediator.Send(command);
@@ -35,7 +35,7 @@ public class ProductController(IMapper mapper) : BaseController
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> CreateProductShoes([FromBody] CreateShoesProductDto model)
+    public async Task<IActionResult> CreateShoes([FromBody] CreateShoesProductDto model)
     {
         var command = mapper.Map<CreateShoesProductCommand>(model);
         var result = await Mediator.Send(command);
@@ -48,7 +48,7 @@ public class ProductController(IMapper mapper) : BaseController
     
     [HttpPut]
     [AllowAnonymous]
-    public async Task<IActionResult> EditProduct([FromBody] UpdateProductDto model)
+    public async Task<IActionResult> Edit([FromBody] UpdateProductDto model)
     {
         var command = mapper.Map<UpdateProductCommand>(model);
         await Mediator.Send(command);
@@ -57,7 +57,7 @@ public class ProductController(IMapper mapper) : BaseController
     
     [HttpDelete("{id}")]
     [AllowAnonymous]
-    public async Task<IActionResult> DeleteProduct([FromBody] DeleteProductCommand command)
+    public async Task<IActionResult> Delete([FromBody] DeleteProductCommand command)
     {
         await Mediator.Send(command);
         return NoContent();
@@ -65,7 +65,7 @@ public class ProductController(IMapper mapper) : BaseController
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<ProductMiniListVm>> GetProductList()
+    public async Task<ActionResult<ProductMiniListVm>> ProductsList()
     {
         var query = new GetMiniProductListQuery()
         {
@@ -77,22 +77,14 @@ public class ProductController(IMapper mapper) : BaseController
     
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<ActionResult<ProductVm>> GetProduct([FromBody] GetProductQuery query)
+    public async Task<ActionResult<ProductVm>> Product([FromBody] GetProductQuery query)
     {
         var result = await Mediator.Send(query);
         return Ok(result);
     }
 
-    /*
-    [HttpGet]
-    [Route("api/[controller]/[action]/{id?}")]
-    public async Task<IActionResult> Index(Guid? id)
+    public async Task<ActionResult> Sale()
     {
-        if(id != null)
-        {
-            var productPage = await productService.GetByIdAsync(id);
-            return Ok(productPage);
-        }
         return Ok();
-    }*/
+    }
 }

@@ -27,13 +27,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Category\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="JetBrains.ReSharper.TestRunner.Merged">
       <HintPath>..\..\..\..\..\..\..\..\snap\rider\554\lib\ReSharperHost\TestRunner\netcoreapp3.0\JetBrains.ReSharper.TestRunner.Merged.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entities\Seller\Queries\GetAll\" />
+    <Folder Include="Entities\Seller\Queries\GetById\" />
+    <Folder Include="Entities\Seller\Queries\GetByName\" />
   </ItemGroup>
 
 </Project>

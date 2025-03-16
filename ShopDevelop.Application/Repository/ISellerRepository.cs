@@ -5,9 +5,9 @@ namespace ShopDevelop.Application.Repository;
 
 public interface ISellerRepository 
 {
-    Task<Guid> Create(Seller seller);
-    Task Update(Seller seller);
-    Task Delete(Guid id);
-    Task<IEnumerable<Seller>> GetAll();
-    Task<Seller> GetById(uint id);
+    Task<int> CreateAsync(Seller seller, CancellationToken cancellationToken);
+    Task UpdateAsync(Seller seller, CancellationToken cancellationToken);
+    Task DeleteAsync(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<Seller>> GetAllAsync();
+    Task<Seller> GetByIdAsync(int id);
 }

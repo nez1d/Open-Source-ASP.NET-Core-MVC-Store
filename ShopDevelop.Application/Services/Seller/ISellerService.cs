@@ -32,5 +32,5 @@ public interface ISellerService
     /// </summary>
     /// <param name="id">Seller Id.</param>
     /// <returns>Return Seller.</returns>
-    Task<Domain.Entities.Seller> GetSellerByIdAsync(uint id);
+    Task<Domain.Entities.Seller> GetSellerByIdAsync(int id);
 }
