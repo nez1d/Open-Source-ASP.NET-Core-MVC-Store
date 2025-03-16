@@ -6,14 +6,14 @@ using ShopDevelop.Application.Interfaces;
 
 namespace ShopDevelop.Persistence.Entities.Product.Queries.GetMinimizedProducts;
 
-public class GetMiniProductListHandler
+public class GetMiniProductListQueryHandler
     : IRequestHandler<GetMiniProductListQuery, List<ProductMiniLookupDto>>
 {
     public readonly IApplicationDbContext applicationDbContext;
-    private readonly ILogger<GetMiniProductListHandler> logger;
+    private readonly ILogger<GetMiniProductListQueryHandler> logger;
 
-    public GetMiniProductListHandler(IApplicationDbContext applicationDbContext,
-        ILogger<GetMiniProductListHandler> logger)
+    public GetMiniProductListQueryHandler(IApplicationDbContext applicationDbContext,
+        ILogger<GetMiniProductListQueryHandler> logger)
     {
         this.applicationDbContext = applicationDbContext;
         this.logger = logger;
@@ -24,7 +24,7 @@ public class GetMiniProductListHandler
         GetMiniProductListQuery query,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation($"Handling {nameof(GetMiniProductListHandler)}");
+        logger.LogInformation($"Handling {nameof(GetMiniProductListQueryHandler)}");
         
         var result = await applicationDbContext.Products
             .Select(product => 
@@ -37,7 +37,7 @@ public class GetMiniProductListHandler
                     product.Seller.Name)
                 ).ToListAsync(cancellationToken);
         
-        logger.LogInformation($"Handled {nameof(GetMiniProductListHandler)}");
+        logger.LogInformation($"Handled {nameof(GetMiniProductListQueryHandler)}");
         
         return result;
     }

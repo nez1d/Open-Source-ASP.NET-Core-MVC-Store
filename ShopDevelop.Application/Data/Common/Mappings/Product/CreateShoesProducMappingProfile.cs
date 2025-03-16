@@ -4,7 +4,7 @@ using ShopDevelop.Domain.Dto.Product;
 using ShopDevelop.Domain.Entities;
 using ShopDevelop.Domain.Entities.Products;
 
-namespace ShopDevelop.Application.Data.Common.Mappings;
+namespace ShopDevelop.Application.Data.Common.Mappings.Product;
 
 public class CreateShoesProducMappingProfile : Profile
 {
@@ -59,6 +59,6 @@ public class CreateShoesProducMappingProfile : Profile
                 }));
         #endregion
         
-        CreateMap<CreateShoesProductCommand, Product>();
+        CreateMap<CreateShoesProductCommand, Domain.Entities.Product>();
     }
 }

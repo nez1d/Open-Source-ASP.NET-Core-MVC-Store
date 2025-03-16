@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Category.Commands.Create;
 using ShopDevelop.Application.Entities.Category.Commands.Delete;
 using ShopDevelop.Application.Entities.Category.Commands.Update;
+using ShopDevelop.Application.Entities.Category.Queries.GetAllCategories;
+using ShopDevelop.Application.Entities.Category.Queries.GetCategoryById;
+using ShopDevelop.Application.Entities.Category.Queries.GetCategoryByName;
 using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Domain.Entities;
 
@@ -18,7 +21,7 @@ public class CategoryController : BaseController
         (this.categoryService) = (categoryService);
 
     [HttpPost]
-    public async Task<IActionResult> CreateCategory(CreateCategoryCommand command)
+    public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
     {
         var result = await Mediator.Send(command);
         if (result != 0)
@@ -28,14 +31,14 @@ public class CategoryController : BaseController
     }
 
     [HttpPatch]
-    public async Task<IActionResult> EditCategory(UpdateCategoryCommand model)
+    public async Task<IActionResult> EditCategory([FromBody] UpdateCategoryCommand model)
     {
         await Mediator.Send(model); 
         return NoContent();
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteCategory(DeleteCategoryCommand command)
+    public async Task<IActionResult> DeleteCategory([FromBody] DeleteCategoryCommand command)
     {
         await Mediator.Send(command);
         return NoContent();
@@ -44,12 +47,30 @@ public class CategoryController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAllCategories()
     {
-        return Ok();
+        var result = await Mediator
+            .Send(new GetCategoriesListQuery());
+        return Ok(result);
     }
     
     [HttpGet]
     public async Task<IActionResult> GetCategoryById(int id)
     {
-        return NotFound();
+        var result = await Mediator.Send(
+            new GetCategoryByIdQuery()
+            {
+                Id = id
+            });
+        return Ok(result);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetCategoryByName(string name)
+    {
+        var result = await Mediator.Send(
+            new GetCategoryByNameQuery()
+            {
+                Name = name
+            });
+        return Ok(result);
     }
 }

@@ -11,14 +11,14 @@ public class SellerRepository : ISellerRepository
     public SellerRepository(IApplicationDbContext context) =>
         this.context = context;
 
-    public async Task<Guid> Create(Seller seller)
+    public async Task<int> CreateAsync(Seller seller, CancellationToken cancellationToken)
     {
         await context.Sellers.AddAsync(seller);
         await context.SaveChangesAsync();
-        return Guid.Empty;
+        return 0;
     }
 
-    public async Task Update(Seller seller)
+    public async Task UpdateAsync(Seller seller, CancellationToken cancellationToken)
     {
         /*var model = await GetById(seller.Id);
         if (model != null)
@@ -28,7 +28,7 @@ public class SellerRepository : ISellerRepository
         }*/
     }
 
-    public async Task Delete(Guid id)
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
     {
         /*var seller = await GetById(id);     
         if (seller == null)
@@ -39,14 +39,14 @@ public class SellerRepository : ISellerRepository
         await context.SaveChangesAsync()*/;
     }
 
-    public async Task<IEnumerable<Seller>> GetAll()
+    public async Task<IEnumerable<Seller>> GetAllAsync()
     {
         return await context.Sellers
             .Where(seller => seller.Id != null)
             .ToListAsync();
     }
 
-    public async Task<Seller> GetById(uint id)
+    public async Task<Seller> GetByIdAsync(int id)
     {
         return await context.Sellers
             .FirstOrDefaultAsync(seller => seller.Id == id);

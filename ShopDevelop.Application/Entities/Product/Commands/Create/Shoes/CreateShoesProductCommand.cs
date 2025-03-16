@@ -14,7 +14,7 @@ public class CreateShoesProductCommand : IRequest<Guid>
     public uint InStock { get; set; }
     public string ImagePath { get; set; }
     public string ImageMiniPath { get; set; }
-    public uint SellerId { get; set; }
+    public int SellerId { get; set; }
     public ProductDetail ProductDetail { get; set; }
     public ShoesProduct ShoesProduct { get; set; }
 }

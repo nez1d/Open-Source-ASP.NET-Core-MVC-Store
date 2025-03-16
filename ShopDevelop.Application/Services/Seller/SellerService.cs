@@ -50,9 +50,9 @@ public class SellerService : ISellerService
         throw new NotImplementedException();
     }
 
-    public async Task<Domain.Entities.Seller> GetSellerByIdAsync(uint id)
+    public async Task<Domain.Entities.Seller> GetSellerByIdAsync(int id)
     {
-        return await sellerRepository.GetById(id);
+        return await sellerRepository.GetByIdAsync(id);
         return null;
     }
 }
