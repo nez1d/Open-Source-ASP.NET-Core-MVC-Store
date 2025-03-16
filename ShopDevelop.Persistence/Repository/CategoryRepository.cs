@@ -30,22 +30,21 @@ public class CategoryRepository : ICategoryRepository
     public async Task UpdateAsync(Category category, 
         CancellationToken cancellationToken)
     {
-        var model = GetByIdAsync(category.Id);
-        if (model != null)
-        {
-            context.Categories.Update(category);
-            await context.SaveChangesAsync();
-        }
+        var model = await GetByIdAsync(category.Id, cancellationToken);
+        if (model == null)
+            throw new NotFoundException(typeof(Category), category.Id);
+            
+        context.Categories.Update(category);
+        await context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id, 
         CancellationToken cancellationToken)
     {
-        var category = await GetByIdAsync(id);     
+        var category = await GetByIdAsync(id, cancellationToken);     
         if (category == null)
-        {
-            throw new ArgumentException();
-        }
+            throw new NotFoundException(typeof(Category), id);
+        
         context.Categories.Remove(category);
         await context.SaveChangesAsync();
     }
@@ -57,7 +56,7 @@ public class CategoryRepository : ICategoryRepository
             .ToListAsync();
     }
 
-    public async Task<Category> GetByIdAsync(int id)
+    public async Task<Category> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await context.Categories
             .FirstOrDefaultAsync(category => category.Id == id)

@@ -19,6 +19,7 @@ using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
 using ShopDevelop.Application.Entities.Seller.Command.Create;
 using ShopDevelop.Application.Entities.Seller.Command.Delete;
 using ShopDevelop.Application.Entities.Seller.Command.Update;
+using ShopDevelop.Application.Entities.Seller.Queries.GetAll;
 
 namespace ShopDevelop.Application;
 
@@ -64,7 +65,8 @@ public static class DependencyInjection
             x.RegisterServicesFromAssemblies(
                 typeof(CreateSellerCommand).Assembly,
                 typeof(UpdateSellerCommand).Assembly,
-                typeof(DeleteSellerCommand).Assembly));
+                typeof(DeleteSellerCommand).Assembly,
+                typeof(GetAllSellersListQuery).Assembly));
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(
             Assembly.GetExecutingAssembly()));

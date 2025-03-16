@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Seller.Command.Create;
 using ShopDevelop.Application.Entities.Seller.Command.Delete;
-using ShopDevelop.Domain.Entities;
 
 namespace ShopDevelop.WebApi.Controllers;
 

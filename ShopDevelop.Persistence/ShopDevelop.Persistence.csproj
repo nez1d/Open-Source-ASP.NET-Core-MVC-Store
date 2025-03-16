@@ -33,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Seller\Queries\GetAll\" />
     <Folder Include="Entities\Seller\Queries\GetById\" />
     <Folder Include="Entities\Seller\Queries\GetByName\" />
   </ItemGroup>

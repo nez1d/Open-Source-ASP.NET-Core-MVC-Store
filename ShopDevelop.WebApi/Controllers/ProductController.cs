@@ -82,9 +82,4 @@ public class ProductController(IMapper mapper) : BaseController
         var result = await Mediator.Send(query);
         return Ok(result);
     }
-
-    public async Task<ActionResult> Sale()
-    {
-        return Ok();
-    }
 }

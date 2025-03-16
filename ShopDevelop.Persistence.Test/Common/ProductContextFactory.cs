@@ -10,6 +10,9 @@ public class ProductContextFactory
 {
     public static Guid ProductIdForDelete = Guid.NewGuid();
     public static Guid ProductIdForUpdate = Guid.NewGuid();
+    
+    public static int CategoryIdForUpdate = 42222;
+    public static int CategoryIdForDelete = 42324;
 
     public static ApplicationDbContext Create()
     {
@@ -21,6 +24,7 @@ public class ProductContextFactory
         context.Database.EnsureCreated();
         
         context.Products.AddRange(
+            #region Products 
             new Product
                 {   
                     Id = ProductIdForDelete,
@@ -43,6 +47,8 @@ public class ProductContextFactory
                     Reviews = null,
                     Category = null,
                     CategoryId = 1,
+                    CategoryName = "categoryName",
+                    SellerName = "sellerName",
                     Seller = null,
                     SellerId = 1,
                     ProductDetail = new ProductDetail
@@ -72,7 +78,8 @@ public class ProductContextFactory
                             ClothesSizes.XXL, 
                             ClothesSizes.M
                         ]
-                    }
+                    },
+                    ShoesProduct = null
                 },
             new Product
                 {   
@@ -96,6 +103,8 @@ public class ProductContextFactory
                     Reviews = null,
                     Category = null,
                     CategoryId = 1,
+                    CategoryName = "categoryName",
+                    SellerName = "sellerName",
                     Seller = null,
                     SellerId = 1,
                     ProductDetail = new ProductDetail
@@ -125,7 +134,8 @@ public class ProductContextFactory
                             ClothesSizes.XXL, 
                             ClothesSizes.M
                         ]
-                    }
+                    },
+                    ShoesProduct = null
                 },
             new Product
                 {   
@@ -149,6 +159,8 @@ public class ProductContextFactory
                     Reviews = null,
                     Category = null,
                     CategoryId = 1,
+                    CategoryName = "categoryName",
+                    SellerName = "sellerName",
                     Seller = null,
                     SellerId = 1,
                     ProductDetail = new ProductDetail
@@ -178,9 +190,35 @@ public class ProductContextFactory
                             ClothesSizes.XXL, 
                             ClothesSizes.M
                         ]
-                    }
+                    },
+                    ShoesProduct = null
                 }
+            #endregion
         );
+        
+        context.Categories.AddRange(
+            #region Categories
+            new Category()
+            {
+                Id = CategoryIdForUpdate,
+                Name = "Sample Name up",
+                Description = "Sample Description",
+                ImagePath = "/images/main/img.png",
+            }, new Category()
+            {
+                Id = CategoryIdForDelete,
+                Name = "Sample Name del",
+                Description = "Sample Description",
+                ImagePath = "/images/main/img.png",
+            }, new Category()
+            {
+                Id = 43242,
+                Name = "Sample Name",
+                Description = "Sample Description",
+                ImagePath = "/images/main/img.png",
+            }
+            #endregion
+            );
         
         context.SaveChanges();
         return context;

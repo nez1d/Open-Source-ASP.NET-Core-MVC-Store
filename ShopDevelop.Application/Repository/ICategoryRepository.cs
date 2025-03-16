@@ -9,5 +9,5 @@ public interface ICategoryRepository
     Task DeleteAsync(int id, CancellationToken cancellationToken);
     Task<Category> GetByNameAsync(string name);
     Task<IEnumerable<Category>> GetAllAsync();
-    Task<Category> GetByIdAsync(int id);
+    Task<Category> GetByIdAsync(int id, CancellationToken cancellationToken);
 }

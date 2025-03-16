@@ -28,7 +28,7 @@ public class UpdateCategoryCommandHandler
     {
         logger.LogInformation($"Handling {nameof(UpdateCategoryCommandHandler)}");
 
-        var category = await categoryRepository.GetByIdAsync(request.Id);
+        var category = await categoryRepository.GetByIdAsync(request.Id, cancellationToken);
         
         if(category == null)
             throw new NotFoundException(typeof(Domain.Entities.Category), request.Id);

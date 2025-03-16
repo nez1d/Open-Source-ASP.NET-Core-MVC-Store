@@ -25,9 +25,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Seller\Queries\GetAll\" />
     <Folder Include="Entities\Seller\Queries\GetById\" />
     <Folder Include="Entities\Seller\Queries\GetByName\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel">
+      <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.testplatform.testhost\17.11.1\lib\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
