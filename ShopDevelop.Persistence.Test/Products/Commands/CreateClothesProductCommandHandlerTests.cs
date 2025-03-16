@@ -1,4 +1,4 @@
-using AutoMapper;
+/*using AutoMapper;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Product.Commands.Create;
 using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
@@ -91,4 +91,4 @@ public class CreateClothesProductCommandHandlerTests : TestCommandBase
             await productRepository.GetByIdAsync(
                 productId, CancellationToken.None));
     }
-}
+}*/

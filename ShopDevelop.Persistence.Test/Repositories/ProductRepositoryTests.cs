@@ -41,6 +41,8 @@ public class ProductRepositoryTests : TestCommandBase
             Reviews = null,
             Category = null,
             CategoryId = 1,
+            CategoryName = "categoryName",
+            SellerName = "sellerName",
             Seller = null,
             SellerId = 1,
             ProductDetail = new ProductDetail
@@ -74,7 +76,8 @@ public class ProductRepositoryTests : TestCommandBase
         }, 
         CancellationToken.None);
         // Assert
-        Assert.NotNull(await productRepository.GetByIdAsync(productId, CancellationToken.None));
+        var product = await productRepository.GetByIdAsync(productId, CancellationToken.None);
+        Assert.NotNull(product);
     }
 
     [Fact]
@@ -112,7 +115,6 @@ public class ProductRepositoryTests : TestCommandBase
         // Arrange
         productRepository = new ProductRepository(context);
         // Act
-        
         // Assert
         await Assert.ThrowsAsync<NotFoundException>(async () =>
             await productRepository.UpdateAsync(new Product
@@ -129,7 +131,12 @@ public class ProductRepositoryTests : TestCommandBase
         // Act
         await productRepository.DeleteAsync(ProductContextFactory.ProductIdForDelete, CancellationToken.None);
         // Assert
-        Assert.Null(await productRepository.GetByIdAsync(ProductContextFactory.ProductIdForDelete, CancellationToken.None));
+        await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await productRepository.GetByIdAsync(
+                ProductContextFactory.ProductIdForDelete, 
+                CancellationToken.None
+            )
+        );
     }
     
     [Fact]
@@ -142,8 +149,9 @@ public class ProductRepositoryTests : TestCommandBase
         await Assert.ThrowsAsync<NotFoundException>(async () =>
             await productRepository.DeleteAsync(
                 Guid.Parse("e090f3f2-ac9e-45a6-9392-995e56564731"), 
-                CancellationToken.None)
-            );
+                CancellationToken.None
+            )
+        );
     }
 
     [Fact]
@@ -168,7 +176,6 @@ public class ProductRepositoryTests : TestCommandBase
             CancellationToken.None
         );
         // Assert
-        
         Assert.NotNull(product);
         Assert.Equal(ProductContextFactory.ProductIdForUpdate, product.Id);
     }
@@ -179,12 +186,12 @@ public class ProductRepositoryTests : TestCommandBase
         // Arrange
         productRepository = new ProductRepository(context);
         // Act
-        var product = await productRepository.GetByIdAsync(
-            ProductContextFactory.ProductIdForUpdate, 
-            CancellationToken.None
-        );
         // Assert
-        Assert.NotNull(product);
-        Assert.Equal(ProductContextFactory.ProductIdForUpdate, product.Id);
+        await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await productRepository.GetByIdAsync(
+                Guid.NewGuid(), 
+                CancellationToken.None
+            )
+        );
     }
 }

@@ -30,13 +30,11 @@ public class SellerRepository : ISellerRepository
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken)
     {
-        /*var seller = await GetById(id);     
+        var seller = await GetByIdAsync(id);     
         if (seller == null)
-        {
             throw new ArgumentException();
-        }
         context.Sellers.Remove(seller);
-        await context.SaveChangesAsync()*/;
+        await context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Seller>> GetAllAsync()

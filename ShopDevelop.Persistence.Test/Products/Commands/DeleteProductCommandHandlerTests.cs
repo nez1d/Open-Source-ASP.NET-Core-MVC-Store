@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+/*using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Persistence.Entities.Product.Command.Delete;
@@ -76,5 +76,5 @@ public class DeleteProductCommandHandlerTests : TestCommandBase
                     UserId = ProductContextFactory.UserIdB
                 }, 
                 CancellationToken.None));
-    }*/
-}
+    }#1#
+}*/

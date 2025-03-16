@@ -27,7 +27,7 @@ public class GetCategoryByIdQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetCategoryByIdQueryHandler)}");
         
-        var category = await categoryRepository.GetByIdAsync(request.Id);
+        var category = await categoryRepository.GetByIdAsync(request.Id, cancellationToken);
         
         var result = mapper.Map<CategoryByIdVm>(category); 
         
