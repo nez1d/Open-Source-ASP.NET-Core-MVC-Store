@@ -20,6 +20,8 @@ using ShopDevelop.Application.Entities.Seller.Command.Create;
 using ShopDevelop.Application.Entities.Seller.Command.Delete;
 using ShopDevelop.Application.Entities.Seller.Command.Update;
 using ShopDevelop.Application.Entities.Seller.Queries.GetAll;
+using ShopDevelop.Application.Entities.Seller.Queries.GetById;
+using ShopDevelop.Application.Entities.Seller.Queries.GetByName;
 
 namespace ShopDevelop.Application;
 
@@ -39,6 +41,8 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(GetCategoryByNameMappingProfile));
         // Seller
         services.AddAutoMapper(typeof(CreateSellerMappingProfile));
+        services.AddAutoMapper(typeof(GetAllSellersMappingProfile));
+        services.AddAutoMapper(typeof(GetSellerByNameMappingProfile));
         
         services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
         
@@ -49,7 +53,7 @@ public static class DependencyInjection
                 typeof(CreateShoesProductCommand).Assembly,
                 typeof(UpdateProductCommand).Assembly,
                 typeof(DeleteProductCommand).Assembly,
-                typeof(GetProductQuery).Assembly,
+                typeof(GetProductByIdQuery).Assembly,
                 typeof(GetMiniProductListQuery).Assembly));
         // Category
         services.AddMediatR(x =>
@@ -66,7 +70,9 @@ public static class DependencyInjection
                 typeof(CreateSellerCommand).Assembly,
                 typeof(UpdateSellerCommand).Assembly,
                 typeof(DeleteSellerCommand).Assembly,
-                typeof(GetAllSellersListQuery).Assembly));
+                typeof(GetAllSellersListQuery).Assembly,
+                typeof(GetSellerByIdQuery).Assembly,
+                typeof(GetSellerByNameQuery).Assembly));
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(
             Assembly.GetExecutingAssembly()));

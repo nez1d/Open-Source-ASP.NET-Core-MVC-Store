@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -13,9 +14,9 @@ public class SellerRepository : ISellerRepository
 
     public async Task<int> CreateAsync(Seller seller, CancellationToken cancellationToken)
     {
-        await context.Sellers.AddAsync(seller);
+        await context.Sellers.AddAsync(seller, cancellationToken);
         await context.SaveChangesAsync();
-        return 0;
+        return seller.Id;
     }
 
     public async Task UpdateAsync(Seller seller, CancellationToken cancellationToken)
@@ -30,9 +31,9 @@ public class SellerRepository : ISellerRepository
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken)
     {
-        var seller = await GetByIdAsync(id);     
+        var seller = await GetByIdAsync(id, cancellationToken);     
         if (seller == null)
-            throw new ArgumentException();
+            return;
         context.Sellers.Remove(seller);
         await context.SaveChangesAsync();
     }
@@ -44,9 +45,15 @@ public class SellerRepository : ISellerRepository
             .ToListAsync();
     }
 
-    public async Task<Seller> GetByIdAsync(int id)
+    public async Task<Seller> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await context.Sellers
             .FirstOrDefaultAsync(seller => seller.Id == id);
+    }
+    
+    public async Task<Seller> GetByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        return await context.Sellers
+            .FirstOrDefaultAsync(seller => seller.Name == name);
     }
 }

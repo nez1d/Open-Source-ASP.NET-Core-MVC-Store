@@ -9,5 +9,6 @@ public interface ISellerRepository
     Task UpdateAsync(Seller seller, CancellationToken cancellationToken);
     Task DeleteAsync(int id, CancellationToken cancellationToken);
     Task<IEnumerable<Seller>> GetAllAsync();
-    Task<Seller> GetByIdAsync(int id);
+    Task<Seller> GetByIdAsync(int id, CancellationToken cancellationToken);
+    Task<Seller> GetByNameAsync(string name, CancellationToken cancellationToken);
 }

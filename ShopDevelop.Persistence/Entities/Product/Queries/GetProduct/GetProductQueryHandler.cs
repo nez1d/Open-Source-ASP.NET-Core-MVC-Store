@@ -11,7 +11,7 @@ using ShopDevelop.Domain.Entities.Products;
 namespace ShopDevelop.Persistence.Entities.Product.Queries.GetProduct;
 
 public class GetProductQueryHandler 
-    : IRequestHandler<GetProductQuery, ProductVm>
+    : IRequestHandler<GetProductByIdQuery, ProductVm>
 {
     private readonly IProductRepository productRepository;
     private readonly IMapper mapper;
@@ -27,10 +27,10 @@ public class GetProductQueryHandler
         this.logger = logger;
     }
     
-    public async Task<ProductVm> Handle(GetProductQuery request, 
+    public async Task<ProductVm> Handle(GetProductByIdQuery request, 
         CancellationToken cancellationToken)
     {
-        logger.LogInformation($"Handling {nameof(GetProductQuery)}");
+        logger.LogInformation($"Handling {nameof(GetProductByIdQuery)}");
 
         var product = await productRepository
             .GetByIdAsync(request.Id, cancellationToken);
@@ -53,7 +53,7 @@ public class GetProductQueryHandler
                 product.ShoesProductId, cancellationToken);
         }
         
-        logger.LogInformation($"Handled {nameof(GetProductQuery)}");
+        logger.LogInformation($"Handled {nameof(GetProductByIdQuery)}");
         return result;
     }
 }

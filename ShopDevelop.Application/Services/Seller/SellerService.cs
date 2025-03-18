@@ -52,7 +52,7 @@ public class SellerService : ISellerService
 
     public async Task<Domain.Entities.Seller> GetSellerByIdAsync(int id)
     {
-        return await sellerRepository.GetByIdAsync(id);
+        /*return await sellerRepository.GetByIdAsync(id);*/
         return null;
     }
 }

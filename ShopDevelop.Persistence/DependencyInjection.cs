@@ -18,6 +18,7 @@ using ShopDevelop.Persistence.Entities.Seller.Command.Create;
 using ShopDevelop.Persistence.Entities.Seller.Command.Delete;
 using ShopDevelop.Persistence.Entities.Seller.Command.Update;
 using ShopDevelop.Persistence.Entities.Seller.Queries.GetAll;
+using ShopDevelop.Persistence.Entities.Seller.Queries.GetByName;
 
 namespace ShopDevelop.Persistence;
 
@@ -50,7 +51,9 @@ public static class DependencyInjection
                 typeof(CreateSellerCommandHandler).Assembly,
                 typeof(UpdateSellerCommandHandler).Assembly,
                 typeof(DeleteSellerCommandHandler).Assembly,
-                typeof(GetAllSellersQueryHandler).Assembly));
+                typeof(GetAllSellersQueryHandler).Assembly,
+                typeof(GetCategoryByIdQueryHandler).Assembly,
+                typeof(GetSellerByNameQueryHandler).Assembly));
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {

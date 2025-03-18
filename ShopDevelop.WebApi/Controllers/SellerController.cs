@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Seller.Command.Create;
 using ShopDevelop.Application.Entities.Seller.Command.Delete;
+using ShopDevelop.Application.Entities.Seller.Queries.GetAll;
+using ShopDevelop.Application.Entities.Seller.Queries.GetById;
+using ShopDevelop.Application.Entities.Seller.Queries.GetByName;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -9,7 +12,7 @@ namespace ShopDevelop.WebApi.Controllers;
 public class SellerController : BaseController
 {
     [HttpPost]
-    public async Task<IActionResult> CreateSeller([FromBody] CreateSellerCommand createSellerCommand)
+    public async Task<IActionResult> Create([FromBody] CreateSellerCommand createSellerCommand)
     {
         var result = await Mediator.Send(createSellerCommand);
         if(result is not 0)
@@ -19,33 +22,59 @@ public class SellerController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditSeller(Guid id)
+    public async Task<IActionResult> Edit()
     {
         return NoContent();  
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteSeller([FromBody] DeleteSellerCommand deleteSellerCommand)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
     {
-        await Mediator.Send(deleteSellerCommand);
+        var request = new DeleteSellerCommand()
+        {
+            Id = id
+        };
+        await Mediator.Send(request);
         return NoContent();
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllSellers()
+    public async Task<IActionResult> GetSellers()
     {
-        return Ok();
+        var result = await Mediator
+            .Send(new GetAllSellersListQuery());
+        if(result is not null)
+            return Ok(result);
+        
+        return NotFound();
     }
     
-    [HttpGet]
-    public async Task<IActionResult> GetSellerById()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
-        return Ok();
+        var query = new GetSellerByIdQuery
+        {
+            Id = id
+        };
+        var result = await Mediator.Send(query);
+        if(result is not null)
+            return Ok(result);
+        
+        return NotFound();
     }
-    
-    [HttpGet]
-    public async Task<IActionResult> GetSellerByName()
+
+    [HttpGet("{name}")]
+    public async Task<IActionResult> GetByName(string name)
     {
-        return Ok();
+        var query = new GetSellerByNameQuery()
+        {
+            Name = name
+        };
+        var result = await Mediator.Send(query);
+        
+        if(result is not null)
+            return Ok(result);
+        
+        return NotFound();
     }
 }
