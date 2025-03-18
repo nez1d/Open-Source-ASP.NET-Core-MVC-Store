@@ -74,12 +74,12 @@ public class ProductController(IMapper mapper) : BaseController
         var result = await Mediator.Send(query);
         return Ok(result);
     }
-    
+    // TODO: опять баг с зависимыми моделями
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<ActionResult<ProductVm>> Product([FromBody] GetProductQuery query)
+    public async Task<ActionResult<ProductVm>> Product([FromBody] GetProductByIdQuery byIdQuery)
     {
-        var result = await Mediator.Send(query);
+        var result = await Mediator.Send(byIdQuery);
         return Ok(result);
     }
 }

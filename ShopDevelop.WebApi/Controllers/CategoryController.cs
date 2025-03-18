@@ -52,7 +52,7 @@ public class CategoryController : BaseController
         return Ok(result);
     }
     
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetCategoryById(int id)
     {
         var result = await Mediator.Send(
@@ -63,7 +63,7 @@ public class CategoryController : BaseController
         return Ok(result);
     }
     
-    [HttpGet]
+    [HttpGet("{name}")]
     public async Task<IActionResult> GetCategoryByName(string name)
     {
         var result = await Mediator.Send(
