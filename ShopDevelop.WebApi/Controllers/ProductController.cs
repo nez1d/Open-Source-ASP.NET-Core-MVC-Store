@@ -65,7 +65,7 @@ public class ProductController(IMapper mapper) : BaseController
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<ProductMiniListVm>> ProductsList()
+    public async Task<ActionResult> ProductsList()
     {
         var query = new GetMiniProductListQuery()
         {
@@ -74,12 +74,20 @@ public class ProductController(IMapper mapper) : BaseController
         var result = await Mediator.Send(query);
         return Ok(result);
     }
-    // TODO: опять баг с зависимыми моделями
+
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<ActionResult<ProductVm>> Product([FromBody] GetProductByIdQuery byIdQuery)
+    public async Task<ActionResult> Product(Guid id)
     {
+        var byIdQuery = new GetProductByIdQuery
+        {
+            Id = id
+        };
         var result = await Mediator.Send(byIdQuery);
-        return Ok(result);
+        
+        if(result != null)
+            return Ok(result);
+        
+        return NotFound();
     }
 }
