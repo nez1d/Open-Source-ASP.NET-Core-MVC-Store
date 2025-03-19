@@ -1,4 +1,4 @@
-﻿/*using ShopDevelop.Application.Repository;
+﻿using ShopDevelop.Application.Repository;
 
 namespace ShopDevelop.Application.Services.Review;
 
@@ -13,7 +13,8 @@ public class ReviewService : IReviewService
         Guid productId,
         string text,
         uint rating,
-        List<string> imageUrls)
+        List<string> imageUrls,
+        CancellationToken cancellationToken)
     {
         var likesUsersId = new List<string>();
         var review = new Domain.Entities.Review
@@ -35,7 +36,7 @@ public class ReviewService : IReviewService
         if (!check)
             return false;
         
-        var result = await reviewRepository.Create(review);
+        var result = await reviewRepository.Create(review, cancellationToken);
         
         if(result != Guid.Empty)
             return true;
@@ -111,4 +112,4 @@ public class ReviewService : IReviewService
     {
         return false;
     }
-}*/
+}

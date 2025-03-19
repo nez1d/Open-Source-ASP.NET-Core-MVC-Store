@@ -1,8 +1,9 @@
-/*using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Application.Interfaces;
-using ShopDevelop.Domain.Models;
+using ShopDevelop.Application.Repository;
+using ShopDevelop.Domain.Entities;
 
-namespace ShopDevelop.Application.Repository;
+namespace ShopDevelop.Persistence.Repository;
 
 public class ReviewRepository : IReviewRepository
 {
@@ -10,9 +11,10 @@ public class ReviewRepository : IReviewRepository
     public ReviewRepository(IApplicationDbContext context) =>
         this.context = context;
         
-    public async Task<Guid> Create(Review review)
+    public async Task<Guid> Create(Review review, 
+        CancellationToken cancellationToken)
     {
-        await context.Reviews.AddAsync(review);
+        await context.Reviews.AddAsync(review, cancellationToken);
         await context.SaveChangesAsync();
         return review.Id;    
     }
@@ -117,4 +119,4 @@ public class ReviewRepository : IReviewRepository
         
         return false;
     }
-}*/
+}

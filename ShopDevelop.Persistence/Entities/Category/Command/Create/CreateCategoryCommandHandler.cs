@@ -26,6 +26,10 @@ public class CreateCategoryCommandHandler
         CancellationToken cancellationToken)
     {
         logger.LogInformation($"Handling {nameof(CreateCategoryCommandHandler)}");
+
+        var data = await categoryRepository.GetByNameAsync(request.Name);
+        if(data != null)
+            return 0;
         
         var category = mapper.Map<Domain.Entities.Category>(request);
         

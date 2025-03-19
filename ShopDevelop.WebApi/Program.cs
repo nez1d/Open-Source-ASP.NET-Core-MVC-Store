@@ -125,6 +125,8 @@ builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+
 var app = builder.Build();
 
 app.UseRouting();
