@@ -27,6 +27,10 @@ public class CreateSellerCommandHandler
     {
         logger.LogInformation($"Handling {nameof(CreateSellerCommandHandler)}");
         
+        var data = await sellerRepository.GetByNameAsync(request.Name, cancellationToken);
+        if(data != null)
+            return 0;
+        
         var seller = mapper.Map<Domain.Entities.Seller>(request);
         
         var result = await sellerRepository.CreateAsync(seller, cancellationToken);

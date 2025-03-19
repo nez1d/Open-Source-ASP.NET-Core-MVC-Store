@@ -14,6 +14,8 @@ using ShopDevelop.Persistence.Entities.Product.Command.Create.Shoes;
 using ShopDevelop.Persistence.Entities.Product.Command.Update;
 using ShopDevelop.Persistence.Entities.Product.Queries.GetMinimizedProducts;
 using ShopDevelop.Persistence.Entities.Product.Queries.GetProduct;
+using ShopDevelop.Persistence.Entities.Review.Commands.Create;
+using ShopDevelop.Persistence.Entities.Review.Commands.Delete;
 using ShopDevelop.Persistence.Entities.Seller.Command.Create;
 using ShopDevelop.Persistence.Entities.Seller.Command.Delete;
 using ShopDevelop.Persistence.Entities.Seller.Command.Update;
@@ -54,6 +56,11 @@ public static class DependencyInjection
                 typeof(GetAllSellersQueryHandler).Assembly,
                 typeof(GetCategoryByIdQueryHandler).Assembly,
                 typeof(GetSellerByNameQueryHandler).Assembly));
+        // Review
+        services.AddMediatR(x =>
+            x.RegisterServicesFromAssemblies(
+                typeof(CreateReviewCommandHandler).Assembly,
+                typeof(DeleteReviewCommandHandler).Assembly));
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {

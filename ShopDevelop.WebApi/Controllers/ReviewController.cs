@@ -1,121 +1,72 @@
-/*using System.Net.Mime;
-using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using ShopDevelop.Application.Services.Review;
-using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
+using ShopDevelop.Application.Entities.Review.Commands.Create;
+using ShopDevelop.Application.Entities.Review.Commands.Delete;
+using ShopDevelop.Domain.Dto.Review;
 
 namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class ReviewController : BaseController
+public class ReviewController(IMapper mapper) : BaseController
 {
-    private readonly IReviewService reviewService; 
-    private readonly JwtProvider jwtProvider;
-    
-    public ReviewController(IReviewService reviewService,
-        JwtProvider jwtProvider) =>
-            (this.reviewService, this.jwtProvider) = 
-            (reviewService, jwtProvider);
-    
     [HttpPost]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> Create(Guid productId, string text, uint rating)
+    public async Task<IActionResult> Create([FromBody] CreateReviewDto model)
     {
-        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
-        var userId = Guid.Parse(jwtProvider.GetUserId(accessToken));
+        var review = mapper.Map<CreateReviewCommand>(model);
+        var result = await Mediator.Send(review);
+        if(result != Guid.Empty)
+            return Created();
         
-        if(userId == Guid.Empty)
-            return BadRequest("User id is empty.");
-        
-        List<string> imagesUrls = new List<string>();
-        
-        if(rating < 1 || rating > 5)
-            return BadRequest("Rating is not valid! Please try again (1-5 stars).");
-        
-        var result = await reviewService.CreateReviewAsync(
-            userId: userId.ToString(), 
-            productId: productId, 
-            text: text, 
-            rating: rating, 
-            imagesUrls: imagesUrls);
-        
-        if(result)
-            return Ok();
-        
-        return BadRequest("Invalid review.");
+        return BadRequest();
     }
     
-    [HttpPatch]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> Update(
-        Guid reviewId, 
-        string text,
-        uint rating)
+    [HttpPut]
+    public async Task<IActionResult> Edit()
     {
-        if(rating < 1 || rating > 5)
-            return BadRequest("Rating is not valid! Please try again (1-5 stars).");
-        
-        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
-        var userId = Guid.Parse(jwtProvider.GetUserId(accessToken));
-        
-        if(userId == Guid.Empty)
-            return BadRequest("User id is empty.");
-        
-        var review = await reviewService.GetByIdAsync(reviewId);
-        
-        var imagesUrls = new List<string>();
-        
-        await reviewService.UpdateReviewAsync(reviewId, text, rating, imagesUrls);
-
         return Ok();
     }
     
-    [HttpDelete]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> Delete(Guid reviewId)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
     {
-        await reviewService.DeleteReviewAsync(reviewId);
-        return Ok();
+        await Mediator.Send(new DeleteReviewCommand { Id = id });
+        return NoContent();
     }
     
     [HttpGet]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> LikeReview(string userId, Guid reviewId)
-    {
-        await reviewService.LikeReviewAsync(reviewId, userId);
-        return Ok();
-    }
-    
-    [HttpGet]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> GetFirstFiveByRating(Guid productId)
-    {
-        var result = await reviewService.GetFirstFiveByRatingAsync(productId);
-        return Ok(result);
-    }
-    
-    [HttpGet]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> GetFirstFiveByDate(Guid productId)
-    {
-        var result = await reviewService.GetFirstFiveByDateAsync(productId);
-        return Ok(result);
-    }
-    
-    [HttpGet]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> GetAllByUserId(string reviewId)
-    {
-        var result = await reviewService.GetAllByUserIdAsync(reviewId);
-        return Ok(result);
-    }
-    
-    [HttpGet]
-    [Authorize(Roles = "AuthUser")]
     public async Task<IActionResult> GetAll()
     {
-        var result = await reviewService.GetAllAsync();
-        return Ok(result);
+        return Ok();
     }
-}*/
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAllByUserId()
+    {
+        return Ok();
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetFirstFiveByRating()
+    {
+        return Ok();
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetFirstFiveByDate()
+    {
+        return Ok();
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> LikeReview()
+    {
+        return Ok();
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> UnlikeReview()
+    {
+        return Ok();
+    }
+}

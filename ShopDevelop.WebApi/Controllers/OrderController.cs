@@ -1,14 +1,4 @@
-/*using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using ShopDevelop.Application.Services.Cart;
-using ShopDevelop.Application.Services.Category;
-using ShopDevelop.Application.Services.Product;
-using ShopDevelop.Domain.Entities;
-using ShopDevelop.Identity.DuendeServer.WebAPI.Data;
-using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
 
 namespace ShopDevelop.WebApi.Controllers;
 
@@ -16,87 +6,39 @@ namespace ShopDevelop.WebApi.Controllers;
 [ApiController]
 public class OrderController : BaseController
 {
-    private readonly ShoppingCartService shoppingCartService;
-    private readonly IOrderService orderService;
-    private readonly UserManager<ApplicationUser> userManager;
-    private readonly JwtProvider jwtProvider;
-    
-    public OrderController(ShoppingCartService shoppingCartService,
-            IOrderService orderService, 
-            UserManager<ApplicationUser> userManager,
-            JwtProvider jwtProvider) =>
-        (this.shoppingCartService, this.orderService,
-            this.userManager, this.jwtProvider) = 
-        (shoppingCartService, orderService, 
-            userManager, jwtProvider);
-
     [HttpPost]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> CreateOrder(string address, string city, string country)
+    public async Task<IActionResult> Create()
     {
-        var items = await shoppingCartService.GetShoppingCartItems();
-
-        if (items.Count() == 0)
-            return BadRequest("Items count is not null");   
-        
-        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
-        
-        var id = jwtProvider.GetUserId(accessToken);
-
-        if (id != null)
-        {
-            var user = await userManager.FindByIdAsync(id);
-            var product = items.FirstOrDefault().Product;
-
-            if (user is not null)
-            {
-                var order = await orderService.CreateOrderAsync(
-                    address: address,
-                    city: city,
-                    country: country,
-                    product: product,
-                    user: user);
-
-                if (order)
-                    return Ok();
-            }
-            return BadRequest("User is null. \nuserId: " + id);
-        }
         return BadRequest();
     }
     
-    [HttpPatch]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> UpdateOrder(Guid orderId, string address, string city, string country)
+    [HttpPut]
+    public async Task<IActionResult> Edit()
     {
-        if (orderId == Guid.Empty)
-            return BadRequest("Invalid order id");    
-        
-        await orderService.UpdateOrderAsync(orderId, address, city, country);
         return Ok();
     }
     
     [HttpDelete]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> DeleteOrder(Guid orderId)
+    public async Task<IActionResult> Delete()
     {
-        await orderService.DeleteOrderAsync(orderId);
         return Ok();
     }
 
     [HttpGet]
-    [Authorize(Roles = "AuthUser")]
-    public async Task<IActionResult> GetOrders()
+    public async Task<IActionResult> GetAll()
     {
-        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
-        
-        var id = jwtProvider.GetUserId(accessToken);
-        
-        var items = await orderService.GetOrdersByUserIdAsync(id);
-        
-        if(!items.Any())
-            return Ok("The number of orders is zero.");
-        
-        return Ok(items);
+        return Ok();
     }
-}*/
+    
+    [HttpGet]
+    public async Task<IActionResult> GetById()
+    {
+        return Ok();
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetByUserId()
+    {
+        return Ok();
+    }
+}

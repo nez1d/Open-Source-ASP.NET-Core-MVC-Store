@@ -3,6 +3,7 @@ using System.Reflection;
 using FluentValidation;
 using ShopDevelop.Application.Data.Common.Mappings;
 using ShopDevelop.Application.Data.Common.Mappings.Product;
+using ShopDevelop.Application.Data.Common.Mappings.Review;
 using ShopDevelop.Application.Data.Common.Mappings.Seller;
 using ShopDevelop.Application.Entities.Category.Commands.Create;
 using ShopDevelop.Application.Entities.Category.Commands.Delete;
@@ -16,6 +17,8 @@ using ShopDevelop.Application.Entities.Product.Commands.Delete;
 using ShopDevelop.Application.Entities.Product.Commands.Update;
 using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
 using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
+using ShopDevelop.Application.Entities.Review.Commands.Create;
+using ShopDevelop.Application.Entities.Review.Commands.Delete;
 using ShopDevelop.Application.Entities.Seller.Command.Create;
 using ShopDevelop.Application.Entities.Seller.Command.Delete;
 using ShopDevelop.Application.Entities.Seller.Command.Update;
@@ -43,6 +46,8 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(CreateSellerMappingProfile));
         services.AddAutoMapper(typeof(GetAllSellersMappingProfile));
         services.AddAutoMapper(typeof(GetSellerByNameMappingProfile));
+        // Review
+        services.AddAutoMapper(typeof(CreateReviewMappingProfile));
         
         services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
         
@@ -73,6 +78,11 @@ public static class DependencyInjection
                 typeof(GetAllSellersListQuery).Assembly,
                 typeof(GetSellerByIdQuery).Assembly,
                 typeof(GetSellerByNameQuery).Assembly));
+        // Review
+        services.AddMediatR(x =>
+            x.RegisterServicesFromAssemblies(
+                typeof(CreateReviewCommand).Assembly,
+                typeof(DeleteReviewCommand).Assembly));
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(
             Assembly.GetExecutingAssembly()));

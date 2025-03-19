@@ -77,7 +77,7 @@ public class ProductController(IMapper mapper) : BaseController
 
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<ActionResult> Product(Guid id)
+    public async Task<ActionResult> GetProduct(Guid id)
     {
         var byIdQuery = new GetProductByIdQuery
         {
