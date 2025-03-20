@@ -67,11 +67,8 @@ public class ProductController(IMapper mapper) : BaseController
     [AllowAnonymous]
     public async Task<ActionResult> ProductsList()
     {
-        var query = new GetMiniProductListQuery()
-        {
-            Id = UserId
-        };
-        var result = await Mediator.Send(query);
+        var result = await Mediator.Send(
+            new GetMiniProductListQuery());
         return Ok(result);
     }
 
