@@ -37,7 +37,6 @@
     <Folder Include="Entities\Orders\Commands\Update\" />
     <Folder Include="Entities\Orders\Queries\GetAll\" />
     <Folder Include="Entities\Orders\Queries\GetById\" />
-    <Folder Include="Entities\Review\Queries\" />
   </ItemGroup>
 
 </Project>
