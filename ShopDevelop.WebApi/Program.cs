@@ -11,14 +11,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Application.Data.Common.Mappings;
 using ShopDevelop.Application.Interfaces;
-using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Application.Services.Seller;
 using ShopDevelop.Domain.Entities;
 using ShopDevelop.Identity.DuendeServer.WebAPI.Data;
 using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
-using ShopDevelop.Persistence.Entities.Product.Command.Create;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -111,9 +108,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddScoped<AuthDbContext>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<JwtProvider>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -127,6 +125,9 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
