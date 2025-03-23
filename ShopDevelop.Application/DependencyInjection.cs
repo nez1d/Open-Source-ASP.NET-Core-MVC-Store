@@ -2,6 +2,7 @@
 using System.Reflection;
 using FluentValidation;
 using ShopDevelop.Application.Data.Common.Mappings;
+using ShopDevelop.Application.Data.Common.Mappings.Order;
 using ShopDevelop.Application.Data.Common.Mappings.Product;
 using ShopDevelop.Application.Data.Common.Mappings.Review;
 using ShopDevelop.Application.Data.Common.Mappings.Seller;
@@ -11,6 +12,12 @@ using ShopDevelop.Application.Entities.Category.Commands.Update;
 using ShopDevelop.Application.Entities.Category.Queries.GetAllCategories;
 using ShopDevelop.Application.Entities.Category.Queries.GetCategoryById;
 using ShopDevelop.Application.Entities.Category.Queries.GetCategoryByName;
+using ShopDevelop.Application.Entities.Orders.Commands.Create;
+using ShopDevelop.Application.Entities.Orders.Commands.Delete;
+using ShopDevelop.Application.Entities.Orders.Queries.GetAll;
+using ShopDevelop.Application.Entities.Orders.Queries.GetById;
+using ShopDevelop.Application.Entities.Orders.Queries.GetByProductId;
+using ShopDevelop.Application.Entities.Orders.Queries.GetByUserId;
 using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
 using ShopDevelop.Application.Entities.Product.Commands.Create.Shoes;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
@@ -51,6 +58,9 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(GetSellerByNameMappingProfile));
         // Review
         services.AddAutoMapper(typeof(CreateReviewMappingProfile));
+        // Order
+        services.AddAutoMapper(typeof(CreateOrderMappingProfile));
+        services.AddAutoMapper(typeof(GetOrderByIdMappingProfile));
         
         services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
         
@@ -89,6 +99,15 @@ public static class DependencyInjection
                 typeof(GetAllReviewsQuery).Assembly,
                 typeof(GetAllReviewsByProductIdQuery).Assembly,
                 typeof(GetAllReviewsByUserIdQuery).Assembly));
+        // Order
+        services.AddMediatR(x =>
+            x.RegisterServicesFromAssemblies(
+                typeof(CreateOrderCommand).Assembly,
+                typeof(DeleteOrderCommand).Assembly,
+                typeof(GetAllOrdersQuery).Assembly,
+                typeof(GetOrderByIdQuery).Assembly,
+                typeof(GetOrdersByProductIdQuery).Assembly,
+                typeof(GetOrdersByUserIdQuery).Assembly));
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(
             Assembly.GetExecutingAssembly()));

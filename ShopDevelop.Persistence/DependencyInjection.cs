@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShopDevelop.Application.Entities.Category.Queries.GetCategoryById;
+using ShopDevelop.Application.Entities.Orders.Commands.Create;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Persistence.Entities.Category.Command.Create;
 using ShopDevelop.Persistence.Entities.Category.Command.Delete;
@@ -9,6 +10,11 @@ using ShopDevelop.Persistence.Entities.Category.Command.Update;
 using ShopDevelop.Persistence.Entities.Category.Queries.GetAllCategories;
 using ShopDevelop.Persistence.Entities.Category.Queries.GetCategoryById;
 using ShopDevelop.Persistence.Entities.Category.Queries.GetCategoryByName;
+using ShopDevelop.Persistence.Entities.Orders.Commands.Create;
+using ShopDevelop.Persistence.Entities.Orders.Commands.Delete;
+using ShopDevelop.Persistence.Entities.Orders.Queries.GetById;
+using ShopDevelop.Persistence.Entities.Orders.Queries.GetByProductId;
+using ShopDevelop.Persistence.Entities.Orders.Queries.GetByUserId;
 using ShopDevelop.Persistence.Entities.Product.Command.Create.Clothes;
 using ShopDevelop.Persistence.Entities.Product.Command.Create.Shoes;
 using ShopDevelop.Persistence.Entities.Product.Command.Update;
@@ -66,6 +72,15 @@ public static class DependencyInjection
                 typeof(GetAllCategoriesQueryHandler).Assembly,
                 typeof(GetAllReviewsByProductIdQueryHandler).Assembly,
                 typeof(GetAllReviewsByUserIdQueryHandler).Assembly));
+        // Order
+        services.AddMediatR(x =>
+            x.RegisterServicesFromAssemblies(
+                typeof(CreateOrderCommandHandler).Assembly,
+                typeof(DeleteOrderCommandHandler).Assembly,
+                typeof(GetAllCategoriesQueryHandler).Assembly,
+                typeof(GetOrderByIdQueryHandler).Assembly,
+                typeof(GetOrdersByProductIdQueryHandler).Assembly,
+                typeof(GetOrdersByUserIdQueryHandler).Assembly));
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {
