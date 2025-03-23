@@ -2,9 +2,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Review.Commands.Create;
 using ShopDevelop.Application.Entities.Review.Commands.Delete;
+using ShopDevelop.Application.Entities.Review.Commands.Update;
 using ShopDevelop.Application.Entities.Review.Queries.GetAllByProductId;
 using ShopDevelop.Application.Entities.Review.Queries.GetAllReviews;
 using ShopDevelop.Application.Entities.Review.Queries.GetAllReviewsByUserId;
+using ShopDevelop.Application.Entities.Review.Queries.GetFirstByCreatedDate;
+using ShopDevelop.Application.Entities.Review.Queries.GetFirstByRating;
 using ShopDevelop.Domain.Dto.Review;
 
 namespace ShopDevelop.WebApi.Controllers;
@@ -25,9 +28,11 @@ public class ReviewController(IMapper mapper) : BaseController
     }
     
     [HttpPut]
-    public async Task<IActionResult> Edit()
+    public async Task<IActionResult> Edit([FromBody] UpdateReviewDto model)
     {
-        return Ok();
+        var review = mapper.Map<UpdateReviewCommand>(model);
+        await Mediator.Send(review);
+        return NoContent();
     }
     
     [HttpDelete("{id}")]
@@ -77,27 +82,49 @@ public class ReviewController(IMapper mapper) : BaseController
         return NotFound();
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetFirstFiveByRating(Guid id)
+    [HttpGet("{productId}/{count}")]
+    public async Task<IActionResult> GetFirstByRating(Guid productId, int count)
     {
-        return Ok();
+        var request = await Mediator.Send(
+            new GetFirstReviewsByRatingQuery()
+            {
+                ProductId = productId, 
+                Count = count
+            });
+        
+        if(request != null)
+            return Ok(request);
+        
+        return NotFound();
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetFirstFiveByDate(Guid id)
+    [HttpGet("{productId}/{count}")]
+    public async Task<IActionResult> GetFirstByDate(Guid productId, int count)
     {
-        return Ok();
+        var request = await Mediator.Send(
+            new GetFirstReviewsByDateQuery()
+            {
+                ProductId = productId, 
+                Count = count
+            });
+        
+        if(request != null)
+            return Ok(request);
+        
+        return NotFound();
     }
     
     [HttpPost("{reviewId}/{userId}")]
     public async Task<IActionResult> LikeReview(Guid reviewId, Guid userId)
     {
+        // TODO: доделать лайк отзыва
         return Ok();
     }
     
     [HttpPost]
     public async Task<IActionResult> UnlikeReview()
     {
+        // TODO: доделать снятие лайка с отзыва
         return Ok();
     }
 }

@@ -1,12 +1,8 @@
-using MediatR;
+namespace ShopDevelop.Domain.Dto.Review;
 
-namespace ShopDevelop.Application.Entities.Review.Commands.Update;
-
-public class UpdateReviewCommand : IRequest
+public class UpdateReviewDto
 {
     public Guid Id { get; set; }
-    public DateTime? LastUpdatedDate { get; set; }
-    public bool IsUpdated  { get; set; }
     public string Message { get; set;  }
     public decimal Rating { get; set; }
     public IEnumerable<string> ImagesUrls { get; set; }

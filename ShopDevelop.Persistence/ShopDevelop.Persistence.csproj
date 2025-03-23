@@ -33,7 +33,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Orders\Commands\Update\" />
+    <Folder Include="Entities\ShoppingCart\Command\Clear\" />
+    <Folder Include="Entities\ShoppingCart\Command\Create\" />
+    <Folder Include="Entities\ShoppingCart\Command\Delete\" />
+    <Folder Include="Entities\ShoppingCart\Command\Remove\" />
+    <Folder Include="Entities\ShoppingCart\Query\GetAll\" />
+    <Folder Include="Entities\ShoppingCart\Query\GetByUserId\" />
+    <Folder Include="Entities\ShoppingCart\Query\GetTotalPrice\" />
   </ItemGroup>
 
 </Project>

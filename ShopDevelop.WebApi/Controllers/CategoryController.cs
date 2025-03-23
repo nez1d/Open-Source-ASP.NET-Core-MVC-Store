@@ -30,7 +30,7 @@ public class CategoryController : BaseController
         return BadRequest();
     }
 
-    [HttpPatch]
+    [HttpPut]
     public async Task<IActionResult> EditCategory([FromBody] UpdateCategoryCommand model)
     {
         await Mediator.Send(model); 

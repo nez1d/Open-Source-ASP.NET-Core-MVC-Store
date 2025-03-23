@@ -2,16 +2,18 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Orders.Commands.Create;
 using ShopDevelop.Application.Entities.Orders.Commands.Delete;
+using ShopDevelop.Application.Entities.Orders.Commands.Update;
 using ShopDevelop.Application.Entities.Orders.Queries.GetAll;
 using ShopDevelop.Application.Entities.Orders.Queries.GetById;
 using ShopDevelop.Application.Entities.Orders.Queries.GetByProductId;
 using ShopDevelop.Application.Entities.Orders.Queries.GetByUserId;
+using ShopDevelop.Domain.Dto.Order;
 
 namespace ShopDevelop.WebApi.Controllers;
 
 [Route("api/[controller]/[action]/")]
 [ApiController]
-public class OrderController : BaseController
+public class OrderController(IMapper mapper) : BaseController
 {
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateOrderCommand createOrderCommand)
@@ -24,9 +26,11 @@ public class OrderController : BaseController
     }
     
     [HttpPut]
-    public async Task<IActionResult> Edit()
+    public async Task<IActionResult> Edit([FromBody] UpdateOrderDto updateOrderDto)
     {
-        return Ok();
+        var command = mapper.Map<UpdateOrderCommand>(updateOrderDto);
+        await Mediator.Send(command);
+        return NoContent();
     }
     
     [HttpDelete("{id}")]
@@ -64,7 +68,10 @@ public class OrderController : BaseController
     public async Task<IActionResult> GetAllByUserId(Guid id)
     {
         var result = await Mediator.Send(
-            new GetOrdersByUserIdQuery() { UserId = id });
+            new GetOrdersByUserIdQuery()
+            {
+                UserId = id
+            });
         
         if(result is not null)
             return Ok(result);

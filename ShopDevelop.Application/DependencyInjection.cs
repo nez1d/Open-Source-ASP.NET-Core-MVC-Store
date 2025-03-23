@@ -14,6 +14,7 @@ using ShopDevelop.Application.Entities.Category.Queries.GetCategoryById;
 using ShopDevelop.Application.Entities.Category.Queries.GetCategoryByName;
 using ShopDevelop.Application.Entities.Orders.Commands.Create;
 using ShopDevelop.Application.Entities.Orders.Commands.Delete;
+using ShopDevelop.Application.Entities.Orders.Commands.Update;
 using ShopDevelop.Application.Entities.Orders.Queries.GetAll;
 using ShopDevelop.Application.Entities.Orders.Queries.GetById;
 using ShopDevelop.Application.Entities.Orders.Queries.GetByProductId;
@@ -26,9 +27,12 @@ using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
 using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
 using ShopDevelop.Application.Entities.Review.Commands.Create;
 using ShopDevelop.Application.Entities.Review.Commands.Delete;
+using ShopDevelop.Application.Entities.Review.Commands.Update;
 using ShopDevelop.Application.Entities.Review.Queries.GetAllByProductId;
 using ShopDevelop.Application.Entities.Review.Queries.GetAllReviews;
 using ShopDevelop.Application.Entities.Review.Queries.GetAllReviewsByUserId;
+using ShopDevelop.Application.Entities.Review.Queries.GetFirstByCreatedDate;
+using ShopDevelop.Application.Entities.Review.Queries.GetFirstByRating;
 using ShopDevelop.Application.Entities.Seller.Command.Create;
 using ShopDevelop.Application.Entities.Seller.Command.Delete;
 using ShopDevelop.Application.Entities.Seller.Command.Update;
@@ -58,8 +62,11 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(GetSellerByNameMappingProfile));
         // Review
         services.AddAutoMapper(typeof(CreateReviewMappingProfile));
+        services.AddAutoMapper(typeof(UpdateReviewMappingProfile));
         // Order
         services.AddAutoMapper(typeof(CreateOrderMappingProfile));
+        services.AddAutoMapper(typeof(UpdateOrderMappingProfile));
+        services.AddAutoMapper(typeof(UpdateOrderMappingProfile));
         services.AddAutoMapper(typeof(GetOrderByIdMappingProfile));
         
         services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
@@ -95,14 +102,18 @@ public static class DependencyInjection
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
                 typeof(CreateReviewCommand).Assembly,
+                typeof(UpdateReviewCommand).Assembly,
                 typeof(DeleteReviewCommand).Assembly,
                 typeof(GetAllReviewsQuery).Assembly,
                 typeof(GetAllReviewsByProductIdQuery).Assembly,
-                typeof(GetAllReviewsByUserIdQuery).Assembly));
+                typeof(GetAllReviewsByUserIdQuery).Assembly,
+                typeof(GetFirstReviewsByDateQuery).Assembly,
+                typeof(GetFirstReviewsByRatingQuery).Assembly));
         // Order
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
                 typeof(CreateOrderCommand).Assembly,
+                typeof(UpdateOrderCommand).Assembly,
                 typeof(DeleteOrderCommand).Assembly,
                 typeof(GetAllOrdersQuery).Assembly,
                 typeof(GetOrderByIdQuery).Assembly,

@@ -21,12 +21,8 @@ public class SellerRepository : ISellerRepository
 
     public async Task UpdateAsync(Seller seller, CancellationToken cancellationToken)
     {
-        /*var model = await GetById(seller.Id);
-        if (model != null)
-        {
-            context.Sellers.Update(model);
-            await context.SaveChangesAsync();
-        }*/
+        context.Sellers.Update(seller);
+        await context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken)

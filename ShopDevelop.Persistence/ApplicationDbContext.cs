@@ -41,4 +41,5 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Seller> Sellers { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 }

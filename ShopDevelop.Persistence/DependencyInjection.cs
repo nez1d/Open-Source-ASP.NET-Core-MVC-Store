@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ShopDevelop.Application.Entities.Category.Queries.GetCategoryById;
-using ShopDevelop.Application.Entities.Orders.Commands.Create;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Persistence.Entities.Category.Command.Create;
 using ShopDevelop.Persistence.Entities.Category.Command.Delete;
@@ -12,6 +10,7 @@ using ShopDevelop.Persistence.Entities.Category.Queries.GetCategoryById;
 using ShopDevelop.Persistence.Entities.Category.Queries.GetCategoryByName;
 using ShopDevelop.Persistence.Entities.Orders.Commands.Create;
 using ShopDevelop.Persistence.Entities.Orders.Commands.Delete;
+using ShopDevelop.Persistence.Entities.Orders.Commands.Update;
 using ShopDevelop.Persistence.Entities.Orders.Queries.GetById;
 using ShopDevelop.Persistence.Entities.Orders.Queries.GetByProductId;
 using ShopDevelop.Persistence.Entities.Orders.Queries.GetByUserId;
@@ -22,8 +21,11 @@ using ShopDevelop.Persistence.Entities.Product.Queries.GetMinimizedProducts;
 using ShopDevelop.Persistence.Entities.Product.Queries.GetProduct;
 using ShopDevelop.Persistence.Entities.Review.Commands.Create;
 using ShopDevelop.Persistence.Entities.Review.Commands.Delete;
+using ShopDevelop.Persistence.Entities.Review.Commands.Update;
 using ShopDevelop.Persistence.Entities.Review.Queries.GetAllByProductId;
 using ShopDevelop.Persistence.Entities.Review.Queries.GetAllReviewsByUserId;
+using ShopDevelop.Persistence.Entities.Review.Queries.GetFirstByCreatedDate;
+using ShopDevelop.Persistence.Entities.Review.Queries.GetFirstByRating;
 using ShopDevelop.Persistence.Entities.Seller.Command.Create;
 using ShopDevelop.Persistence.Entities.Seller.Command.Delete;
 using ShopDevelop.Persistence.Entities.Seller.Command.Update;
@@ -68,6 +70,7 @@ public static class DependencyInjection
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
                 typeof(CreateReviewCommandHandler).Assembly,
+                typeof(UpdateReviewCommandHandler).Assembly,
                 typeof(DeleteReviewCommandHandler).Assembly,
                 typeof(GetAllCategoriesQueryHandler).Assembly,
                 typeof(GetAllReviewsByProductIdQueryHandler).Assembly,
@@ -76,11 +79,14 @@ public static class DependencyInjection
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
                 typeof(CreateOrderCommandHandler).Assembly,
+                typeof(UpdateOrderCommandHandler).Assembly,
                 typeof(DeleteOrderCommandHandler).Assembly,
                 typeof(GetAllCategoriesQueryHandler).Assembly,
                 typeof(GetOrderByIdQueryHandler).Assembly,
                 typeof(GetOrdersByProductIdQueryHandler).Assembly,
-                typeof(GetOrdersByUserIdQueryHandler).Assembly));
+                typeof(GetOrdersByUserIdQueryHandler).Assembly,
+                typeof(GetFirstReviewsByRatingQueryHandler).Assembly,
+                typeof(GetFirstReviewsByCreatedDateQueryHandler).Assembly));
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {
