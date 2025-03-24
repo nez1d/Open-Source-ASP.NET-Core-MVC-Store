@@ -1,4 +1,4 @@
-using AutoMapper;
+/*using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.ShoppingCart.Command.Add;
@@ -47,8 +47,8 @@ public class AddToCartCommandHandler
             ApplicationUserId = request.UserId
         };
         var result = shoppingCartRepository.AddToCartAsync()
-        */
+        #1#
         
         logger.LogInformation($"Handled {nameof(AddToCartCommandHandler)}");
     }
-}
+}*/

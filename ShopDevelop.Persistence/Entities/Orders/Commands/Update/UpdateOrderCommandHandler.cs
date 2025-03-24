@@ -33,7 +33,7 @@ public class UpdateOrderCommandHandler
 
         var order = await orderRepository.GetById(request.Id);
 
-        if (order.ApplicationUserId != request.ApplicationUserId)
+        if (order.ApplicationUserId != request.ApplicationUserId.ToString())
             throw new NotFoundException(typeof(Order), request.Id);
         
         order.Address = request.Address;

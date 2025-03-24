@@ -30,7 +30,7 @@ public class UpdateReviewCommandHandler
         
         var review = await reviewRepository.GetById(request.Id);
         
-        if(review.ApplicationUserId != request.ApplicationUserId)
+        if(review.ApplicationUserId != request.ApplicationUserId.ToString())
             throw new NotFoundException(typeof(Domain.Entities.Review), request.ApplicationUserId);
         
         review.LastUpdatedDate = DateTime.UtcNow;

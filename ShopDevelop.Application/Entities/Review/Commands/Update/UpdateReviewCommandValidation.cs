@@ -1,6 +1,25 @@
+using FluentValidation;
+
 namespace ShopDevelop.Application.Entities.Review.Commands.Update;
 
-public class UpdateReviewCommandValidation
+public class UpdateReviewCommandValidation : AbstractValidator<UpdateReviewCommand>
 {
-    // TODO: доделать валидацию
+    public UpdateReviewCommandValidation()
+    {
+        RuleFor(review => review.Message)
+            .MinimumLength(5)
+            .MaximumLength(150)
+            .NotEmpty()
+            .NotNull()
+            .WithMessage("");
+        
+        RuleFor(review => review.Rating)
+            .NotNull()
+            .WithMessage("");
+        
+        RuleFor(review => review.ApplicationUserId)
+            .NotNull()
+            .NotEqual(Guid.Empty)
+            .WithMessage("");
+    }
 }
