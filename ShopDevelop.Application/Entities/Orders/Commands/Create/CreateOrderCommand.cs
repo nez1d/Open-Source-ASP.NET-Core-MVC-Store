@@ -9,6 +9,6 @@ public class CreateOrderCommand : IRequest<Guid>
     public string City { get; set; }
     public string Country { get; set; }
     public uint Amount { get; set; } 
-    public string ApplicationUserId { get; set; }
+    public Guid ApplicationUserId { get; set; }
     public Guid ProductId { get; set; }
 }

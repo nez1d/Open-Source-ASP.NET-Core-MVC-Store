@@ -34,6 +34,8 @@ public class UpdateSellerCommandHandler
         
         seller.Name = request.Name;
         seller.Description = request.Description;
+        seller.ImagePath = request.ImagePath;
+        seller.ImageFooterPath = request.ImageFooterPath;
 
         await sellerRepository.UpdateAsync(seller, cancellationToken);
         

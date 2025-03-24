@@ -1,5 +1,4 @@
-﻿/*
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Application.Interfaces;
@@ -27,8 +26,8 @@ public class ShoppingCartService
             ?? Guid.NewGuid().ToString();
 
         session.SetString("CartId", cartId);
-        return new ShoppingCartService(context) 
-            { ShoppingCartId = Guid.Parse(cartId) };
+        return new ShoppingCartService(context)
+        { ShoppingCartId = Guid.Parse(cartId) };
     }
     
     public async Task<bool> AddToCart(
@@ -54,7 +53,7 @@ public class ShoppingCartService
                 ShoppingCartId = ShoppingCartId,
                 Product = product,
                 Amount = (uint)Math.Min(product.InStock, amount),
-                ApplicationUserId = userId
+                ApplicationUserId = Guid.Parse(userId)
             };
             context.ShoppingCartItems.Add(shoppingCartItem);
         }
@@ -99,14 +98,14 @@ public class ShoppingCartService
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(/*string userId#1#)
+    public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(/*string userId*/)
     {
         return ShoppingCartItems = context.ShoppingCartItems
                    .Where(c => c.ShoppingCartId == ShoppingCartId)
                    .Include(s => s.Product);
         
         /*return context.ShoppingCartItems
-            .Where(item => item.ApplicationUserId == userId);#1#
+            .Where(item => item.ApplicationUserId == userId);*/
     }
 
     public async Task<decimal> GetShoppingCartTotal(Guid ShoppingCartId)
@@ -117,4 +116,3 @@ public class ShoppingCartService
             .SumAsync();
     }
 }
-*/

@@ -90,19 +90,21 @@ public class ReviewRepository : IReviewRepository
         DateTime date)
     {
         return await context.Reviews
-            .Where(review => review.ProductId == productId
-                && review.CreatedDate.Date.CompareTo(date.Date) >= 0)
+            .Where(review => review.ProductId == productId)
+            .OrderBy(review => review.CreatedDate.Date)
             .Take(count)
             .ToListAsync();
     }
     
     public async Task<IEnumerable<Review>> GetFirstByRating(
         int count, 
-        Guid productId, 
-        uint ratingStart,
-        uint ratingEnd)
+        Guid productId)
     {
-        return null;
+        return await context.Reviews
+            .Where(review => review.ProductId == productId)
+            .OrderBy(review => review.Rating)
+            .Take(count)
+            .ToListAsync();
     }
 
     public async Task<bool> CheckExistByUserId(Guid productId, string userId)

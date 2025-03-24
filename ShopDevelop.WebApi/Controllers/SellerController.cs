@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Seller.Command.Create;
 using ShopDevelop.Application.Entities.Seller.Command.Delete;
+using ShopDevelop.Application.Entities.Seller.Command.Update;
 using ShopDevelop.Application.Entities.Seller.Queries.GetAll;
 using ShopDevelop.Application.Entities.Seller.Queries.GetById;
 using ShopDevelop.Application.Entities.Seller.Queries.GetByName;
@@ -21,9 +22,10 @@ public class SellerController : BaseController
         return BadRequest();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Edit()
+    [HttpPut]
+    public async Task<IActionResult> Edit([FromBody] UpdateSellerCommand updateSellerCommand)
     {
+        await Mediator.Send(updateSellerCommand);
         return NoContent();  
     }
 

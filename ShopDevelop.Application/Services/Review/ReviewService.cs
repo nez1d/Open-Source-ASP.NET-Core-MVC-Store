@@ -95,7 +95,9 @@ public class ReviewService : IReviewService
     
     public async Task<IEnumerable<Domain.Entities.Review>> GetFirstFiveByRatingAsync(Guid productId)
     {
-        return await reviewRepository.GetFirstByRating(5, productId, 0, 5);
+        /*return await reviewRepository.GetFirstByRating(5, productId, 0, 5);*/
+
+        return null;
     }
 
     public async Task<IEnumerable<Domain.Entities.Review>> GetAllAsync()
