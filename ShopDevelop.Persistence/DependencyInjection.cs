@@ -31,6 +31,8 @@ using ShopDevelop.Persistence.Entities.Seller.Command.Delete;
 using ShopDevelop.Persistence.Entities.Seller.Command.Update;
 using ShopDevelop.Persistence.Entities.Seller.Queries.GetAll;
 using ShopDevelop.Persistence.Entities.Seller.Queries.GetByName;
+using ShopDevelop.Persistence.Entities.ShoppingCart.Command.Add;
+using ShopDevelop.Persistence.Entities.ShoppingCart.Query.GetByUserId;
 
 namespace ShopDevelop.Persistence;
 
@@ -87,6 +89,16 @@ public static class DependencyInjection
                 typeof(GetOrdersByUserIdQueryHandler).Assembly,
                 typeof(GetFirstReviewsByRatingQueryHandler).Assembly,
                 typeof(GetFirstReviewsByCreatedDateQueryHandler).Assembly));
+        // Shopping Cart
+        services.AddMediatR(x =>
+            x.RegisterServicesFromAssemblies(
+                typeof(AddToCartCommandHandler).Assembly,
+                typeof(GetShoppingCartItemsByUserIdQueryHandler).Assembly
+                
+                /*,
+                typeof(ClearCartCommandHandler).Assembly,
+                typeof(RemoveFromCartCommandHandler).Assembly*/
+                ));
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {

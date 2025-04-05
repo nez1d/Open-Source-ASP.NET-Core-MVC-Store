@@ -1,26 +1,29 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ShopDevelop.Application.Entities.ShoppingCart.Command.Add;
+using ShopDevelop.Application.Entities.ShoppingCart.Query.GetByUserId;
+using ShopDevelop.Domain.Dto.ShoppingCart;
+using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
 
 namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class CartController : BaseController
+public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseController
 {
     [HttpPost]
-    public async Task<IActionResult> AddToCart(Guid id, int amount)
+    public async Task<IActionResult> AddToCart([FromBody] AddToCartDto model)
     {
         /*string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
-        var userId = jwtProvider.GetUserId(accessToken);
+        var userId = jwtProvider.GetUserId(accessToken);*/
+
+        string userId = "f157e21c-381f-42e1-8363-18040eda0d00";
         
-        try
-        {
-            var product = await productService.GetByIdAsync(id);
-            await shoppingCartService.AddToCart(product, 1, userId);
-            return Ok();
-        }
-        catch { }
-        return BadRequest();*/
-        return Ok();
+        var command = mapper.Map<AddToCartCommand>(model);
+        command.UserId = userId;
+        
+        await Mediator.Send(command);
+        return NoContent();
     }
     
     [HttpDelete]
@@ -38,11 +41,19 @@ public class CartController : BaseController
         return Ok();
     }
     
-    [HttpGet]
-    public async Task<IActionResult> GetShoppingCart()
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetShoppingCart(Guid userId)
     {
         /*var items = await shoppingCartService.GetShoppingCartItems();*/
-        return Ok();
+        var items = Mediator.Send(new GetShoppingCartItemsByUserIdQuery()
+        {
+            UserId = userId.ToString()
+        });
+        
+        if(items is not null)
+            return Ok(items);
+        
+        return NotFound();
     }
 
     [HttpGet]

@@ -6,6 +6,7 @@ using ShopDevelop.Application.Data.Common.Mappings.Order;
 using ShopDevelop.Application.Data.Common.Mappings.Product;
 using ShopDevelop.Application.Data.Common.Mappings.Review;
 using ShopDevelop.Application.Data.Common.Mappings.Seller;
+using ShopDevelop.Application.Data.Common.Mappings.ShoppingCart;
 using ShopDevelop.Application.Entities.Category.Commands.Create;
 using ShopDevelop.Application.Entities.Category.Commands.Delete;
 using ShopDevelop.Application.Entities.Category.Commands.Update;
@@ -39,6 +40,10 @@ using ShopDevelop.Application.Entities.Seller.Command.Update;
 using ShopDevelop.Application.Entities.Seller.Queries.GetAll;
 using ShopDevelop.Application.Entities.Seller.Queries.GetById;
 using ShopDevelop.Application.Entities.Seller.Queries.GetByName;
+using ShopDevelop.Application.Entities.ShoppingCart.Command.Add;
+using ShopDevelop.Application.Entities.ShoppingCart.Command.Clear;
+using ShopDevelop.Application.Entities.ShoppingCart.Command.Remove;
+using ShopDevelop.Application.Entities.ShoppingCart.Query.GetByUserId;
 
 namespace ShopDevelop.Application;
 
@@ -68,6 +73,8 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(UpdateOrderMappingProfile));
         services.AddAutoMapper(typeof(UpdateOrderMappingProfile));
         services.AddAutoMapper(typeof(GetOrderByIdMappingProfile));
+        // Shopping Cart
+        services.AddAutoMapper(typeof(AddToCartMappingProfile));
         
         services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
         
@@ -79,7 +86,8 @@ public static class DependencyInjection
                 typeof(UpdateProductCommand).Assembly,
                 typeof(DeleteProductCommand).Assembly,
                 typeof(GetProductByIdQuery).Assembly,
-                typeof(GetMiniProductListQuery).Assembly));
+                typeof(GetMiniProductListQuery).Assembly
+                ));
         // Category
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
@@ -88,7 +96,8 @@ public static class DependencyInjection
                 typeof(DeleteCategoryCommand).Assembly,
                 typeof(GetCategoriesListQuery).Assembly,
                 typeof(GetCategoryByIdQuery).Assembly,
-                typeof(GetCategoryByNameQuery).Assembly));
+                typeof(GetCategoryByNameQuery).Assembly
+                ));
         // Seller
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
@@ -97,7 +106,8 @@ public static class DependencyInjection
                 typeof(DeleteSellerCommand).Assembly,
                 typeof(GetAllSellersListQuery).Assembly,
                 typeof(GetSellerByIdQuery).Assembly,
-                typeof(GetSellerByNameQuery).Assembly));
+                typeof(GetSellerByNameQuery).Assembly
+                ));
         // Review
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
@@ -108,7 +118,8 @@ public static class DependencyInjection
                 typeof(GetAllReviewsByProductIdQuery).Assembly,
                 typeof(GetAllReviewsByUserIdQuery).Assembly,
                 typeof(GetFirstReviewsByDateQuery).Assembly,
-                typeof(GetFirstReviewsByRatingQuery).Assembly));
+                typeof(GetFirstReviewsByRatingQuery).Assembly
+                ));
         // Order
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
@@ -118,7 +129,16 @@ public static class DependencyInjection
                 typeof(GetAllOrdersQuery).Assembly,
                 typeof(GetOrderByIdQuery).Assembly,
                 typeof(GetOrdersByProductIdQuery).Assembly,
-                typeof(GetOrdersByUserIdQuery).Assembly));
+                typeof(GetOrdersByUserIdQuery).Assembly
+                ));
+        // Shopping Cart
+        services.AddMediatR(x =>
+            x.RegisterServicesFromAssemblies(
+                typeof(AddToCartCommand).Assembly,
+                typeof(GetShoppingCartItemsByUserIdQuery).Assembly,
+                typeof(ClearCartCommand).Assembly,
+                typeof(RemoveFromCartCommand).Assembly
+                ));
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(
             Assembly.GetExecutingAssembly()));

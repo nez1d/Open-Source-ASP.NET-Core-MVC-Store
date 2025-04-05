@@ -15,16 +15,8 @@ public class ShoppingCartItemConfiguration : IEntityTypeConfiguration<ShoppingCa
             .HasMaxLength(10)
             .HasDefaultValue(1)
             .IsRequired();
-        
-        builder
-            .Property(item => item.ShoppingCartId)
-            .IsRequired();
 
         builder
             .HasOne(item => item.Product);
-        
-        builder
-            .Property(item => item.ApplicationUserId)
-            .IsRequired();
     }
 }

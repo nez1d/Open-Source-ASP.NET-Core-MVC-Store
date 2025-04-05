@@ -28,10 +28,11 @@ public class CreateCategoryCommandHandler
         logger.LogInformation($"Handling {nameof(CreateCategoryCommandHandler)}");
 
         var data = await categoryRepository.GetByNameAsync(request.Name);
-        if(data != null)
-            return 0;
         
-        var category = mapper.Map<Domain.Entities.Category>(request);
+        if(data is not null) return 0;
+        
+        var category = mapper.Map<Domain.Entities.Category>(request); 
+        category.ImagePath = $"categories/{category.Name}";
         
         var result = await categoryRepository.CreateAsync(category, cancellationToken);
         

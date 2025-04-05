@@ -28,7 +28,7 @@ public class ProductController(IMapper mapper) : BaseController
         if (result == Guid.Empty)
             return BadRequest();
 
-        return Ok();
+        return Created();
     }
     
     [HttpPost]

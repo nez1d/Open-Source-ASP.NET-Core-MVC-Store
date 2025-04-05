@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Data.Common.Exceptions;
-using ShopDevelop.Application.Entities.Product.Commands.Create;
 using ShopDevelop.Application.Entities.Product.Commands.Update;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Application.Services.Category;
-using ShopDevelop.Application.Services.Product;
-using ShopDevelop.Application.Services.Seller;
 
 namespace ShopDevelop.Persistence.Entities.Product.Command.Update;
 
