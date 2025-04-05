@@ -12,7 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShopDevelop.Application.Interfaces;
-using ShopDevelop.Application.Services.Seller;
+using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Domain.Entities;
 using ShopDevelop.Identity.DuendeServer.WebAPI.Data;
 using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
@@ -118,7 +118,6 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<ISellerRepository, SellerRepository>();
-builder.Services.AddScoped<ISellerService, SellerService>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -128,6 +127,9 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+/*builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();*/
+// TODO: добавить метод GetCart
 
 var app = builder.Build();
 

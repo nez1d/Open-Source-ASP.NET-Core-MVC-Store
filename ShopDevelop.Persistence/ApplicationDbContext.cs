@@ -34,12 +34,11 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<ApplicationUser> AspNetUsers { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductDetail> ProductDetails { get; set; }
-    public DbSet<ClothesProduct> ClothesProducts { get; set; }
+    public DbSet<ClothesProduct> ClothesProducts { get; set; } 
     public DbSet<ShoesProduct> ShoesProducts { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Seller> Sellers { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
-    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 }

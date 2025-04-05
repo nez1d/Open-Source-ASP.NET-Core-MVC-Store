@@ -1,6 +1,5 @@
 ﻿using ShopDevelop.Domain.Entities;
 using ShopDevelop.Domain.Entities.Products;
-using ShopDevelop.Domain.Interfaces.Repository;
 
 namespace ShopDevelop.Application.Repository;
 

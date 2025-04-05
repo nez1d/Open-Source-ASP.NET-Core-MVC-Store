@@ -16,6 +16,6 @@ public class ApplicationUser : IdentityUser, IUser<string>
     public string? ImagePath { get; set; } 
     public string? ImageFooterPath { get; set; } 
     public IEnumerable<Review>? Reviews { get; set; }
-    public IEnumerable<ShoppingCartItem>? CartItems { get; set; }
+    public IEnumerable<ShoppingCartItem>? ShoppingCartItems { get; set; }
     public IEnumerable<Order>? Orders { get; set; }
 }

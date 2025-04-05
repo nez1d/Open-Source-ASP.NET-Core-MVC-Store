@@ -37,7 +37,7 @@ public class OrderRepository : IOrderRepository
     public async Task<IEnumerable<Order>> GetAll()
     {
         return await context.Orders
-            .Where(order=> order.Id != null)
+            .Where(order => order.Id != null)
             .ToListAsync();
     }
 
