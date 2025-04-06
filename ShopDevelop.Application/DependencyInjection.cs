@@ -43,7 +43,9 @@ using ShopDevelop.Application.Entities.Seller.Queries.GetByName;
 using ShopDevelop.Application.Entities.ShoppingCart.Command.Add;
 using ShopDevelop.Application.Entities.ShoppingCart.Command.Clear;
 using ShopDevelop.Application.Entities.ShoppingCart.Command.Remove;
+using ShopDevelop.Application.Entities.ShoppingCart.Query.GetAll;
 using ShopDevelop.Application.Entities.ShoppingCart.Query.GetByUserId;
+using ShopDevelop.Application.Entities.ShoppingCart.Query.GetTotalPrice;
 
 namespace ShopDevelop.Application;
 
@@ -135,9 +137,11 @@ public static class DependencyInjection
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
                 typeof(AddToCartCommand).Assembly,
-                typeof(GetShoppingCartItemsByUserIdQuery).Assembly,
+                typeof(RemoveFromCartCommand).Assembly,
                 typeof(ClearCartCommand).Assembly,
-                typeof(RemoveFromCartCommand).Assembly
+                typeof(GetShoppingCartItemsByUserIdQuery).Assembly,
+                typeof(GetAllCartItemsQuery).Assembly,
+                typeof(GetTotalShoppingCartPriceQuery).Assembly
                 ));
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(
