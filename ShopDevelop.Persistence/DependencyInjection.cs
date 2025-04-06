@@ -32,7 +32,11 @@ using ShopDevelop.Persistence.Entities.Seller.Command.Update;
 using ShopDevelop.Persistence.Entities.Seller.Queries.GetAll;
 using ShopDevelop.Persistence.Entities.Seller.Queries.GetByName;
 using ShopDevelop.Persistence.Entities.ShoppingCart.Command.Add;
+using ShopDevelop.Persistence.Entities.ShoppingCart.Command.Clear;
+using ShopDevelop.Persistence.Entities.ShoppingCart.Command.Remove;
+using ShopDevelop.Persistence.Entities.ShoppingCart.Query.GetAll;
 using ShopDevelop.Persistence.Entities.ShoppingCart.Query.GetByUserId;
+using ShopDevelop.Persistence.Entities.ShoppingCart.Query.GetTotalPrice;
 
 namespace ShopDevelop.Persistence;
 
@@ -93,11 +97,12 @@ public static class DependencyInjection
         services.AddMediatR(x =>
             x.RegisterServicesFromAssemblies(
                 typeof(AddToCartCommandHandler).Assembly,
-                typeof(GetShoppingCartItemsByUserIdQueryHandler).Assembly
-                
-                /*,
+                typeof(RemoveFromCartCommandHandler).Assembly,
                 typeof(ClearCartCommandHandler).Assembly,
-                typeof(RemoveFromCartCommandHandler).Assembly*/
+                typeof(GetShoppingCartItemsByUserIdQueryHandler).Assembly,
+                typeof(GetTotalShoppingCartPriceQueryHandler).Assembly,
+                typeof(GetAllCartItemsQueryHandler).Assembly,
+                typeof(GetTotalShoppingCartPriceQueryHandler).Assembly
                 ));
         
         services.AddDbContext<ApplicationDbContext>(options =>

@@ -30,11 +30,4 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\ShoppingCart\Command\Create\" />
-    <Folder Include="Entities\ShoppingCart\Command\Delete\" />
-    <Folder Include="Entities\ShoppingCart\Query\GetAll\" />
-    <Folder Include="Entities\ShoppingCart\Query\GetTotalPrice\" />
-  </ItemGroup>
-
 </Project>
