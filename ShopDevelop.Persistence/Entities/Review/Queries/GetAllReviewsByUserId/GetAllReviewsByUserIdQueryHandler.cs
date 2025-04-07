@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Review.Queries.GetAllReviewsByUserId;
+using ShopDevelop.Application.Repository;
 
 namespace ShopDevelop.Persistence.Entities.Review.Queries.GetAllReviewsByUserId;
 
@@ -9,14 +10,14 @@ public class GetAllReviewsByUserIdQueryHandler
     : IRequestHandler<GetAllReviewsByUserIdQuery, IList<GetAllReviewsByUserIdVm>>
 {
     private ILogger<GetAllReviewsByUserIdQueryHandler> logger;
-    private readonly ApplicationDbContext context;
+    private readonly IReviewRepository reviewRepository;
 
     public GetAllReviewsByUserIdQueryHandler(
         ILogger<GetAllReviewsByUserIdQueryHandler> logger,
-        ApplicationDbContext context)
+        IReviewRepository reviewRepository)
     {
         this.logger = logger;
-        this.context = context;
+        this.reviewRepository = reviewRepository;
     }
     
     public async Task<IList<GetAllReviewsByUserIdVm>> Handle(GetAllReviewsByUserIdQuery request, 
@@ -24,8 +25,9 @@ public class GetAllReviewsByUserIdQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetAllReviewsByUserIdQueryHandler)}");
         
-        var result = await context.Reviews
-            .Where(review => review.ApplicationUserId == request.UserId)
+        var items = await reviewRepository.GetAllByUserIdAsync(request.UserId, cancellationToken);
+        
+        var result = items
             .Select(review => 
                 new GetAllReviewsByUserIdVm(
                     review.Id,
@@ -39,7 +41,7 @@ public class GetAllReviewsByUserIdQueryHandler
                     review.ApplicationUserId,
                     review.ProductId)
             )
-            .ToListAsync(cancellationToken);
+            .ToList();
         
         logger.LogInformation($"Handled {nameof(GetAllReviewsByUserIdQueryHandler)}");
 

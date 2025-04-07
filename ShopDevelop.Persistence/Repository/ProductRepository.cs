@@ -70,7 +70,6 @@ public class ProductRepository : IProductRepository
     public async Task<IEnumerable<Product>> GetAllAsync()
     {
         return context.Products
-            .Where(product => product.Id != null)
             .ToList();
     }
 

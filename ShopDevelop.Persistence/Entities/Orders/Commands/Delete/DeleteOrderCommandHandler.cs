@@ -24,7 +24,7 @@ public class DeleteOrderCommandHandler
     {
         logger.LogInformation($"Handling {nameof(DeleteOrderCommandHandler)}");
         
-        await orderRepository.Delete(request.OrderId, cancellationToken);
+        await orderRepository.DeleteAsync(request.OrderId, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(DeleteOrderCommandHandler)}");
     }

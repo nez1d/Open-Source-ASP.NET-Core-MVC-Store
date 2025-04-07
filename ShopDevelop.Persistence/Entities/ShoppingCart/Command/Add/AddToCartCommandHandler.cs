@@ -13,17 +13,15 @@ public class AddToCartCommandHandler
     : IRequestHandler<AddToCartCommand>
 {
     private readonly ILogger logger;
-    private readonly IMapper mapper;
     private readonly IProductRepository productRepository;
     private readonly ApplicationDbContext context;
     
-    public AddToCartCommandHandler(IMapper mapper,
+    public AddToCartCommandHandler(
         ILogger<AddToCartCommandHandler> logger,
         IProductRepository productRepository,
         ApplicationDbContext context)
     {
         this.logger = logger;
-        this.mapper = mapper;
         this.productRepository = productRepository;
         this.context = context;
     }
@@ -50,6 +48,7 @@ public class AddToCartCommandHandler
             shoppingCartItem = new ShoppingCartItem()
             {
                 Product = product,
+                ProductId = product.Id,
                 Amount = (uint)Math.Min(product.InStock, request.Amount),
                 ApplicationUserId = request.UserId
             };

@@ -14,13 +14,13 @@ public class CreateReviewCommandHandler
     private ILogger<CreateReviewCommandHandler> logger;
     private IReviewRepository reviewRepository;
     private IProductRepository productRepository;
-    private IReviewService reviewService;
+    private ReviewService reviewService;
 
     public CreateReviewCommandHandler(IMapper mapper, 
         ILogger<CreateReviewCommandHandler> logger,
         IReviewRepository reviewRepository,
         IProductRepository productRepository,
-        IReviewService reviewService)
+        ReviewService reviewService)
     {
         this.logger = logger;
         this.mapper = mapper;
@@ -46,7 +46,7 @@ public class CreateReviewCommandHandler
         review.LastUpdatedDate = null;
         review.IsUpdated = false;
         
-        var result = await reviewRepository.Create(review, cancellationToken);
+        var result = await reviewRepository.CreateAsync(review, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(CreateReviewCommandHandler)}");
         

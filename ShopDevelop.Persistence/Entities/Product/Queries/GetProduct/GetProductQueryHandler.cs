@@ -13,13 +13,13 @@ namespace ShopDevelop.Persistence.Entities.Product.Queries.GetProduct;
 public class GetProductQueryHandler 
     : IRequestHandler<GetProductByIdQuery, ProductVm>
 {
-    private readonly IProductRepository productRepository;
     private readonly IMapper mapper;
+    private readonly IProductRepository productRepository;
     private readonly ILogger<GetProductQueryHandler> logger;
     
     public GetProductQueryHandler(
-        IProductRepository productRepository,
         IMapper mapper,
+        IProductRepository productRepository,
         ILogger<GetProductQueryHandler> logger)
     {
         this.productRepository = productRepository;

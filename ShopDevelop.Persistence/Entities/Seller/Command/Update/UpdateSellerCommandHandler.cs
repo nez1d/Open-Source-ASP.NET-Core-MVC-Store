@@ -11,15 +11,13 @@ public class UpdateSellerCommandHandler
     : IRequestHandler<UpdateSellerCommand>
 {
     private readonly ILogger logger;
-    private readonly IMapper mapper;
     private readonly ISellerRepository sellerRepository;
 
-    public UpdateSellerCommandHandler(IMapper mapper,
+    public UpdateSellerCommandHandler(
         ILogger<UpdateSellerCommandHandler> logger,
         ISellerRepository sellerRepository)
     {
         this.logger = logger;
-        this.mapper = mapper;
         this.sellerRepository = sellerRepository;
     }
 

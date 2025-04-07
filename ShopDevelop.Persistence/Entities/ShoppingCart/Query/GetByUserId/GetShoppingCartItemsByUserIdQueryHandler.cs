@@ -32,7 +32,7 @@ public class GetShoppingCartItemsByUserIdQueryHandler
             new GetShoppingCartItemsByUserIdVm(
                 item.Id,
                 item.Amount,
-                item.Product,
+                item.ProductId,
                 item.ApplicationUserId))
             .ToList();
         

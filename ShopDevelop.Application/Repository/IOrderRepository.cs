@@ -7,10 +7,11 @@ namespace ShopDevelop.Application.Repository;
 
 public interface IOrderRepository
 {
-    Task<Guid> Create(Order order, CancellationToken cancellationToken);
-    Task Update(Order order, CancellationToken cancellationToken);
-    Task Delete(Guid id, CancellationToken cancellationToken);
-    Task<IEnumerable<Order>> GetAll();
-    Task<Order> GetById(Guid id);
-    Task<IEnumerable<Order>> GetByUserId(string userId);
+    Task<Guid> CreateAsync(Order order, CancellationToken cancellationToken);
+    Task UpdateAsync(Order order, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+    Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken);
+    Task<Order> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<IEnumerable<Order>> GetByUserIdAsync(string userId, CancellationToken cancellationToken);
+    Task<IEnumerable<Order>> GetByProductIdAsync(Guid productId, CancellationToken cancellationToken);
 }

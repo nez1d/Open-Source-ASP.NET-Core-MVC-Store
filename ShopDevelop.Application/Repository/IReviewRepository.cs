@@ -5,16 +5,18 @@ namespace ShopDevelop.Application.Repository;
 
 public interface IReviewRepository 
 {
-    Task<Guid> Create(Review review, CancellationToken cancellationToken);
-    Task Update(Review review);
-    Task Delete(Guid id);
-    Task<IEnumerable<Review>> GetAll();
-    Task<Review> GetById(Guid id);
-    Task<IEnumerable<Review>> GetAllByUserId(string userId);
-    Task<IEnumerable<Review>> GetFirst(int count, Guid productId);
-    Task<IEnumerable<Review>> GetFirstByDateLine(int count, Guid productId, DateTime dateStart, DateTime dateEnd);
-    Task<IEnumerable<Review>> GetFirstByDate(int count, Guid productId, DateTime date);
-    Task<IEnumerable<Review>> GetFirstByRating(int count, Guid productId);
-    Task Like(Guid reviewId);
-    Task<bool> CheckExistByUserId(Guid productId, string userId);
+    // TODO: Сделать модели nullable и проверки на null
+    Task<Guid> CreateAsync(Review review, CancellationToken cancellationToken);
+    Task UpdateAsync(Review review);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetAllAsync();
+    Task<Review> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetAllByProductIdAsync(Guid userId, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetFirstAsync(int count, Guid productId, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetFirstByDateLineAsync(int count, Guid productId, DateTime dateStart, DateTime dateEnd, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetFirstByDateAsync(int count, Guid productId, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetFirstByRatingAsync(int count, Guid productId, CancellationToken cancellationToken);
+    Task LikeAsync(Guid reviewId, CancellationToken cancellationToken);
+    Task<bool> CheckExistByUserIdAsync(Guid productId, string userId, CancellationToken cancellationToken);
 }

@@ -12,14 +12,14 @@ public class GetAllOrdersQueryHandler
     : IRequestHandler<GetAllOrdersQuery, IList<GetAllOrdersVm>>
 {
     private readonly ILogger logger;
-    private readonly IApplicationDbContext applicationDbContext;
+    private readonly IOrderRepository orderRepository;
 
     public GetAllOrdersQueryHandler(
         ILogger<GetAllOrdersQueryHandler> logger,
-        IApplicationDbContext applicationDbContext)
+        IOrderRepository orderRepository)
     {
         this.logger = logger;
-        this.applicationDbContext = applicationDbContext;
+        this.orderRepository = orderRepository;
     }
     
     public async Task<IList<GetAllOrdersVm>> Handle(GetAllOrdersQuery request,
@@ -27,8 +27,10 @@ public class GetAllOrdersQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetAllOrdersQueryHandler)}");
 
-        var result = await applicationDbContext.Orders
-            .Select(order => 
+        var items = await orderRepository.GetAllAsync(cancellationToken); 
+
+        var result = 
+            items.Select(order => 
                 new GetAllOrdersVm(
                     order.Id,
                     order.Address,
@@ -41,7 +43,8 @@ public class GetAllOrdersQueryHandler
                     order.CreatedDate,
                     order.ApplicationUserId,
                     order.ProductId)
-            ).ToListAsync(cancellationToken);
+            )
+            .ToList();
         
         logger.LogInformation($"Handled {nameof(GetAllOrdersQueryHandler)}");
 

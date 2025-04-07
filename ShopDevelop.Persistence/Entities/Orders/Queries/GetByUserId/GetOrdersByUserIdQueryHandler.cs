@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Orders.Queries.GetByUserId;
 using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Application.Repository;
 
 namespace ShopDevelop.Persistence.Entities.Orders.Queries.GetByUserId;
 
@@ -10,22 +11,24 @@ public class GetOrdersByUserIdQueryHandler
     : IRequestHandler<GetOrdersByUserIdQuery, IList<GetOrdersByUserIdVm>>
 {
     private readonly ILogger logger;
-    private readonly ApplicationDbContext applicationDbContext;
+    private readonly IOrderRepository orderRepository;
 
     public GetOrdersByUserIdQueryHandler(
         ILogger<GetOrdersByUserIdQueryHandler> logger,
-        ApplicationDbContext applicationDbContext)
+        IOrderRepository orderRepository)
     {
         this.logger = logger;
-        this.applicationDbContext = applicationDbContext;
+        this.orderRepository = orderRepository;
     }
     
     public async Task<IList<GetOrdersByUserIdVm>> Handle(GetOrdersByUserIdQuery request,
         CancellationToken cancellationToken)
     {
         logger.LogInformation($"Handling {nameof(GetOrdersByUserIdQueryHandler)}");
+        
+        var items = await orderRepository.GetByUserIdAsync(request.UserId, cancellationToken); 
 
-        var result = await applicationDbContext.Orders
+        var result = items
             .Select(order => 
                 new GetOrdersByUserIdVm(
                     order.Id,
@@ -40,9 +43,9 @@ public class GetOrdersByUserIdQueryHandler
                     order.ApplicationUserId,
                     order.ProductId
                 ))
-            .ToListAsync(cancellationToken);
+            .ToList();
         
-        logger.LogInformation($"Handling {nameof(GetOrdersByUserIdQueryHandler)}");
+        logger.LogInformation($"Handled {nameof(GetOrdersByUserIdQueryHandler)}");
 
         return result;
     }

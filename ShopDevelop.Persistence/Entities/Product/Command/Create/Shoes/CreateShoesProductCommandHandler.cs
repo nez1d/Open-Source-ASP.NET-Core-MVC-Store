@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Product.Commands.Create.Shoes;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Application.Services.Product;
 
 namespace ShopDevelop.Persistence.Entities.Product.Command.Create.Shoes;
@@ -12,22 +11,22 @@ public class CreateShoesProductCommandHandler :
     IRequestHandler<CreateShoesProductCommand, Guid>
 {
     private readonly IProductRepository productRepository;
-    private readonly IProductService productService;
-    private readonly ICategoryService categoryService;
+    private readonly ProductService productService;
+    private readonly ICategoryRepository categoryRepository;
     private readonly ISellerRepository sellerRepository;
     private readonly IMapper mapper;
     private readonly ILogger logger;
     
     public CreateShoesProductCommandHandler(
-        IProductService productService,
+        ProductService productService,
         IProductRepository productRepository,
-        ICategoryService categoryService,
+        ICategoryRepository categoryRepository,
         ISellerRepository sellerRepository,
         IMapper mapper,
         ILogger<CreateShoesProductCommandHandler> logger)
     {
         this.productRepository = productRepository;
-        this.categoryService = categoryService;
+        this.categoryRepository = categoryRepository;
         this.sellerRepository = sellerRepository;
         this.productService = productService;
         this.mapper = mapper;
@@ -39,7 +38,7 @@ public class CreateShoesProductCommandHandler :
     {
         logger.LogInformation($"Handling {nameof(CreateShoesProductCommand)}");
 
-        var category = await categoryService.GetByName("Shoes");
+        var category = await categoryRepository.GetByNameAsync("Shoes");
         var seller = await sellerRepository.GetByIdAsync(request.SellerId, cancellationToken);
 
         if (category == null || seller == null)

@@ -24,7 +24,7 @@ public class DeleteReviewCommandHandler
     {
         logger.LogInformation($"Handling {nameof(DeleteReviewCommandHandler)}");
         
-        await reviewRepository.Delete(request.Id);
+        await reviewRepository.DeleteAsync(request.Id, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(DeleteReviewCommandHandler)}");
     }

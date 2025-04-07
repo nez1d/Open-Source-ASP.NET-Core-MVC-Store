@@ -8,6 +8,7 @@ namespace ShopDevelop.Persistence.Entities.Product.Command.Update;
 
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 {
+    // TODO: доделать обновление по категориям.
     private readonly IProductRepository productRepository;
     private readonly ILogger logger;
     

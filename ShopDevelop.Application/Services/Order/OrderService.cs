@@ -10,27 +10,11 @@ using ShopDevelop.Domain.Enums;
 
 namespace ShopDevelop.Application.Services.Category;
 
-public class OrderService : IOrderService
+public class OrderService 
 {
     private readonly IOrderRepository orderRepository;
     public OrderService(IOrderRepository orderRepository) =>
             (this.orderRepository) = (orderRepository);
-    
-    
-
-    public async Task<IEnumerable<Order>> GetAllAsync()
-    {
-        return await orderRepository.GetAll();
-    }
-    public async Task<Order> GetOrderByIdAsync(Guid orderId)
-    {
-        return await orderRepository.GetById(orderId);
-    }
-
-    public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId)
-    {
-        return await orderRepository.GetByUserId(userId);
-    }
 
     public async Task<int> CreateZipCodeAsync()
     {

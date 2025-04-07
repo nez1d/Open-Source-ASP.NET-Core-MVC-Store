@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Orders.Queries.GetById;
 using ShopDevelop.Application.Entities.Orders.Queries.GetByProductId;
 using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Application.Repository;
 using ShopDevelop.Persistence.Entities.Orders.Queries.GetAll;
 
 namespace ShopDevelop.Persistence.Entities.Orders.Queries.GetByProductId;
@@ -12,22 +13,24 @@ public class GetOrdersByProductIdQueryHandler
     : IRequestHandler<GetOrdersByProductIdQuery, IList<GetOrdersByProductIdVm>>
 {
     private readonly ILogger logger;
-    private readonly IApplicationDbContext applicationDbContext;
+    private readonly IOrderRepository orderRepository;
 
     public GetOrdersByProductIdQueryHandler(
         ILogger<GetOrdersByProductIdQueryHandler> logger,
-        IApplicationDbContext applicationDbContext)
+        IOrderRepository orderRepository)
     {
         this.logger = logger;
-        this.applicationDbContext = applicationDbContext;
+        this.orderRepository = orderRepository;
     }
     
     public async Task<IList<GetOrdersByProductIdVm>> Handle(GetOrdersByProductIdQuery request,
         CancellationToken cancellationToken)
     {
         logger.LogInformation($"Handling {nameof(GetOrdersByProductIdQueryHandler)}");
+        
+        var items = await orderRepository.GetByProductIdAsync(request.ProductId, cancellationToken); 
 
-        var result = await applicationDbContext.Orders
+        var result = items
             .Select(order => 
                 new GetOrdersByProductIdVm(
                     order.Id,
@@ -42,10 +45,10 @@ public class GetOrdersByProductIdQueryHandler
                     order.ApplicationUserId,
                     order.ProductId
             ))
-            .ToListAsync(cancellationToken);
+            .ToList();
         
         
-        logger.LogInformation($"Handling {nameof(GetOrdersByProductIdQueryHandler)}");
+        logger.LogInformation($"Handled {nameof(GetOrdersByProductIdQueryHandler)}");
 
         return result;
     }

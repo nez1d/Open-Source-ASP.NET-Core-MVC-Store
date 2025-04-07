@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Review.Queries.GetFirstByRating;
+using ShopDevelop.Application.Repository;
 
 namespace ShopDevelop.Persistence.Entities.Review.Queries.GetFirstByRating;
 
@@ -9,14 +10,14 @@ public class GetFirstReviewsByRatingQueryHandler
     : IRequestHandler<GetFirstReviewsByRatingQuery, IList<GetFirstReviewsByRatingVm>>
 {
     private ILogger<GetFirstReviewsByRatingQueryHandler> logger;
-    private readonly ApplicationDbContext context;
+    private readonly IReviewRepository reviewRepository;
 
     public GetFirstReviewsByRatingQueryHandler(
         ILogger<GetFirstReviewsByRatingQueryHandler> logger,
-        ApplicationDbContext context)
+        IReviewRepository reviewRepository)
     {
         this.logger = logger;
-        this.context = context;
+        this.reviewRepository = reviewRepository;
     }
     
     public async Task<IList<GetFirstReviewsByRatingVm>> Handle(GetFirstReviewsByRatingQuery request,
@@ -24,9 +25,9 @@ public class GetFirstReviewsByRatingQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetFirstReviewsByRatingQueryHandler)}");
         
-        var result = await context.Reviews
-            .Where(review => review.ProductId == request.ProductId)
-            .OrderBy(review => review.Rating)
+        var items = await reviewRepository.GetFirstByRatingAsync(request.Count, request.ProductId, cancellationToken);
+        
+        var result = items
             .Select(review => 
                 new GetFirstReviewsByRatingVm(
                     review.Id,
@@ -38,10 +39,8 @@ public class GetFirstReviewsByRatingQueryHandler
                     review.ImagesUrls,
                     review.LikesCount,
                     review.ApplicationUserId,
-                    review.ProductId)
-            )
-            .Take(request.Count)
-            .ToListAsync(cancellationToken);
+                    review.ProductId))
+            .ToList();
         
         logger.LogInformation($"Handled {nameof(GetFirstReviewsByRatingQueryHandler)}");
 

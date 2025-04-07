@@ -1,24 +1,23 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
-using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Application.Repository;
 
-namespace ShopDevelop.Persistence.Entities.Product.Queries.GetMinimizedProducts;
+namespace ShopDevelop.Persistence.Entities.Product.Queries.GetAllMinimizedProducts;
 
 public class GetMiniProductListQueryHandler
     : IRequestHandler<GetMiniProductListQuery, List<ProductMiniLookupDto>>
 {
-    public readonly IApplicationDbContext applicationDbContext;
     private readonly ILogger<GetMiniProductListQueryHandler> logger;
+    private readonly IProductRepository productRepository;
 
-    public GetMiniProductListQueryHandler(IApplicationDbContext applicationDbContext,
+    public GetMiniProductListQueryHandler(
+        IProductRepository productRepository,
         ILogger<GetMiniProductListQueryHandler> logger)
     {
-        this.applicationDbContext = applicationDbContext;
+        this.productRepository = productRepository;
         this.logger = logger;
     }
-    
     
     public async Task<List<ProductMiniLookupDto>> Handle(
         GetMiniProductListQuery query,
@@ -26,7 +25,9 @@ public class GetMiniProductListQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetMiniProductListQueryHandler)}");
         
-        var result = await applicationDbContext.Products
+        var items = await productRepository.GetAllAsync();
+            
+        var result = items
             .Select(product => 
                 new ProductMiniLookupDto(
                     product.Id,
@@ -34,8 +35,9 @@ public class GetMiniProductListQueryHandler
                     product.Price,
                     product.Rating,
                     product.ImageMiniPath,
-                    product.Seller.Name)
-                ).ToListAsync(cancellationToken);
+                    product.SellerName)
+                )
+            .ToList();
         
         logger.LogInformation($"Handled {nameof(GetMiniProductListQueryHandler)}");
         

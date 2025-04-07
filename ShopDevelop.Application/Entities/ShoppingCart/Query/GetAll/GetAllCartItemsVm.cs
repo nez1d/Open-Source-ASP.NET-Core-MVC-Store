@@ -4,18 +4,18 @@ public class GetAllCartItemsVm
 {
     public Guid Id { get; set; }
     public uint Amount { get; set; }
-    public Domain.Entities.Product Product { get; set; }
+    public Guid ProductId { get; set; }
     public string ApplicationUserId { get; set; }
 
     public GetAllCartItemsVm(
         Guid id, 
         uint amount, 
-        Domain.Entities.Product product, 
+        Guid productId, 
         string userId)
     {
         this.Id = id;
         this.Amount = amount;
-        this.Product = product;
+        this.ProductId = productId;
         this.ApplicationUserId = userId;
     }
 }
