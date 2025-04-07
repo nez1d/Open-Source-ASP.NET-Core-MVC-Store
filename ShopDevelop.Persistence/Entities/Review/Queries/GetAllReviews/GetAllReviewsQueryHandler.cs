@@ -12,22 +12,24 @@ public class GetAllReviewsQueryHandler
     : IRequestHandler<GetAllReviewsQuery, IList<GetAllReviewsVm>>
 {
     private ILogger<GetAllReviewsQueryHandler> logger;
-    private readonly ApplicationDbContext context;
+    private readonly IReviewRepository reviewRepository;
 
     public GetAllReviewsQueryHandler(
         ILogger<GetAllReviewsQueryHandler> logger,
-        ApplicationDbContext context)
+        IReviewRepository reviewRepository)
     {
         this.logger = logger;
-        this.context = context;
+        this.reviewRepository = reviewRepository;
     }
     
     public async Task<IList<GetAllReviewsVm>> Handle(GetAllReviewsQuery request, 
         CancellationToken cancellationToken)
     {
         logger.LogInformation($"Handling {nameof(GetAllReviewsQueryHandler)}");
+
+        var items = await reviewRepository.GetAllAsync();
         
-        var result = await context.Reviews
+        var result = items
             .Select(review => 
                 new GetAllReviewsVm(
                     review.Id,
@@ -41,7 +43,7 @@ public class GetAllReviewsQueryHandler
                     review.ApplicationUserId,
                     review.ProductId)
             )
-            .ToListAsync(cancellationToken);
+            .ToList();
         
         logger.LogInformation($"Handled {nameof(GetAllReviewsQueryHandler)}");
 

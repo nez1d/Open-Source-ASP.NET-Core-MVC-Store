@@ -30,7 +30,7 @@ public class GetAllCartItemsQueryHandler
             new GetAllCartItemsVm(
                 item.Id,
                 item.Amount,
-                item.Product,
+                item.ProductId,
                 item.ApplicationUserId))
             .ToList();
         

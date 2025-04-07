@@ -1,8 +1,6 @@
-﻿using ShopDevelop.Application.Data.Common.Mappings;
+﻿namespace ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
 
-namespace ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
-
-public class ProductMiniLookupDto : IMapWith<Domain.Entities.Product>
+public class ProductMiniLookupDto
 {
     public Guid Id { get; set; }
     public string ProductName { get; set; }

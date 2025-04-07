@@ -31,11 +31,6 @@ public class CreateOrderValidation : AbstractValidator<CreateOrderCommand>
             .NotNull()
             .WithMessage("");
         
-        RuleFor(order => order.ApplicationUserId)
-            .NotNull()
-            .NotEqual(Guid.Empty)
-            .WithMessage("");
-        
         RuleFor(order => order.ProductId)
             .NotNull()
             .NotEqual(Guid.Empty)

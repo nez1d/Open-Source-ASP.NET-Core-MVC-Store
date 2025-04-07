@@ -3,20 +3,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Seller.Queries.GetAll;
 using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Application.Repository;
 
 namespace ShopDevelop.Persistence.Entities.Seller.Queries.GetAll;
 
 public class GetAllSellersQueryHandler
     : IRequestHandler<GetAllSellersListQuery, IList<SellerLookupDto>>
 {
-    public readonly IApplicationDbContext applicationDbContext;
+    public readonly ISellerRepository sellerRepository;
     private readonly ILogger<GetAllSellersQueryHandler> logger;
 
     public GetAllSellersQueryHandler(
-        IApplicationDbContext applicationDbContext,
+        ISellerRepository sellerRepository,
         ILogger<GetAllSellersQueryHandler> logger)
     {
-        this.applicationDbContext = applicationDbContext;
+        this.sellerRepository = sellerRepository;
         this.logger = logger;
     }
     
@@ -25,7 +26,9 @@ public class GetAllSellersQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetAllSellersQueryHandler)}");
         
-        var result = await applicationDbContext.Sellers
+        var items = await sellerRepository.GetAllAsync();
+        
+        var result = items
             .Select(seller => 
                 new SellerLookupDto(
                     seller.Id,
@@ -34,7 +37,7 @@ public class GetAllSellersQueryHandler
                     seller.ImagePath,
                     seller.ImageFooterPath)
             )
-            .ToListAsync(cancellationToken);
+            .ToList();
         
         logger.LogInformation($"Handling {nameof(GetAllSellersQueryHandler)}");
 

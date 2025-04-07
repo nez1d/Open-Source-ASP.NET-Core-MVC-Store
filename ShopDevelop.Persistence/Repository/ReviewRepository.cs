@@ -11,7 +11,7 @@ public class ReviewRepository : IReviewRepository
     public ReviewRepository(IApplicationDbContext context) =>
         this.context = context;
         
-    public async Task<Guid> Create(Review review, 
+    public async Task<Guid> CreateAsync(Review review, 
         CancellationToken cancellationToken)
     {
         await context.Reviews.AddAsync(review, cancellationToken);
@@ -19,15 +19,15 @@ public class ReviewRepository : IReviewRepository
         return review.Id;    
     }
 
-    public async Task Update(Review review)
+    public async Task UpdateAsync(Review review)
     {
         context.Reviews.Update(review);
         await context.SaveChangesAsync();
     }
 
-    public async Task Delete(Guid id)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var review = await GetById(id);     
+        var review = await GetByIdAsync(id, cancellationToken);     
         if (review == null)
             throw new ArgumentException();
         
@@ -35,85 +35,99 @@ public class ReviewRepository : IReviewRepository
         await context.SaveChangesAsync();
     }
     
-    public async Task Like(Guid reviewId)
+    public async Task LikeAsync(Guid reviewId, CancellationToken cancellationToken)
     {
-        var review = await GetById(reviewId);
+        var review = await GetByIdAsync(reviewId, cancellationToken);
         review.LikesCount += 1;
         
-        await Update(review);
+        await UpdateAsync(review);
     }
     
-    public async Task<IEnumerable<Review>> GetAll()
+    public async Task<IEnumerable<Review>> GetAllAsync()
     {
         return await context.Reviews
-            .Where(review=> review.Id != null)
             .ToListAsync();
     }
 
-    public async Task<Review> GetById(Guid id)
+    public async Task<Review> GetByIdAsync(Guid id, 
+        CancellationToken cancellationToken)
     {
         return await context.Reviews
-            .FirstOrDefaultAsync(review => review.Id == id);
+            .FirstOrDefaultAsync(review => 
+                review.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<Review>> GetAllByUserId(string userId)
+    public async Task<IEnumerable<Review>> GetAllByUserIdAsync(string userId, 
+        CancellationToken cancellationToken)
     {
         return context.Reviews
             .Where(review => review.ApplicationUserId == userId);
     }
     
-    public async Task<IEnumerable<Review>> GetFirst(int count, Guid productId)
+    public async Task<IEnumerable<Review>> GetAllByProductIdAsync(Guid productId, 
+        CancellationToken cancellationToken)
+    {
+        return context.Reviews
+            .Where(review => review.ProductId == productId);
+    }
+    
+    public async Task<IEnumerable<Review>> GetFirstAsync(int count, Guid productId, 
+        CancellationToken cancellationToken)
     {
         return await context.Reviews
             .Where(review => review.ProductId == productId)
             .Take(count)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Review>> GetFirstByDateLine(
+    public async Task<IEnumerable<Review>> GetFirstByDateLineAsync(
         int count, 
         Guid productId, 
         DateTime dateStart, 
-        DateTime dateEnd)
+        DateTime dateEnd, 
+        CancellationToken cancellationToken)
     {
         return await context.Reviews
             .Where(review => review.ProductId == productId
                 && review.CreatedDate.Date.CompareTo(dateStart.Date) >= 0 
                 && review.CreatedDate.Date.CompareTo(dateEnd.Date) <= 0)
             .Take(count)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
     
-    public async Task<IEnumerable<Review>> GetFirstByDate(
+    public async Task<IEnumerable<Review>> GetFirstByDateAsync(
         int count, 
         Guid productId, 
-        DateTime date)
+        CancellationToken cancellationToken)
     {
         return await context.Reviews
             .Where(review => review.ProductId == productId)
             .OrderBy(review => review.CreatedDate.Date)
             .Take(count)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
     
-    public async Task<IEnumerable<Review>> GetFirstByRating(
-        int count, 
-        Guid productId)
+    public async Task<IEnumerable<Review>> GetFirstByRatingAsync(int count, Guid productId, 
+        CancellationToken cancellationToken)
     {
         return await context.Reviews
             .Where(review => review.ProductId == productId)
             .OrderBy(review => review.Rating)
             .Take(count)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> CheckExistByUserId(Guid productId, string userId)
+    public async Task<bool> CheckExistByUserIdAsync(Guid productId, string userId, 
+        CancellationToken cancellationToken)
     {
         try
         {
             var result = await context.Reviews
-                .FirstOrDefaultAsync(review => review.ProductId == productId
-                    && review.ApplicationUserId == userId);
+                .FirstOrDefaultAsync(review => 
+                    review.ProductId == productId && 
+                    review.ApplicationUserId == userId, 
+                    cancellationToken);
+            
             if(result == null)
                 return true;
         }

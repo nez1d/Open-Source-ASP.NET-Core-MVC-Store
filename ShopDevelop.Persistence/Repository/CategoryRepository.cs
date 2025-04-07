@@ -49,10 +49,9 @@ public class CategoryRepository : ICategoryRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Category>> GetAllAsync()
+    public async Task<IEnumerable<Category>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await context.Categories
-            .Where(category => category.Id != null)
             .ToListAsync();
     }
 

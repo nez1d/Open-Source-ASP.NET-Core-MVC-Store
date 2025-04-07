@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Review.Queries.GetFirstByCreatedDate;
+using ShopDevelop.Application.Repository;
 
 namespace ShopDevelop.Persistence.Entities.Review.Queries.GetFirstByCreatedDate;
 
@@ -9,14 +10,14 @@ public class GetFirstReviewsByCreatedDateQueryHandler
     : IRequestHandler<GetFirstReviewsByDateQuery, IList<GetFirstReviewsByDateVm>>
 {
     private ILogger<GetFirstReviewsByCreatedDateQueryHandler> logger;
-    private readonly ApplicationDbContext context;
+    private readonly IReviewRepository reviewRepository;
 
     public GetFirstReviewsByCreatedDateQueryHandler(
         ILogger<GetFirstReviewsByCreatedDateQueryHandler> logger,
-        ApplicationDbContext context)
+        IReviewRepository reviewRepository)
     {
         this.logger = logger;
-        this.context = context;
+        this.reviewRepository = reviewRepository;
     }
     
     public async Task<IList<GetFirstReviewsByDateVm>> Handle(GetFirstReviewsByDateQuery request,
@@ -24,9 +25,9 @@ public class GetFirstReviewsByCreatedDateQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetFirstReviewsByCreatedDateQueryHandler)}");
         
-        var result = await context.Reviews
-            .Where(review => review.ProductId == request.ProductId)
-            .OrderBy(review => review.CreatedDate)
+        var items = await reviewRepository.GetFirstByDateAsync(request.Count, request.ProductId, cancellationToken);
+        
+        var result = items
             .Select(review => 
                 new GetFirstReviewsByDateVm(
                     review.Id,
@@ -40,8 +41,7 @@ public class GetFirstReviewsByCreatedDateQueryHandler
                     review.ApplicationUserId,
                     review.ProductId)
             )
-            .Take(request.Count)
-            .ToListAsync(cancellationToken);
+            .ToList();
         
         logger.LogInformation($"Handled {nameof(GetFirstReviewsByCreatedDateQueryHandler)}");
 

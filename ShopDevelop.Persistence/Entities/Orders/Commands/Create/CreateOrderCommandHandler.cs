@@ -15,14 +15,14 @@ public class CreateOrderCommandHandler
     private readonly ILogger logger;
     private readonly IMapper mapper;
     private readonly IOrderRepository orderRepository;
-    private readonly IOrderService orderService; 
+    private readonly OrderService orderService; 
     private readonly IProductRepository productRepository;
 
     public CreateOrderCommandHandler(
         ILogger<CreateOrderCommandHandler> logger,
         IMapper mapper,
         IOrderRepository orderRepository,
-        IOrderService orderService,
+        OrderService orderService,
         IProductRepository productRepository)
     {
         this.logger = logger;
@@ -46,7 +46,7 @@ public class CreateOrderCommandHandler
         order.OrderTotal = await orderService.GetOrderTotalPrice(product.Price, request.Amount);
         order.CreatedDate = DateTime.UtcNow;
         
-        var result = await orderRepository.Create(order, cancellationToken);
+        var result = await orderRepository.CreateAsync(order, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(CreateOrderCommandHandler)}");
         

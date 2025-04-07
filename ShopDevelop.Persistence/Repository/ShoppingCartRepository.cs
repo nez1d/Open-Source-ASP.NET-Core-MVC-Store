@@ -36,7 +36,6 @@ public class ShoppingCartRepository : IShoppingCartRepository
         CancellationToken cancellationToken)
     {
         return await context.ShoppingCartItems
-            .Where(item => item.ApplicationUserId != null)
                 .ToListAsync(cancellationToken)
             ?? throw new NotFoundException(typeof(ShoppingCartItem), null);
     }
@@ -48,6 +47,15 @@ public class ShoppingCartRepository : IShoppingCartRepository
             .Where(item => item.ApplicationUserId == userId)
                 .ToListAsync(cancellationToken)
             ?? throw new NotFoundException(typeof(ShoppingCartItem), userId);
+    }
+    
+    public async Task<ShoppingCartItem> GetItemAsync(string userId, Guid productId,
+        CancellationToken cancellationToken)
+    {
+        return await context.ShoppingCartItems
+            .FirstOrDefaultAsync(item => 
+                item.ApplicationUserId == userId &&
+                item.Product.Id == productId);
     }
     
     public async Task<ShoppingCartItem> GetByItemIdAsync(Guid itemId,

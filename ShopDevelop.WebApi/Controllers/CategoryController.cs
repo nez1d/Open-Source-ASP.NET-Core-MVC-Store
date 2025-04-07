@@ -16,10 +16,6 @@ namespace ShopDevelop.WebApi.Controllers;
 [Route("api/[controller]/[action]")]
 public class CategoryController : BaseController
 {
-    private readonly ICategoryService categoryService;
-    public CategoryController(ICategoryService categoryService) =>
-        (this.categoryService) = (categoryService);
-
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
     {

@@ -29,7 +29,7 @@ public class GetOrderByIdQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetOrderByIdQueryHandler)}");
         
-        var order = await orderRepository.GetById(request.Id);
+        var order = await orderRepository.GetByIdAsync(request.Id, cancellationToken);
         
         var result = mapper.Map<GetOrderByIdVm>(order);
         

@@ -10,16 +10,14 @@ namespace ShopDevelop.Persistence.Entities.Review.Commands.Update;
 public class UpdateReviewCommandHandler 
     : IRequestHandler<UpdateReviewCommand>
 {
-    private readonly IMapper mapper;
     private ILogger<UpdateReviewCommandHandler> logger;
     private IReviewRepository reviewRepository;
 
-    public UpdateReviewCommandHandler(IMapper mapper, 
+    public UpdateReviewCommandHandler(
         ILogger<UpdateReviewCommandHandler> logger,
         IReviewRepository reviewRepository)
     {
         this.logger = logger;
-        this.mapper = mapper;
         this.reviewRepository = reviewRepository;
     }
     
@@ -28,7 +26,7 @@ public class UpdateReviewCommandHandler
     {
         logger.LogInformation($"Handling {nameof(UpdateReviewCommandHandler)}");
         
-        var review = await reviewRepository.GetById(request.Id);
+        var review = await reviewRepository.GetByIdAsync(request.Id, cancellationToken);
         
         if(review.ApplicationUserId != request.ApplicationUserId.ToString())
             throw new NotFoundException(typeof(Domain.Entities.Review), request.ApplicationUserId);
@@ -39,7 +37,7 @@ public class UpdateReviewCommandHandler
         review.Rating = request.Rating;
         review.ImagesUrls = request.ImagesUrls;
         
-        await reviewRepository.Update(review);
+        await reviewRepository.UpdateAsync(review);
         
         logger.LogInformation($"Handled {nameof(UpdateReviewCommandHandler)}");
     }

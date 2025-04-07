@@ -13,16 +13,13 @@ public class UpdateOrderCommandHandler
     : IRequestHandler<UpdateOrderCommand>
 {
     private readonly ILogger logger;
-    private readonly IMapper mapper;
     private readonly IOrderRepository orderRepository;
 
     public UpdateOrderCommandHandler(
         ILogger<UpdateOrderCommandHandler> logger,
-        IMapper mapper,
         IOrderRepository orderRepository)
     {
         this.logger = logger;
-        this.mapper = mapper;
         this.orderRepository = orderRepository;
     }
     
@@ -31,7 +28,7 @@ public class UpdateOrderCommandHandler
     {
         logger.LogInformation($"Handling {nameof(UpdateOrderCommandHandler)}");
 
-        var order = await orderRepository.GetById(request.Id);
+        var order = await orderRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (order.ApplicationUserId != request.ApplicationUserId.ToString())
             throw new NotFoundException(typeof(Order), request.Id);
@@ -40,7 +37,7 @@ public class UpdateOrderCommandHandler
         order.Country = request.Country;
         order.City = request.City;
         
-        await orderRepository.Update(order, cancellationToken);
+        await orderRepository.UpdateAsync(order, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(UpdateOrderCommandHandler)}");
     }

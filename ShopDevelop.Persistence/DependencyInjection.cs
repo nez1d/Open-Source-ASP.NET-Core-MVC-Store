@@ -17,7 +17,7 @@ using ShopDevelop.Persistence.Entities.Orders.Queries.GetByUserId;
 using ShopDevelop.Persistence.Entities.Product.Command.Create.Clothes;
 using ShopDevelop.Persistence.Entities.Product.Command.Create.Shoes;
 using ShopDevelop.Persistence.Entities.Product.Command.Update;
-using ShopDevelop.Persistence.Entities.Product.Queries.GetMinimizedProducts;
+using ShopDevelop.Persistence.Entities.Product.Queries.GetAllMinimizedProducts;
 using ShopDevelop.Persistence.Entities.Product.Queries.GetProduct;
 using ShopDevelop.Persistence.Entities.Review.Commands.Create;
 using ShopDevelop.Persistence.Entities.Review.Commands.Delete;

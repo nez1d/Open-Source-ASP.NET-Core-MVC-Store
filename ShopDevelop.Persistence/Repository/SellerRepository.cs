@@ -37,19 +37,20 @@ public class SellerRepository : ISellerRepository
     public async Task<IEnumerable<Seller>> GetAllAsync()
     {
         return await context.Sellers
-            .Where(seller => seller.Id != null)
             .ToListAsync();
     }
 
     public async Task<Seller> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await context.Sellers
-            .FirstOrDefaultAsync(seller => seller.Id == id);
+            .FirstOrDefaultAsync(seller => seller.Id == id, 
+                cancellationToken);
     }
     
     public async Task<Seller> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
         return await context.Sellers
-            .FirstOrDefaultAsync(seller => seller.Name == name);
+            .FirstOrDefaultAsync(seller => seller.Name == name, 
+                cancellationToken);
     }
 }

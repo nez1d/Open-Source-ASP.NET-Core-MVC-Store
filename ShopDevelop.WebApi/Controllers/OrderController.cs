@@ -8,17 +8,24 @@ using ShopDevelop.Application.Entities.Orders.Queries.GetById;
 using ShopDevelop.Application.Entities.Orders.Queries.GetByProductId;
 using ShopDevelop.Application.Entities.Orders.Queries.GetByUserId;
 using ShopDevelop.Domain.Dto.Order;
+using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
 
 namespace ShopDevelop.WebApi.Controllers;
 
 [Route("api/[controller]/[action]/")]
 [ApiController]
-public class OrderController(IMapper mapper) : BaseController
+public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseController
 {
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateOrderCommand createOrderCommand)
+    public async Task<IActionResult> Create([FromBody] CreateOrderDto model)
     {
-        var result = await Mediator.Send(createOrderCommand);
+        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        var userId = jwtProvider.GetUserId(accessToken);
+        
+        var command = mapper.Map<CreateOrderCommand>(model);
+        command.ApplicationUserId = userId;
+        
+        var result = await Mediator.Send(command);
         if(result != Guid.Empty)
             return Ok(result);
         
@@ -65,7 +72,7 @@ public class OrderController(IMapper mapper) : BaseController
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAllByUserId(Guid id)
+    public async Task<IActionResult> GetAllByUserId(string id)
     {
         var result = await Mediator.Send(
             new GetOrdersByUserIdQuery()

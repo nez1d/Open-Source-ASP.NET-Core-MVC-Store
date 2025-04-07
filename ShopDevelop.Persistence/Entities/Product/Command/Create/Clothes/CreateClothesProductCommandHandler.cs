@@ -12,22 +12,22 @@ public class CreateClothesProductCommandHandler
     : IRequestHandler<CreateClothesProductCommand, Guid>
 {
     private readonly IProductRepository productRepository;
-    private readonly IProductService productService;
-    private readonly ICategoryService categoryService;
+    private readonly ProductService productService;
     private readonly ISellerRepository sellerRepository;
+    private readonly ICategoryRepository categoryRepository;
     private readonly IMapper mapper;
     private readonly ILogger logger;
     
     public CreateClothesProductCommandHandler(
-        IProductService productService,
+        ProductService productService,
         IProductRepository productRepository,
-        ICategoryService categoryService,
+        ICategoryRepository categoryRepository,
         ISellerRepository sellerRepository,
         IMapper mapper,
         ILogger<CreateClothesProductCommandHandler> logger)
     {
         this.productRepository = productRepository;
-        this.categoryService = categoryService;
+        this.categoryRepository = categoryRepository;
         this.sellerRepository = sellerRepository;
         this.productService = productService;
         this.mapper = mapper;
@@ -39,7 +39,7 @@ public class CreateClothesProductCommandHandler
     {
         logger.LogInformation($"Handling {nameof(CreateClothesProductCommand)}");
 
-        var category = await categoryService.GetByName("Clothes");
+        var category = await categoryRepository.GetByNameAsync("Clothes");
         var seller = await sellerRepository.GetByIdAsync(request.SellerId, cancellationToken);
 
         if (category == null || seller == null)

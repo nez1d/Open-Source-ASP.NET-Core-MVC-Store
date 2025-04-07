@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Category.Queries.GetAllCategories;
+using ShopDevelop.Application.Repository;
 
 namespace ShopDevelop.Persistence.Entities.Category.Queries.GetAllCategories;
 
@@ -10,13 +11,13 @@ public class GetAllCategoriesQueryHandler
     : IRequestHandler<GetCategoriesListQuery, List<CategoryLookupDto>>
 {
     private readonly ILogger<GetAllCategoriesQueryHandler> logger;
-    private readonly ApplicationDbContext dbContext;
+    private readonly ICategoryRepository categoryRepository;
 
     public GetAllCategoriesQueryHandler(
         ILogger<GetAllCategoriesQueryHandler> logger,
-        ApplicationDbContext dbContext)
+        ICategoryRepository categoryRepository)
     {
-        this.dbContext = dbContext;
+        this.categoryRepository = categoryRepository;
         this.logger = logger;
     }
     
@@ -25,14 +26,16 @@ public class GetAllCategoriesQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetAllCategoriesQueryHandler)}");
         
-        var result = await dbContext.Categories
-            .Select(category => 
-                new CategoryLookupDto(
-                    category.Id,
-                    category.Name,
-                    category.Description,
-                    category.ImagePath)
-            ).ToListAsync(cancellationToken);
+        var items = await categoryRepository.GetAllAsync(cancellationToken);
+        
+        var result = items.Select(category => 
+            new CategoryLookupDto(
+                category.Id,
+                category.Name,
+                category.Description,
+                category.ImagePath)
+            )
+            .ToList();
         
         logger.LogInformation($"Handled {nameof(GetAllCategoriesQueryHandler)}");
         

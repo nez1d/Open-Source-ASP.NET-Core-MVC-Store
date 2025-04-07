@@ -103,7 +103,7 @@ public class CategoryRepositoryTests : TestCommandBase
         // Arrange
         categoryRepository = new CategoryRepository(context);
         // Act
-        var products = await categoryRepository.GetAllAsync();
+        var products = await categoryRepository.GetAllAsync(CancellationToken.None);
         // Assert
         Assert.Equal(3, products.Count());
     }

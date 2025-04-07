@@ -7,5 +7,4 @@ public class AddToCartCommand : IRequest
     public Guid ProductId { get; set; }
     public int Amount { get; set; }
     public string UserId { get; set; }
-    public Guid ShoppingCartId { get; set; }
 }
