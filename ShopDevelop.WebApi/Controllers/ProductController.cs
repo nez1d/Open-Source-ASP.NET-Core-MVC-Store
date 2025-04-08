@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
@@ -6,20 +7,19 @@ using ShopDevelop.Application.Entities.Product.Commands.Create.Shoes;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
 using ShopDevelop.Application.Entities.Product.Commands.Update;
 using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
-using ShopDevelop.Application.Entities.Product.Queries.GetProduct;
 using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
 using ShopDevelop.Domain.Dto.Product;
 
 namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]/[action]/")]
+[ApiVersion(1, Deprecated = false)]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
 public class ProductController(IMapper mapper) : BaseController
 {
     [HttpPost]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> CreateClothes([FromBody] CreateClothesProductDto model)
     {
         var command = mapper.Map<CreateClothesProductCommand>(model);
@@ -33,8 +33,7 @@ public class ProductController(IMapper mapper) : BaseController
     
     [HttpPost]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> CreateShoes([FromBody] CreateShoesProductDto model)
     {
         var command = mapper.Map<CreateShoesProductCommand>(model);
@@ -48,6 +47,7 @@ public class ProductController(IMapper mapper) : BaseController
     
     [HttpPut]
     [AllowAnonymous]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Edit([FromBody] UpdateProductDto model)
     {
         var command = mapper.Map<UpdateProductCommand>(model);
@@ -57,6 +57,7 @@ public class ProductController(IMapper mapper) : BaseController
     
     [HttpDelete("{id}")]
     [AllowAnonymous]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Delete([FromBody] DeleteProductCommand command)
     {
         await Mediator.Send(command);
@@ -65,7 +66,8 @@ public class ProductController(IMapper mapper) : BaseController
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult> ProductsList()
+    [MapToApiVersion(1)]
+    public async Task<ActionResult> Get()
     {
         var result = await Mediator.Send(
             new GetMiniProductListQuery());
@@ -74,7 +76,8 @@ public class ProductController(IMapper mapper) : BaseController
 
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<ActionResult> GetProduct(Guid id)
+    [MapToApiVersion(1)]
+    public async Task<ActionResult> Get(Guid id)
     {
         var byIdQuery = new GetProductByIdQuery
         {

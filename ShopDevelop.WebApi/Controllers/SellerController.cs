@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Seller.Command.Create;
 using ShopDevelop.Application.Entities.Seller.Command.Delete;
@@ -9,10 +10,12 @@ using ShopDevelop.Application.Entities.Seller.Queries.GetByName;
 namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
+[ApiVersion(1, Deprecated = false)]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
 public class SellerController : BaseController
 {
     [HttpPost]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Create([FromBody] CreateSellerCommand createSellerCommand)
     {
         var result = await Mediator.Send(createSellerCommand);
@@ -23,6 +26,7 @@ public class SellerController : BaseController
     }
 
     [HttpPut]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Edit([FromBody] UpdateSellerCommand updateSellerCommand)
     {
         await Mediator.Send(updateSellerCommand);
@@ -30,6 +34,7 @@ public class SellerController : BaseController
     }
 
     [HttpDelete("{id}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Delete(int id)
     {
         var request = new DeleteSellerCommand()
@@ -41,6 +46,7 @@ public class SellerController : BaseController
     }
     
     [HttpGet]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetSellers()
     {
         var result = await Mediator
@@ -52,6 +58,7 @@ public class SellerController : BaseController
     }
     
     [HttpGet("{id}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetById(int id)
     {
         var query = new GetSellerByIdQuery
@@ -66,6 +73,7 @@ public class SellerController : BaseController
     }
 
     [HttpGet("{name}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetByName(string name)
     {
         var query = new GetSellerByNameQuery()

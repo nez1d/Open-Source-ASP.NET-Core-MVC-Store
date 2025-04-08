@@ -9,13 +9,18 @@ using ShopDevelop.Persistence.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Domain.Entities;
 using ShopDevelop.Identity.DuendeServer.WebAPI.Data;
 using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
+using ShopDevelop.WebApi;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -95,6 +100,21 @@ builder.Services.AddAuthentication(config =>
 
 builder.Services.AddApplication();
 builder.Services.AddPersistence(configuration);
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1);
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new UrlSegmentApiVersionReader()); //https://site.com/v2/get);
+})
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'V";
+        options.SubstituteApiVersionInUrl = true;
+    });
 
 builder.Services.AddCors(options =>
 {

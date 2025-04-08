@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.ShoppingCart.Command.Add;
@@ -12,11 +13,13 @@ using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
 namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]/[action]")]
+[ApiVersion(1, Deprecated = false)]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
 public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseController
 {
     [HttpPost]
-    public async Task<IActionResult> AddToCart([FromBody] AddToCartDto model)
+    [MapToApiVersion(1)]
+    public async Task<IActionResult> Add([FromBody] AddToCartDto model)
     {
         string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
         var userId = jwtProvider.GetUserId(accessToken);
@@ -29,7 +32,8 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> RemoveFromCart(Guid id)
+    [MapToApiVersion(1)]
+    public async Task<IActionResult> Remove(Guid id)
     {
         await Mediator.Send(new RemoveFromCartCommand()
         {
@@ -39,7 +43,8 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
     }
     
     [HttpDelete("{userId}")]
-    public async Task<IActionResult> ClearCart(string userId)
+    [MapToApiVersion(1)]
+    public async Task<IActionResult> Clear(string userId)
     {
         await Mediator.Send(new ClearCartCommand()
         {
@@ -49,7 +54,8 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
     }
     
     [HttpGet("{userId}")]
-    public async Task<IActionResult> GetShoppingCart(Guid userId)
+    [MapToApiVersion(1)]
+    public async Task<IActionResult> Get(Guid userId)
     {
         var items = await Mediator.Send(new GetShoppingCartItemsByUserIdQuery()
         {
@@ -63,7 +69,8 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [MapToApiVersion(1)]
+    public async Task<IActionResult> Get()
     {
         var items = await Mediator.Send(new GetAllCartItemsQuery());
         
@@ -74,7 +81,8 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
     }
 
     [HttpGet("{userId}")]
-    public async Task<IActionResult> GetAllTotalValue(string userId)
+    [MapToApiVersion(1)]
+    public async Task<IActionResult> GetTotal(string userId)
     {
         var result = await Mediator.Send(new GetTotalShoppingCartPriceQuery()
         {

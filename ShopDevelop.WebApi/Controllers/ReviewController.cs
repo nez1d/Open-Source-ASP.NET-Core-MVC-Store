@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Review.Commands.Create;
@@ -13,10 +14,12 @@ using ShopDevelop.Domain.Dto.Review;
 namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]/[action]")]
+[ApiVersion(1, Deprecated = false)]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
 public class ReviewController(IMapper mapper) : BaseController
 {
     [HttpPost]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Create([FromBody] CreateReviewDto model)
     {
         var review = mapper.Map<CreateReviewCommand>(model);
@@ -28,6 +31,7 @@ public class ReviewController(IMapper mapper) : BaseController
     }
     
     [HttpPut]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Edit([FromBody] UpdateReviewDto model)
     {
         var review = mapper.Map<UpdateReviewCommand>(model);
@@ -36,6 +40,7 @@ public class ReviewController(IMapper mapper) : BaseController
     }
     
     [HttpDelete("{id}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Delete(Guid id)
     {
         await Mediator.Send(new DeleteReviewCommand { Id = id });
@@ -43,6 +48,7 @@ public class ReviewController(IMapper mapper) : BaseController
     }
     
     [HttpGet]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetAll()
     {
         var result = await Mediator.Send(new GetAllReviewsQuery());
@@ -52,13 +58,14 @@ public class ReviewController(IMapper mapper) : BaseController
         return NotFound();
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAllByProductId(Guid id)
+    [HttpGet("{productId}")]
+    [MapToApiVersion(1)]
+    public async Task<IActionResult> Get(Guid productId)
     {
         var result = await Mediator.Send(
             new GetAllReviewsByProductIdQuery()
             {
-                ProductId = id
+                ProductId = productId
             });
         
         if (result != null)
@@ -67,13 +74,14 @@ public class ReviewController(IMapper mapper) : BaseController
         return NotFound();
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAllByUserId(Guid id)
+    [HttpGet("{userId}")]
+    [MapToApiVersion(1)]
+    public async Task<IActionResult> Get(string userId)
     {
         var result = await Mediator.Send(
         new GetAllReviewsByUserIdQuery()
         {
-            UserId = id.ToString()
+            UserId = userId
         });
         
         if (result != null)
@@ -83,6 +91,7 @@ public class ReviewController(IMapper mapper) : BaseController
     }
     
     [HttpGet("{productId}/{count}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetFirstByRating(Guid productId, int count)
     {
         var request = await Mediator.Send(
@@ -99,6 +108,7 @@ public class ReviewController(IMapper mapper) : BaseController
     }
     
     [HttpGet("{productId}/{count}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetFirstByDate(Guid productId, int count)
     {
         var request = await Mediator.Send(
@@ -115,6 +125,7 @@ public class ReviewController(IMapper mapper) : BaseController
     }
     
     [HttpPost("{reviewId}/{userId}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> LikeReview(Guid reviewId, Guid userId)
     {
         // TODO: доделать лайк отзыва
@@ -122,6 +133,7 @@ public class ReviewController(IMapper mapper) : BaseController
     }
     
     [HttpPost]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> UnlikeReview()
     {
         // TODO: доделать снятие лайка с отзыва
