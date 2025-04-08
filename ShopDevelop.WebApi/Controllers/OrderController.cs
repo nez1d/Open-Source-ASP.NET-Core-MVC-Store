@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Orders.Commands.Create;
@@ -12,11 +13,13 @@ using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
 
 namespace ShopDevelop.WebApi.Controllers;
 
-[Route("api/[controller]/[action]/")]
 [ApiController]
+[ApiVersion(1, Deprecated = false)]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
 public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseController
 {
     [HttpPost]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Create([FromBody] CreateOrderDto model)
     {
         string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
@@ -33,6 +36,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
     }
     
     [HttpPut]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Edit([FromBody] UpdateOrderDto updateOrderDto)
     {
         var command = mapper.Map<UpdateOrderCommand>(updateOrderDto);
@@ -41,6 +45,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
     }
     
     [HttpDelete("{id}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> Cancel(Guid id)
     {
         await Mediator.Send(new DeleteOrderCommand()
@@ -51,6 +56,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
     }
 
     [HttpGet]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetAll()
     {
         var result = await Mediator.Send(new GetAllOrdersQuery());
@@ -62,6 +68,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
     }
     
     [HttpGet("{id}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetById(Guid id)
     {
         var result = await Mediator.Send(new GetOrderByIdQuery() { Id = id });
@@ -72,6 +79,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
     }
     
     [HttpGet("{id}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetAllByUserId(string id)
     {
         var result = await Mediator.Send(
@@ -87,6 +95,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
     }
     
     [HttpGet("{id}")]
+    [MapToApiVersion(1)]
     public async Task<IActionResult> GetAllByProductId(Guid id)
     {
         var result = await Mediator.Send(
