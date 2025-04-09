@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
 
@@ -7,8 +7,8 @@ namespace ShopDevelop.Persistence.Repository;
 
 public class OrderRepository : IOrderRepository
 {
-    private readonly IApplicationDbContext context;
-    public OrderRepository(IApplicationDbContext context) =>
+    private readonly ApplicationDbContext context;
+    public OrderRepository(ApplicationDbContext context) =>
         this.context = context;
 
     public async Task<Guid> CreateAsync(Order order, CancellationToken cancellationToken)
@@ -20,15 +20,17 @@ public class OrderRepository : IOrderRepository
 
     public async Task UpdateAsync(Order order, CancellationToken cancellationToken)
     {
+        Order result = await this.GetByIdAsync(order.Id, cancellationToken)
+            ?? throw new NotFoundException(typeof(Order), order.Id);
+        
         context.Orders.Update(order);
         await context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var order = await GetByIdAsync(id, cancellationToken);     
-        if (order == null)
-            throw new ArgumentException();
+        Order order = await GetByIdAsync(id, cancellationToken)
+            ?? throw new NotFoundException(typeof(Order), id);
         
         context.Orders.Remove(order);
         await context.SaveChangesAsync();
@@ -37,27 +39,35 @@ public class OrderRepository : IOrderRepository
     public async Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await context.Orders
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Order), null);
     }
 
     public async Task<Order> GetByIdAsync(Guid id, 
         CancellationToken cancellationToken)
     {
         return await context.Orders
-            .FirstOrDefaultAsync(order => order.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(order => 
+                order.Id == id, 
+                cancellationToken)
+            ?? throw new NotFoundException(typeof(Order), id);
     }
 
     public async Task<IEnumerable<Order>> GetByUserIdAsync(string userId, 
         CancellationToken cancellationToken)
     {
-        return context.Orders
-            .Where(order => order.ApplicationUserId == userId);
+        return await context.Orders.Where(order => 
+                order.ApplicationUserId == userId)
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Order), userId);
     }
     
     public async Task<IEnumerable<Order>> GetByProductIdAsync(Guid productId, 
         CancellationToken cancellationToken)
     {
-        return context.Orders
-            .Where(order => order.ProductId == productId);
+        return await context.Orders.Where(order => 
+                order.ProductId == productId)
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Order), productId);
     }
 }

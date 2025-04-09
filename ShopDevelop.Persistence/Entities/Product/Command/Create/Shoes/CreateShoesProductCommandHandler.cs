@@ -38,7 +38,7 @@ public class CreateShoesProductCommandHandler :
     {
         logger.LogInformation($"Handling {nameof(CreateShoesProductCommand)}");
 
-        var category = await categoryRepository.GetByNameAsync("Shoes");
+        var category = await categoryRepository.GetByNameAsync("Shoes", cancellationToken);
         var seller = await sellerRepository.GetByIdAsync(request.SellerId, cancellationToken);
 
         if (category == null || seller == null)

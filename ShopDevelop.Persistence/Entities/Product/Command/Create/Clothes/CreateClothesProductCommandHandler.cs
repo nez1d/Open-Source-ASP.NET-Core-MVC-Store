@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
 using ShopDevelop.Application.Repository;
-using ShopDevelop.Application.Services.Category;
 using ShopDevelop.Application.Services.Product;
 
 namespace ShopDevelop.Persistence.Entities.Product.Command.Create.Clothes;
@@ -39,7 +38,7 @@ public class CreateClothesProductCommandHandler
     {
         logger.LogInformation($"Handling {nameof(CreateClothesProductCommand)}");
 
-        var category = await categoryRepository.GetByNameAsync("Clothes");
+        var category = await categoryRepository.GetByNameAsync("Clothes", cancellationToken);
         var seller = await sellerRepository.GetByIdAsync(request.SellerId, cancellationToken);
 
         if (category == null || seller == null)
