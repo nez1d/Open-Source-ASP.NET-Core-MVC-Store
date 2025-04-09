@@ -160,7 +160,7 @@ public class ProductRepositoryTests : TestCommandBase
         // Arrange
         productRepository = new ProductRepository(context);
         // Act
-        var products = await productRepository.GetAllAsync();
+        var products = await productRepository.GetAllAsync(CancellationToken.None);
         // Assert
         Assert.Equal(3, products.Count());
     }

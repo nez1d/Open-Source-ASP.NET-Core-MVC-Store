@@ -14,24 +14,19 @@ public class ProductRepository : IProductRepository
 
     public async Task<Guid> CreateAsync(Product product, CancellationToken cancellationToken)
     {
-        try
-        {
-            await context.Products.AddAsync(product, cancellationToken);
+        await context.Products.AddAsync(product, cancellationToken);
             
-            product.ProductDetailId = product.ProductDetail.Id;
-            var validProduct = ProductValidCheckerAsync(product);
-
-            if (validProduct == null)
-                return Guid.Empty;
+        product.ProductDetailId = product.ProductDetail.Id;
+        
+        var validProduct = await ProductValidCheckerAsync(product)
+            ?? throw new NotFoundException(typeof(Product), product.Id);;
             
-            await context.SaveChangesAsync();
-        }
-        catch (Exception ex) { }
+        await context.SaveChangesAsync();
         
         return product.Id;
      }
 
-    public async Task<Product> ProductValidCheckerAsync(Product product)
+    private async Task<Product> ProductValidCheckerAsync(Product product)
     {
         if (product.ClothesProduct != null)
         {
@@ -48,9 +43,8 @@ public class ProductRepository : IProductRepository
 
     public async Task UpdateAsync(Product product, CancellationToken cancellationToken)
     {
-        var model = await GetByIdAsync(product.Id, cancellationToken);
-        if (model == null)
-            throw new NotFoundException(typeof(Product), product.Id);
+        var model = await GetByIdAsync(product.Id, cancellationToken)
+            ?? throw new NotFoundException(typeof(Product), product.Id);
         
         context.Entry<Product>(model).State = EntityState.Detached;
         context.Products.Update(product);
@@ -59,32 +53,36 @@ public class ProductRepository : IProductRepository
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var product = await GetByIdAsync(id, cancellationToken);
-        if (product == null)
-            throw new NotFoundException(typeof(Product), id);
+        var product = await GetByIdAsync(id, cancellationToken)
+            ?? throw new NotFoundException(typeof(Product), id);
         
         context.Products.Remove(product);
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
+    public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return context.Products
-            .ToList();
+        return await context.Products
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Product), null);
     }
 
-    public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await context.Products.FirstOrDefaultAsync(product => 
-                product.Id == id, cancellationToken)
-                ?? throw new NotFoundException(typeof(Product), id);
+        return await context.Products
+            .FirstOrDefaultAsync(product => 
+                product.Id == id, 
+                cancellationToken)
+            ?? throw new NotFoundException(typeof(Product), id);
     }
     
     public async Task<ClothesProduct?> GetClothesByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var product = await context.ClothesProducts.FirstOrDefaultAsync(product => 
-                   product.Id == id, cancellationToken)
-                   ?? throw new NotFoundException(typeof(ClothesProduct), id);
+        var product = await context.ClothesProducts
+            .FirstOrDefaultAsync(product => 
+                product.Id == id, 
+                cancellationToken)
+            ?? throw new NotFoundException(typeof(ClothesProduct), id);
 
         product.Product = null;
         return product;
@@ -92,9 +90,11 @@ public class ProductRepository : IProductRepository
     
     public async Task<ShoesProduct?> GetShoesByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var product = await context.ShoesProducts.FirstOrDefaultAsync(product => 
-                          product.Id == id, cancellationToken)
-                      ?? throw new NotFoundException(typeof(ShoesProduct), id);
+        var product = await context.ShoesProducts
+            .FirstOrDefaultAsync(product => 
+                product.Id == id, 
+                cancellationToken)
+            ?? throw new NotFoundException(typeof(ShoesProduct), id);
         
         product.Product = null;
         return product;
@@ -104,11 +104,14 @@ public class ProductRepository : IProductRepository
     {
         return await context.ProductDetails
             .FirstOrDefaultAsync(details => 
-                details.ProductId == id, cancellationToken);
+                details.ProductId == id,
+                cancellationToken)
+            ?? throw new NotFoundException(typeof(ProductDetail), id);
     }
 
-    public async Task<IEnumerable<Product?>> GetByCategoryIdAsync(Guid categoryId)
+    public async Task<IEnumerable<Product?>> GetByCategoryIdAsync(int categoryId, CancellationToken cancellationToken)
     {
+        // TODO: доделать
         /*return context.Products
             .Where(product => product.Category.Id == categoryId);*/
         return null;

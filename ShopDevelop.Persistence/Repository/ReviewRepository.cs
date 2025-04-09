@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ShopDevelop.Application.Interfaces;
+using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
 
@@ -7,8 +7,8 @@ namespace ShopDevelop.Persistence.Repository;
 
 public class ReviewRepository : IReviewRepository
 {
-    private readonly IApplicationDbContext context;
-    public ReviewRepository(IApplicationDbContext context) =>
+    private readonly ApplicationDbContext context;
+    public ReviewRepository(ApplicationDbContext context) =>
         this.context = context;
         
     public async Task<Guid> CreateAsync(Review review, 
@@ -19,68 +19,59 @@ public class ReviewRepository : IReviewRepository
         return review.Id;    
     }
 
-    public async Task UpdateAsync(Review review)
+    public async Task UpdateAsync(Review review, CancellationToken cancellationToken)
     {
+        Review result = await GetByIdAsync(review.Id, cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), review.Id);
+        
         context.Reviews.Update(review);
         await context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var review = await GetByIdAsync(id, cancellationToken);     
-        if (review == null)
-            throw new ArgumentException();
+        Review review = await GetByIdAsync(id, cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), id);
         
         context.Reviews.Remove(review);
         await context.SaveChangesAsync();
     }
     
-    public async Task LikeAsync(Guid reviewId, CancellationToken cancellationToken)
-    {
-        var review = await GetByIdAsync(reviewId, cancellationToken);
-        review.LikesCount += 1;
-        
-        await UpdateAsync(review);
-    }
-    
-    public async Task<IEnumerable<Review>> GetAllAsync()
+    public async Task<IEnumerable<Review?>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await context.Reviews
-            .ToListAsync();
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), null);
     }
 
-    public async Task<Review> GetByIdAsync(Guid id, 
+    public async Task<Review?> GetByIdAsync(Guid id, 
         CancellationToken cancellationToken)
     {
         return await context.Reviews
             .FirstOrDefaultAsync(review => 
-                review.Id == id, cancellationToken);
+                review.Id == id, 
+                cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), id);
     }
 
     public async Task<IEnumerable<Review>> GetAllByUserIdAsync(string userId, 
         CancellationToken cancellationToken)
     {
-        return context.Reviews
-            .Where(review => review.ApplicationUserId == userId);
+        return await context.Reviews
+            .Where(review => review.ApplicationUserId == userId)
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), userId);
     }
     
     public async Task<IEnumerable<Review>> GetAllByProductIdAsync(Guid productId, 
         CancellationToken cancellationToken)
     {
         return context.Reviews
-            .Where(review => review.ProductId == productId);
-    }
-    
-    public async Task<IEnumerable<Review>> GetFirstAsync(int count, Guid productId, 
-        CancellationToken cancellationToken)
-    {
-        return await context.Reviews
             .Where(review => review.ProductId == productId)
-            .Take(count)
-            .ToListAsync(cancellationToken);
+            ?? throw new NotFoundException(typeof(Review), productId);;
     }
 
-    public async Task<IEnumerable<Review>> GetFirstByDateLineAsync(
+    /*public async Task<IEnumerable<Review>> GetFirstByDateLineAsync(
         int count, 
         Guid productId, 
         DateTime dateStart, 
@@ -92,8 +83,9 @@ public class ReviewRepository : IReviewRepository
                 && review.CreatedDate.Date.CompareTo(dateStart.Date) >= 0 
                 && review.CreatedDate.Date.CompareTo(dateEnd.Date) <= 0)
             .Take(count)
-            .ToListAsync(cancellationToken);
-    }
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), productId);
+    }*/
     
     public async Task<IEnumerable<Review>> GetFirstByDateAsync(
         int count, 
@@ -104,7 +96,8 @@ public class ReviewRepository : IReviewRepository
             .Where(review => review.ProductId == productId)
             .OrderBy(review => review.CreatedDate.Date)
             .Take(count)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), productId);
     }
     
     public async Task<IEnumerable<Review>> GetFirstByRatingAsync(int count, Guid productId, 
@@ -114,25 +107,28 @@ public class ReviewRepository : IReviewRepository
             .Where(review => review.ProductId == productId)
             .OrderBy(review => review.Rating)
             .Take(count)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), productId);
     }
 
     public async Task<bool> CheckExistByUserIdAsync(Guid productId, string userId, 
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var result = await context.Reviews
-                .FirstOrDefaultAsync(review => 
-                    review.ProductId == productId && 
-                    review.ApplicationUserId == userId, 
-                    cancellationToken);
+        Review result = await context.Reviews
+             .FirstOrDefaultAsync(review => 
+                 review.ProductId == productId && 
+                 review.ApplicationUserId == userId, 
+                cancellationToken) 
+            ?? throw new NotFoundException(typeof(Review), productId);
             
-            if(result == null)
-                return true;
-        }
-        catch { }
+        return true;
+    }
+    
+    public async Task LikeAsync(Guid reviewId, CancellationToken cancellationToken)
+    {
+        Review review = await GetByIdAsync(reviewId, cancellationToken);
+        review.LikesCount += 1;
         
-        return false;
+        await UpdateAsync(review, cancellationToken);
     }
 }

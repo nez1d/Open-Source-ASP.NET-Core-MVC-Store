@@ -26,7 +26,7 @@ public class GetAllSellersQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetAllSellersQueryHandler)}");
         
-        var items = await sellerRepository.GetAllAsync();
+        var items = await sellerRepository.GetAllAsync(cancellationToken);
         
         var result = items
             .Select(seller => 

@@ -25,7 +25,7 @@ public class GetMiniProductListQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetMiniProductListQueryHandler)}");
         
-        var items = await productRepository.GetAllAsync();
+        var items = await productRepository.GetAllAsync(cancellationToken);
             
         var result = items
             .Select(product => 

@@ -27,7 +27,7 @@ public class GetAllReviewsQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetAllReviewsQueryHandler)}");
 
-        var items = await reviewRepository.GetAllAsync();
+        var items = await reviewRepository.GetAllAsync(cancellationToken);
         
         var result = items
             .Select(review => 

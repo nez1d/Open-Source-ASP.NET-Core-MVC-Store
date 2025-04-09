@@ -37,7 +37,7 @@ public class UpdateReviewCommandHandler
         review.Rating = request.Rating;
         review.ImagesUrls = request.ImagesUrls;
         
-        await reviewRepository.UpdateAsync(review);
+        await reviewRepository.UpdateAsync(review, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(UpdateReviewCommandHandler)}");
     }
