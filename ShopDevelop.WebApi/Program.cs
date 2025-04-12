@@ -149,7 +149,6 @@ builder.Services.AddScoped<OrderService>();
 
 builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 builder.Services.AddScoped<ShoppingCartService>();
-// TODO: добавить метод GetCart
 
 var app = builder.Build();
 

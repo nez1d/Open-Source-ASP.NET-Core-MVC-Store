@@ -56,7 +56,7 @@ public class CategoryController : BaseController
     
     [HttpGet("{id}")]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         var result = await Mediator.Send(
             new GetCategoryByIdQuery()
@@ -68,7 +68,7 @@ public class CategoryController : BaseController
     
     [HttpGet("{name}")]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Get(string name)
+    public async Task<IActionResult> GetByName(string name)
     {
         var result = await Mediator.Send(
             new GetCategoryByNameQuery()

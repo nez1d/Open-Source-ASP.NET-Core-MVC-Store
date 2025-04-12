@@ -13,7 +13,7 @@ public class CategoryRepositoryTests : TestCommandBase
     public async Task CreateCategoryAsync_Success_Test()
     {
         // Arrange
-        categoryRepository = new CategoryRepository(context);
+        categoryRepository = new CategoryRepository(context, null);
         // Act
         var categoryId = await categoryRepository.CreateAsync(new Category
         {
@@ -31,7 +31,7 @@ public class CategoryRepositoryTests : TestCommandBase
     public async Task UpdateCategoryAsync_Success_Test()
     {
         // Arrange
-        categoryRepository = new CategoryRepository(context);
+        categoryRepository = new CategoryRepository(context, null);
         string updatedName = "Updated Category Name";
         string updatedDescription = "Updated Category Name";
         // Act
@@ -57,7 +57,7 @@ public class CategoryRepositoryTests : TestCommandBase
     public async Task UpdateCategoryAsync_FainOnWrong_TestId()
     {
         // Arrange
-        categoryRepository = new CategoryRepository(context);
+        categoryRepository = new CategoryRepository(context, null);
         // Act
         // Assert
         await Assert.ThrowsAsync<NotFoundException>(async () =>
@@ -71,7 +71,7 @@ public class CategoryRepositoryTests : TestCommandBase
     public async Task DeleteCategoryAsync_Success_Test()
     {
         // Arrange
-        categoryRepository = new CategoryRepository(context);
+        categoryRepository = new CategoryRepository(context, null);
         // Act
         await categoryRepository.DeleteAsync(ProductContextFactory.CategoryIdForDelete, CancellationToken.None);
         // Assert
@@ -86,7 +86,7 @@ public class CategoryRepositoryTests : TestCommandBase
     public async Task DeleteCategoryAsync_FailOnWrongId_Test()
     {
         // Arrange
-        categoryRepository = new CategoryRepository(context);
+        categoryRepository = new CategoryRepository(context, null);
         // Act
         // Assert
         await Assert.ThrowsAsync<NotFoundException>(async () =>
@@ -101,7 +101,7 @@ public class CategoryRepositoryTests : TestCommandBase
     public async Task GetAllCategoryAsync_Success_Test()
     {
         // Arrange
-        categoryRepository = new CategoryRepository(context);
+        categoryRepository = new CategoryRepository(context, null);
         // Act
         var products = await categoryRepository.GetAllAsync(CancellationToken.None);
         // Assert
@@ -112,7 +112,7 @@ public class CategoryRepositoryTests : TestCommandBase
     public async Task GetCategoryByIdAsync_Success_Test()
     {
         // Arrange
-        categoryRepository = new CategoryRepository(context);
+        categoryRepository = new CategoryRepository(context, null);
         // Act
         var category = await categoryRepository.GetByIdAsync(
             ProductContextFactory.CategoryIdForUpdate, 
@@ -127,7 +127,7 @@ public class CategoryRepositoryTests : TestCommandBase
     public async Task GetCategoryByIdAsync_FailOnWrongId_Test()
     {
         // Arrange
-        categoryRepository = new CategoryRepository(context);
+        categoryRepository = new CategoryRepository(context, null);
         // Act
         // Assert
         await Assert.ThrowsAsync<NotFoundException>(async () =>

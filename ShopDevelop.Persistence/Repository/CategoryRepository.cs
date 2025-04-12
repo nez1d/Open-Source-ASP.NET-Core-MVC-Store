@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
 using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -8,14 +10,20 @@ namespace ShopDevelop.Persistence.Repository;
 public class CategoryRepository : ICategoryRepository
 {
     private readonly ApplicationDbContext context;
-
-    public CategoryRepository(ApplicationDbContext context) =>
+    private readonly string? connectionString;
+    
+    public CategoryRepository(
+        ApplicationDbContext context,
+        IConfiguration configuration)
+    {
         this.context = context;
+        connectionString = configuration.GetConnectionString("DefaultConnection");
+    }
 
     public async Task<int> CreateAsync(Category category, 
         CancellationToken cancellationToken)
     {
-        var result = await this.GetByNameAsync(category.Name, cancellationToken);
+        var result = await this.FindByNameAsync(category.Name, cancellationToken);
         if (result is null)
         {
             await context.Categories.AddAsync(category, cancellationToken);
@@ -42,29 +50,55 @@ public class CategoryRepository : ICategoryRepository
         context.Categories.Remove(category);
         await context.SaveChangesAsync();
     }
-
+    
     public async Task<IEnumerable<Category>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await context.Categories
-            .ToListAsync(cancellationToken)
-            ?? throw new NotFoundException(typeof(Category), null);
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        string sql = "SELECT * FROM \"Categories\";";
+
+        return await connection
+            .QueryAsync<Category>(
+                sql, cancellationToken) 
+                    ?? [];
+    }
+    
+    public async Task<Category?> FindByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        string sql = $"SELECT * FROM \"Categories\" WHERE \"Id\"={id};";
+        
+        return await connection
+           .QueryFirstOrDefaultAsync<Category>(
+               sql, cancellationToken)
+                ?? null;
     }
     
     public async Task<Category> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await context.Categories
-            .FirstOrDefaultAsync(category => 
-                category.Id == id, 
-                cancellationToken)
+        return await this.FindByIdAsync(id, cancellationToken) 
             ?? throw new NotFoundException(typeof(Category), id);
+    }
+    
+    public async Task<Category?> FindByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        string sql = $"SELECT * FROM \"Categories\" WHERE \"Name\"=\'{name}\';";
+        
+        return await connection
+            .QueryFirstOrDefaultAsync<Category>(
+                sql, cancellationToken) 
+                    ?? null;
     }
 
     public async Task<Category> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
-        return await context.Categories
-            .FirstOrDefaultAsync(category => 
-                category.Name == name, 
-                cancellationToken) 
+        return await this.FindByNameAsync(name, cancellationToken) 
             ?? throw new NotFoundException(typeof(Category), name);
     }
 }

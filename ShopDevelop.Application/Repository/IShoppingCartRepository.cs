@@ -4,6 +4,7 @@ namespace ShopDevelop.Application.Repository;
 
 public interface IShoppingCartRepository
 {
+    // TODO: доделать коментарии.
     Task AddToCartAsync(ShoppingCartItem shoppingCartItem, CancellationToken cancellationToken);
     Task RemoveFromCartAsync(Guid itemId, CancellationToken cancellationToken);
     Task ClearFromCartAsync(Guid shoppingCartId, CancellationToken cancellationToken);
