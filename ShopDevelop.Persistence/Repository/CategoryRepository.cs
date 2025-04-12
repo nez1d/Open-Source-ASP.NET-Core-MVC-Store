@@ -56,7 +56,7 @@ public class CategoryRepository : ICategoryRepository
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        string sql = "SELECT * FROM \"Categories\";";
+        const string sql = @"SELECT * FROM ""Categories"";";
 
         return await connection
             .QueryAsync<Category>(
@@ -69,11 +69,11 @@ public class CategoryRepository : ICategoryRepository
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        string sql = $"SELECT * FROM \"Categories\" WHERE \"Id\"={id};";
+        const string sql = @"SELECT * FROM ""Categories"" WHERE ""Id""=@Id;";
         
         return await connection
            .QueryFirstOrDefaultAsync<Category>(
-               sql, cancellationToken)
+               sql, new { Id = id})
                 ?? null;
     }
     
@@ -88,11 +88,11 @@ public class CategoryRepository : ICategoryRepository
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken);
 
-        string sql = $"SELECT * FROM \"Categories\" WHERE \"Name\"=\'{name}\';";
+        const string sql = @"SELECT * FROM ""Categories"" WHERE ""Name""=@Name;";
         
         return await connection
             .QueryFirstOrDefaultAsync<Category>(
-                sql, cancellationToken) 
+                sql, new { Name = name }) 
                     ?? null;
     }
 

@@ -18,7 +18,7 @@ public class ProductRepositoryTests : TestCommandBase
     public async Task CreateProductAsync_Success_Test()
     {
         // Arrange
-        productRepository = new ProductRepository(context);
+        productRepository = new ProductRepository(context, null);
         // Act
         var productId = await productRepository.CreateAsync(new Product
         {
@@ -84,7 +84,7 @@ public class ProductRepositoryTests : TestCommandBase
     public async Task UpdateProductAsync_Success_Test()
     {
         // Arrange
-        productRepository = new ProductRepository(context);
+        productRepository = new ProductRepository(context, null);
         string updatedName = "Updated Product Name";
         string updatedDescription = "Updated Product Description";
         // Act
@@ -113,7 +113,7 @@ public class ProductRepositoryTests : TestCommandBase
     public async Task UpdateProductAsync_FainOnWrong_TestId()
     {
         // Arrange
-        productRepository = new ProductRepository(context);
+        productRepository = new ProductRepository(context, null);
         // Act
         // Assert
         await Assert.ThrowsAsync<NotFoundException>(async () =>
@@ -127,7 +127,7 @@ public class ProductRepositoryTests : TestCommandBase
     public async Task DeleteProductAsync_Success_Test()
     {
         // Arrange
-        productRepository = new ProductRepository(context);
+        productRepository = new ProductRepository(context, null);
         // Act
         await productRepository.DeleteAsync(ProductContextFactory.ProductIdForDelete, CancellationToken.None);
         // Assert
@@ -143,7 +143,7 @@ public class ProductRepositoryTests : TestCommandBase
     public async Task DeleteProductAsync_FailOnWrongId_Test()
     {
         // Arrange
-        productRepository = new ProductRepository(context);
+        productRepository = new ProductRepository(context, null);
         // Act
         // Assert
         await Assert.ThrowsAsync<NotFoundException>(async () =>
@@ -158,7 +158,7 @@ public class ProductRepositoryTests : TestCommandBase
     public async Task GetAllProductsAsync_Success_Test()
     {
         // Arrange
-        productRepository = new ProductRepository(context);
+        productRepository = new ProductRepository(context, null);
         // Act
         var products = await productRepository.GetAllAsync(CancellationToken.None);
         // Assert
@@ -169,7 +169,7 @@ public class ProductRepositoryTests : TestCommandBase
     public async Task GetProductByIdAsync_Success_Test()
     {
         // Arrange
-        productRepository = new ProductRepository(context);
+        productRepository = new ProductRepository(context, null);
         // Act
         var product = await productRepository.GetByIdAsync(
             ProductContextFactory.ProductIdForUpdate, 
@@ -184,7 +184,7 @@ public class ProductRepositoryTests : TestCommandBase
     public async Task GetProductByIdAsync_FailOnWrongId_Test()
     {
         // Arrange
-        productRepository = new ProductRepository(context);
+        productRepository = new ProductRepository(context, null);
         // Act
         // Assert
         await Assert.ThrowsAsync<NotFoundException>(async () =>

@@ -41,6 +41,13 @@ public interface IOrderRepository
     /// <returns>Return a IEnumerable collection of Orders.</returns>
     Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken);
     /// <summary>
+    /// Finds Order by Order ID.
+    /// </summary>
+    /// <param name="id">Order ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Order if Order is found else returns null.</returns>
+    Task<Order?> FindByIdAsync(Guid id, CancellationToken cancellationToken);
+    /// <summary>
     /// Gets Order by Order ID.
     /// </summary>
     /// <param name="id">Order ID.</param>
@@ -49,6 +56,13 @@ public interface IOrderRepository
     /// <exception cref="NotFoundException">Thrown if the Order is not found.</exception>
     Task<Order> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     /// <summary>
+    /// Finds Orders by User ID.
+    /// </summary>
+    /// <param name="userId">User ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return IEnumerable collection of Orders if Order is found else returns null.</returns>
+    Task<IEnumerable<Order>?> FindByUserIdAsync(string userId, CancellationToken cancellationToken);
+    /// <summary>
     /// Gets Orders by User ID.
     /// </summary>
     /// <param name="userId">User ID.</param>
@@ -56,6 +70,13 @@ public interface IOrderRepository
     /// <returns>Return IEnumerable collection of Orders if Order is found.</returns>
     /// <exception cref="NotFoundException">Thrown if the Orders is not found.</exception>
     Task<IEnumerable<Order>> GetByUserIdAsync(string userId, CancellationToken cancellationToken);
+    /// <summary>
+    /// Finds Orders by Product ID.
+    /// </summary>
+    /// <param name="productId">Product ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return IEnumerable collection of Orders if Order is found else returns null.</returns>
+    Task<IEnumerable<Order>?> FindByProductIdAsync(Guid productId, CancellationToken cancellationToken);
     /// <summary>
     /// Gets Orders by Product ID.
     /// </summary>
