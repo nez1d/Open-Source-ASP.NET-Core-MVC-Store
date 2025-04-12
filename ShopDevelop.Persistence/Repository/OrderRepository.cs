@@ -1,4 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+using Dapper;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
 using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -8,8 +10,15 @@ namespace ShopDevelop.Persistence.Repository;
 public class OrderRepository : IOrderRepository
 {
     private readonly ApplicationDbContext context;
-    public OrderRepository(ApplicationDbContext context) =>
+    private readonly string? connectionString;
+
+    public OrderRepository(
+        ApplicationDbContext context,
+        IConfiguration configuration)
+    {
         this.context = context;
+        connectionString = configuration.GetConnectionString("DefaultConnection");
+    }
 
     public async Task<Guid> CreateAsync(Order order, CancellationToken cancellationToken)
     {
@@ -38,36 +47,77 @@ public class OrderRepository : IOrderRepository
     
     public async Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await context.Orders
-            .ToListAsync(cancellationToken)
-            ?? throw new NotFoundException(typeof(Order), null);
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"SELECT * FROM ""Orders""";
+        
+        return await connection
+            .QueryAsync<Order>(
+                sql, cancellationToken)
+                    ?? [];
+    }
+    
+    public async Task<Order?> FindByIdAsync(Guid id, 
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"SELECT * FROM ""Orders"" WHERE ""Id""=@Id";
+
+        return await connection
+           .QueryFirstOrDefaultAsync<Order>(
+               sql, new { Id = id})
+                   ?? null;
     }
 
     public async Task<Order> GetByIdAsync(Guid id, 
         CancellationToken cancellationToken)
     {
-        return await context.Orders
-            .FirstOrDefaultAsync(order => 
-                order.Id == id, 
-                cancellationToken)
+        return await this.FindByIdAsync(id, cancellationToken)
             ?? throw new NotFoundException(typeof(Order), id);
+    }
+
+    public async Task<IEnumerable<Order>?> FindByUserIdAsync(string userId,
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"SELECT * FROM ""Orders"" WHERE ""ApplicationUserId""=@UserId";
+
+        return await connection
+           .QueryAsync<Order>(
+               sql, new { UserId = userId })
+                   ?? null;
     }
 
     public async Task<IEnumerable<Order>> GetByUserIdAsync(string userId, 
         CancellationToken cancellationToken)
     {
-        return await context.Orders.Where(order => 
-                order.ApplicationUserId == userId)
-            .ToListAsync(cancellationToken)
+        return await this.FindByUserIdAsync(userId, cancellationToken)
             ?? throw new NotFoundException(typeof(Order), userId);
+    }
+    
+    public async Task<IEnumerable<Order>?> FindByProductIdAsync(Guid productId, 
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"SELECT * FROM ""Orders"" WHERE ""ProductId""=@ProductId";
+
+        return await connection
+           .QueryAsync<Order>(
+               sql, new { ProductId = productId })
+                   ?? null;
     }
     
     public async Task<IEnumerable<Order>> GetByProductIdAsync(Guid productId, 
         CancellationToken cancellationToken)
     {
-        return await context.Orders.Where(order => 
-                order.ProductId == productId)
-            .ToListAsync(cancellationToken)
+        return await this.FindByProductIdAsync(productId, cancellationToken)
             ?? throw new NotFoundException(typeof(Order), productId);
     }
 }
