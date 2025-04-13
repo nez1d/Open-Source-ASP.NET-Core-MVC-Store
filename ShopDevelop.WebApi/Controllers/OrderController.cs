@@ -15,28 +15,33 @@ namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
 [ApiVersion(1, Deprecated = false)]
-[Route("api/v{version:apiVersion}/[controller]/[action]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseController
 {
     [HttpPost]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/order")]
     public async Task<IActionResult> Create([FromBody] CreateOrderDto model)
     {
-        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        string? accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        if(accessToken == null)
+            return Unauthorized();
+        
         var userId = jwtProvider.GetUserId(accessToken);
         
         var command = mapper.Map<CreateOrderCommand>(model);
         command.ApplicationUserId = userId;
         
         var result = await Mediator.Send(command);
-        if(result != Guid.Empty)
-            return Ok(result);
+        if(result == Guid.Empty)
+            return BadRequest();
         
-        return BadRequest();
+        return Ok(result);
     }
     
-    [HttpPut]
+    [HttpPatch]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/order/{id:int}")]
     public async Task<IActionResult> Edit([FromBody] UpdateOrderDto updateOrderDto)
     {
         var command = mapper.Map<UpdateOrderCommand>(updateOrderDto);
@@ -44,8 +49,9 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
         return NoContent();
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/order/{id:int}")]
     public async Task<IActionResult> Cancel(Guid id)
     {
         await Mediator.Send(new DeleteOrderCommand()
@@ -57,56 +63,61 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
 
     [HttpGet]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/orders")]
     public async Task<IActionResult> GetAll()
     {
         var result = await Mediator.Send(new GetAllOrdersQuery());
         
-        if(result is not null)
-            return Ok(result);
-        
-        return NotFound();
+        if(result is null)
+            return NotFound();
+            
+        return Ok(result);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/order/{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var result = await Mediator.Send(new GetOrderByIdQuery() { Id = id });
-        if(result is not null)
-            return Ok(result);
         
-        return NotFound();
+        if(result is null)
+            return NotFound();
+        
+        return Ok(result);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> GetAllByUserId(string id)
+    [Route("/api/v{version:apiVersion}/user-orders/{userId}")]
+    public async Task<IActionResult> GetAllByUserId(string userId)
     {
         var result = await Mediator.Send(
             new GetOrdersByUserIdQuery()
             {
-                UserId = id
+                UserId = userId
             });
         
-        if(result is not null)
-            return Ok(result);
+        if(result is null)
+            return NotFound();
         
-        return NotFound();
+        return Ok(result);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> GetAllByProductId(Guid id)
+    [Route("/api/v{version:apiVersion}/product-orders/{productId:guid}")]
+    public async Task<IActionResult> GetAllByProductId(Guid productId)
     {
         var result = await Mediator.Send(
             new GetOrdersByProductIdQuery()
             {
-                ProductId = id
+                ProductId = productId
             });
         
-        if(result is not null)
-            return Ok(result);
+        if(result is null)
+            return NotFound();
         
-        return NotFound();
+        return Ok(result);
     }
 }

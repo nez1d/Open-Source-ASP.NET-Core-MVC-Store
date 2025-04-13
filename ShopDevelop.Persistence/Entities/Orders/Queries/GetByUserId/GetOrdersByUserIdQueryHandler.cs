@@ -26,7 +26,7 @@ public class GetOrdersByUserIdQueryHandler
     {
         logger.LogInformation($"Handling {nameof(GetOrdersByUserIdQueryHandler)}");
         
-        var items = await orderRepository.GetByUserIdAsync(request.UserId, cancellationToken); 
+        var items = await orderRepository.FindByUserIdAsync(request.UserId, cancellationToken); 
 
         var result = items
             .Select(order => 

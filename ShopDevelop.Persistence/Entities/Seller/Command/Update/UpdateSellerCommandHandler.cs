@@ -1,7 +1,5 @@
-using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Entities.Seller.Command.Update;
 using ShopDevelop.Application.Repository;
 
@@ -10,7 +8,7 @@ namespace ShopDevelop.Persistence.Entities.Seller.Command.Update;
 public class UpdateSellerCommandHandler 
     : IRequestHandler<UpdateSellerCommand>
 {
-    private readonly ILogger logger;
+    private readonly ILogger<UpdateSellerCommandHandler> logger;
     private readonly ISellerRepository sellerRepository;
 
     public UpdateSellerCommandHandler(
@@ -27,13 +25,14 @@ public class UpdateSellerCommandHandler
         
         var seller = await sellerRepository.GetByIdAsync(request.Id, cancellationToken);
         
-        if(seller == null)
-            throw new NotFoundException(typeof(Domain.Entities.Category), request.Id);
-        
-        seller.Name = request.Name;
-        seller.Description = request.Description;
-        seller.ImagePath = request.ImagePath;
-        seller.ImageFooterPath = request.ImageFooterPath;
+        if(request.Name != "string")
+            seller.Name = request.Name;
+        if(request.Description != "string")
+            seller.Description = request.Description;
+        if(request.ImagePath != "string")
+            seller.ImagePath = request.ImagePath;
+        if(request.ImageFooterPath != "string")
+            seller.ImageFooterPath = request.ImageFooterPath;
 
         await sellerRepository.UpdateAsync(seller, cancellationToken);
         

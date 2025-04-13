@@ -42,6 +42,13 @@ public interface IReviewRepository
     /// <returns>Return a IEnumerable collection of Reviews.</returns>
     Task<IEnumerable<Review?>> GetAllAsync(CancellationToken cancellationToken);
     /// <summary>
+    /// Finds a Review by Review ID.
+    /// </summary>
+    /// <param name="id">Review ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Review if Review is found else returns null.</returns>
+    Task<Review?> FindByIdAsync(Guid id, CancellationToken cancellationToken);
+    /// <summary>
     /// Gets a Review by Review ID.
     /// </summary>
     /// <param name="id">Review ID.</param>
@@ -50,21 +57,35 @@ public interface IReviewRepository
     /// <exception cref="NotFoundException">Thrown if the Review is not found.</exception>
     Task<Review?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     /// <summary>
+    /// Finds a Reviews by User ID.
+    /// </summary>
+    /// <param name="userId">User ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return IEnumerable collection of Reviews if Reviews is found else returns an empty collection.</returns>
+    Task<IEnumerable<Review>?> FindByUserIdAsync(string userId, CancellationToken cancellationToken);
+    /// <summary>
     /// Gets a Reviews by User ID.
     /// </summary>
     /// <param name="userId">User ID.</param>
     /// <param name="cancellationToken">Cancellation Token.</param>
     /// <returns>Return IEnumerable collection of Reviews if Reviews is found.</returns>
     /// <exception cref="NotFoundException">Thrown if the Review is not found.</exception>
-    Task<IEnumerable<Review>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetByUserIdAsync(string userId, CancellationToken cancellationToken);
+    /// <summary>
+    /// Finds a Reviews by Product ID.
+    /// </summary>
+    /// <param name="productId">User ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return IEnumerable collection of Reviews if Reviews is found else returns an empty collection.</returns>
+    Task<IEnumerable<Review>?> FindByProductIdAsync(Guid productId, CancellationToken cancellationToken);
     /// <summary>
     /// Gets a Reviews by Product ID.
     /// </summary>
-    /// <param name="userId">User ID.</param>
+    /// <param name="productId">User ID.</param>
     /// <param name="cancellationToken">Cancellation Token.</param>
     /// <returns>Return IEnumerable collection of Reviews if Reviews is found.</returns>
     /// <exception cref="NotFoundException">Thrown if the Review is not found.</exception>
-    Task<IEnumerable<Review>> GetAllByProductIdAsync(Guid userId, CancellationToken cancellationToken);
+    Task<IEnumerable<Review>> GetByProductIdAsync(Guid productId, CancellationToken cancellationToken);
     /// <summary>
     /// Gets a first Reviews by Date.
     /// </summary>

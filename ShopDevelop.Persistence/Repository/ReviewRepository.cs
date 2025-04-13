@@ -1,4 +1,7 @@
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
 using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -8,8 +11,14 @@ namespace ShopDevelop.Persistence.Repository;
 public class ReviewRepository : IReviewRepository
 {
     private readonly ApplicationDbContext context;
-    public ReviewRepository(ApplicationDbContext context) =>
+    private readonly string? connectionString;
+    public ReviewRepository(
+        ApplicationDbContext context,
+        IConfiguration configuration) 
+    {
+        connectionString = configuration.GetConnectionString("DefaultConnection");
         this.context = context;
+    }
         
     public async Task<Guid> CreateAsync(Review review, 
         CancellationToken cancellationToken)
@@ -37,38 +46,105 @@ public class ReviewRepository : IReviewRepository
         await context.SaveChangesAsync();
     }
     
-    public async Task<IEnumerable<Review?>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Review>?> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await context.Reviews
-            .ToListAsync(cancellationToken)
-            ?? throw new NotFoundException(typeof(Review), null);
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT
+                *
+            FROM
+                ""Reviews""";
+
+        return await connection
+            .QueryAsync<Review>(
+                sql, cancellationToken)
+                    ?? null;
     }
 
-    public async Task<Review?> GetByIdAsync(Guid id, 
+    public async Task<Review?> GetByIdAsync(Guid id,
         CancellationToken cancellationToken)
     {
-        return await context.Reviews
-            .FirstOrDefaultAsync(review => 
-                review.Id == id, 
-                cancellationToken)
+        return await this.FindByIdAsync(id, cancellationToken)
             ?? throw new NotFoundException(typeof(Review), id);
     }
 
-    public async Task<IEnumerable<Review>> GetAllByUserIdAsync(string userId, 
+    public async Task<Review?> FindByIdAsync(Guid id, 
         CancellationToken cancellationToken)
     {
-        return await context.Reviews
-            .Where(review => review.ApplicationUserId == userId)
-            .ToListAsync(cancellationToken)
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        
+        const string sql = @"
+            SELECT
+                *
+            FROM
+                ""Reviews""
+            WHERE
+                ""Id""=@Id";
+
+        return await connection
+            .QueryFirstOrDefaultAsync<Review>(
+                sql, new { Id = id })
+                    ?? null;
+    }
+
+    public async Task<IEnumerable<Review>> GetByUserIdAsync(string userId,
+        CancellationToken cancellationToken)
+    {
+        return await this.FindByUserIdAsync(userId, cancellationToken)
             ?? throw new NotFoundException(typeof(Review), userId);
     }
-    
-    public async Task<IEnumerable<Review>> GetAllByProductIdAsync(Guid productId, 
+
+    public async Task<IEnumerable<Review>?> FindByUserIdAsync(string userId, 
         CancellationToken cancellationToken)
     {
-        return context.Reviews
-            .Where(review => review.ProductId == productId)
-            ?? throw new NotFoundException(typeof(Review), productId);;
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT
+                *
+            FROM
+                ""Reviews""
+            WHERE
+                ""ApplicationUserId""=@UserId";
+        
+        return await connection
+            .QueryAsync<Review>(
+                sql, new { UserId = userId })
+                    ?? null;
+    }
+
+    public async Task<IEnumerable<Review>> GetByProductIdAsync(Guid productId,
+        CancellationToken cancellationToken)
+    {
+        return await this.FindByProductIdAsync(productId, cancellationToken)
+            ?? throw new NotFoundException(typeof(Review), productId);
+    }
+    
+    public async Task<IEnumerable<Review>?> FindByProductIdAsync(Guid productId, 
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT
+                *
+            FROM
+                ""Reviews""
+            WHERE
+                ""ProductId""=@ProductId";
+        
+        return await connection
+           .QueryAsync<Review>(
+               sql, new
+               {
+                   ProductId = productId
+               })
+                   ?? null;
     }
 
     /*public async Task<IEnumerable<Review>> GetFirstByDateLineAsync(

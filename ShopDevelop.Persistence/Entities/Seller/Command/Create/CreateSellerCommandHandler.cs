@@ -27,7 +27,8 @@ public class CreateSellerCommandHandler
     {
         logger.LogInformation($"Handling {nameof(CreateSellerCommandHandler)}");
         
-        var data = await sellerRepository.GetByNameAsync(request.Name, cancellationToken);
+        var data = await sellerRepository.FindByNameAsync(request.Name, cancellationToken);
+        
         if(data != null)
             return 0;
         

@@ -42,6 +42,13 @@ public interface IProductRepository
     /// <returns>Return a IEnumerable collection of Products.</returns>
     Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken);
     /// <summary>
+    /// Finds a Product by Product ID.
+    /// </summary>
+    /// <param name="id">Category ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Category if category is found else returns null.</returns>
+    Task<Product?> FindByIdAsync(Guid id, CancellationToken cancellationToken);
+    /// <summary>
     /// Gets a Product by Product ID.
     /// </summary>
     /// <param name="id">Category ID.</param>
@@ -66,6 +73,13 @@ public interface IProductRepository
     /// <exception cref="NotFoundException">Thrown if the Product is not found.</exception>
     Task<ShoesProduct?> GetShoesByIdAsync(Guid id, CancellationToken cancellationToken);
     /// <summary>
+    /// Finds a Product details by Product ID.
+    /// </summary>
+    /// <param name="id">Product ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Product details if Product is found else returns null.</returns>
+    Task<ProductDetail?> FindDetailsByProductIdAsync(Guid id, CancellationToken cancellationToken);
+    /// <summary>
     /// Gets a Product details by Product ID.
     /// </summary>
     /// <param name="id">Product ID.</param>
@@ -73,6 +87,13 @@ public interface IProductRepository
     /// <returns>Return Product details if Product is found.</returns>
     /// <exception cref="NotFoundException">Thrown if the Product is not found.</exception>
     Task<ProductDetail?> GetDetailsByProductIdAsync(Guid id, CancellationToken cancellationToken);
+    /// <summary>
+    /// Finds a Products by Category ID.
+    /// </summary>
+    /// <param name="categoryId">Category ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return IEnumerable collection of Products if Products is found else returns an Empty collection.</returns>
+    Task<IEnumerable<Product>?> FindByCategoryIdAsync(int categoryId, CancellationToken cancellationToken);
     /// <summary>
     /// Gets a Products by Category ID.
     /// </summary>

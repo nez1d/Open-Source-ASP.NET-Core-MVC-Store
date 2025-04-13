@@ -1,13 +1,13 @@
 using AutoMapper;
-using ShopDevelop.Application.Entities.Category.Commands.Create;
-using ShopDevelop.Domain.Entities;
+using ShopDevelop.Domain.Dto.Category;
 
-namespace ShopDevelop.Application.Data.Common.Mappings;
+namespace ShopDevelop.Application.Data.Common.Mappings.Category;
 
 public class CreateCategoryMappingModel : Profile
 {
     public CreateCategoryMappingModel()
     {
-        CreateMap<CreateCategoryCommand, Category>();
+        CreateMap<CreateCategoryDto, CreateCategoryCommand>();
+        CreateMap<CreateCategoryCommand, Domain.Entities.Category>();
     }
 }

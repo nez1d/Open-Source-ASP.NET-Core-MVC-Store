@@ -41,6 +41,13 @@ public interface ISellerRepository
     /// <returns>Return a IEnumerable collection of Seller.</returns>
     Task<IEnumerable<Seller>> GetAllAsync(CancellationToken cancellationToken);
     /// <summary>
+    /// Finds a Seller by Seller ID.
+    /// </summary>
+    /// <param name="id">Seller ID.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Seller if Seller is found else returns null.</returns>
+    Task<Seller?> FindByIdAsync(int id, CancellationToken cancellationToken);
+    /// <summary>
     /// Gets a Seller by Seller ID.
     /// </summary>
     /// <param name="id">Seller ID.</param>
@@ -48,6 +55,13 @@ public interface ISellerRepository
     /// <returns>Return Seller if Seller is found.</returns>
     /// <exception cref="NotFoundException">Thrown if the Seller is not found.</exception>
     Task<Seller> GetByIdAsync(int id, CancellationToken cancellationToken);
+    /// <summary>
+    /// Finds a Seller by Seller Name.
+    /// </summary>
+    /// <param name="name">Seller Name.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Seller if Seller is found else returns null.</returns>
+    Task<Seller?> FindByNameAsync(string name, CancellationToken cancellationToken);
     /// <summary>
     /// Gets a Seller by Seller Name.
     /// </summary>

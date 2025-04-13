@@ -30,11 +30,10 @@ public class UpdateCategoryCommandHandler
 
         var category = await categoryRepository.GetByIdAsync(request.Id, cancellationToken);
         
-        if(category == null)
-            throw new NotFoundException(typeof(Domain.Entities.Category), request.Id);
-        
-        category.Name = request.Name;
-        category.Description = request.Description;
+        if (category.Name != "string")
+            category.Name = request.Name;
+        if (category.Description != "string")
+            category.Description = request.Description;
 
         await categoryRepository.UpdateAsync(category, cancellationToken);
         

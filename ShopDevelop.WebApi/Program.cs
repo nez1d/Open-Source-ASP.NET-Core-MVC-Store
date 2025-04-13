@@ -11,16 +11,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using ShopDevelop.Application.Interfaces;
 using ShopDevelop.Application.Services.Cart;
 using ShopDevelop.Domain.Entities;
 using ShopDevelop.Identity.DuendeServer.WebAPI.Data;
 using ShopDevelop.Identity.DuendeServer.WebAPI.Data.IdentityConfigurations;
-using ShopDevelop.WebApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

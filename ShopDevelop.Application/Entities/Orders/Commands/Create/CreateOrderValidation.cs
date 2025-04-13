@@ -11,6 +11,8 @@ public class CreateOrderValidation : AbstractValidator<CreateOrderCommand>
             .MaximumLength(150)
             .NotEmpty()
             .NotNull()
+            .NotEqual(string.Empty)
+            .NotEqual("string")
             .WithMessage("");
         
         RuleFor(order => order.Country)
@@ -18,6 +20,8 @@ public class CreateOrderValidation : AbstractValidator<CreateOrderCommand>
             .MaximumLength(45)
             .NotEmpty()
             .NotNull()
+            .NotEqual(string.Empty)
+            .NotEqual("string")
             .WithMessage("");
         
         RuleFor(order => order.City)
@@ -25,6 +29,8 @@ public class CreateOrderValidation : AbstractValidator<CreateOrderCommand>
             .MaximumLength(50)
             .NotEmpty()
             .NotNull()
+            .NotEqual(string.Empty)
+            .NotEqual("string")
             .WithMessage("");
         
         RuleFor(order => order.Amount)
