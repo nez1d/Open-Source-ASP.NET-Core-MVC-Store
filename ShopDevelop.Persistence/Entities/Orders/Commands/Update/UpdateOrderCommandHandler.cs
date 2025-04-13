@@ -33,9 +33,12 @@ public class UpdateOrderCommandHandler
         if (order.ApplicationUserId != request.ApplicationUserId.ToString())
             throw new NotFoundException(typeof(Order), request.Id);
         
-        order.Address = request.Address;
-        order.Country = request.Country;
-        order.City = request.City;
+        if(request.Address != "string")
+            order.Address = request.Address;
+        if(request.Country != "string")
+            order.Country = request.Country;
+        if(request.City != "string")
+            order.City = request.City;
         
         await orderRepository.UpdateAsync(order, cancellationToken);
         

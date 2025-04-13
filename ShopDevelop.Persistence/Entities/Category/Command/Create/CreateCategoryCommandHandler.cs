@@ -27,7 +27,7 @@ public class CreateCategoryCommandHandler
     {
         logger.LogInformation($"Handling {nameof(CreateCategoryCommandHandler)}");
 
-        var data = await categoryRepository.GetByNameAsync(request.Name, cancellationToken);
+        var data = await categoryRepository.FindByNameAsync(request.Name, cancellationToken);
         
         if(data is not null) return 0;
         

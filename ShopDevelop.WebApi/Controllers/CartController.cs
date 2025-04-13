@@ -14,26 +14,38 @@ namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
 [ApiVersion(1, Deprecated = false)]
-[Route("api/v{version:apiVersion}/[controller]/[action]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseController
 {
     [HttpPost]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Add([FromBody] AddToCartDto model)
+    [Route("/api/v{version:apiVersion}/add-to-cart/{productId:guid}/{amount:int}")]
+    public async Task<IActionResult> AddToCart(Guid productId, int amount = 1)
     {
-        string accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        string? accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        if(accessToken is null)
+            return Unauthorized();
+        
         var userId = jwtProvider.GetUserId(accessToken);
         
-        var command = mapper.Map<AddToCartCommand>(model);
+        var command = mapper.Map<AddToCartCommand>(
+            new AddToCartDto
+            {
+                ProductId = productId, 
+                Amount = amount
+            });
+        
         command.UserId = userId;
         
         await Mediator.Send(command);
         return NoContent();
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Remove(Guid id)
+    // TODO: сделать колличественное удаление продукта из корзины
+    [Route("/api/v{version:apiVersion}/cart/{id:guid}")]
+    public async Task<IActionResult> RemoveFromCart(Guid id)
     {
         await Mediator.Send(new RemoveFromCartCommand()
         {
@@ -42,10 +54,17 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
         return NoContent();
     }
     
-    [HttpDelete("{userId}")]
+    [HttpDelete]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Clear(string userId)
+    [Route("/api/v{version:apiVersion}/clear-cart")]
+    public async Task<IActionResult> Clear()
     {
+        string? accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        if(accessToken is null)
+            return Unauthorized();
+        
+        var userId = jwtProvider.GetUserId(accessToken);
+        
         await Mediator.Send(new ClearCartCommand()
         {
             UserId = userId
@@ -53,45 +72,62 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
         return NoContent();
     }
     
-    [HttpGet("{userId}")]
+    [HttpGet]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Get(Guid userId)
+    [Route("/api/v{version:apiVersion}/cart-items")]
+    public async Task<IActionResult> GetAll()
     {
-        var items = await Mediator.Send(new GetShoppingCartItemsByUserIdQuery()
-        {
-            UserId = userId.ToString()
-        });
+        var items = await Mediator.Send(new GetAllCartItemsQuery());
         
-        if(items is not null)
-            return Ok(items);
+        if(items is null)
+            return NotFound();
         
-        return NotFound();
+        return Ok(items);
     }
     
     [HttpGet]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Get()
+    [Route("/api/v{version:apiVersion}/user-items")]
+    public async Task<IActionResult> GetByUserId()
     {
-        var items = await Mediator.Send(new GetAllCartItemsQuery());
+        string? accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        if(accessToken is null)
+            return Unauthorized();
         
-        if(items is not null)
-            return Ok(items);
+        var userId = jwtProvider.GetUserId(accessToken);
         
-        return NotFound();
+        var items = await Mediator.Send(
+            new GetShoppingCartItemsByUserIdQuery()
+            {
+                UserId = userId
+            });
+        
+        if(items is null)
+            return NotFound();
+        
+        return Ok(items);
     }
 
-    [HttpGet("{userId}")]
+    [HttpGet]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> GetTotal(string userId)
+    [Route("/api/v{version:apiVersion}/cart-total")]
+    public async Task<IActionResult> GetTotal()
     {
-        var result = await Mediator.Send(new GetTotalShoppingCartPriceQuery()
-        {
-            UserId = userId
-        });
+        string? accessToken = HttpContext.Request.Cookies["tasty-cookies"];
+        if(accessToken is null)
+            return Unauthorized();
         
-        if(result is not null)
-            return Ok(result);
+        var userId = jwtProvider.GetUserId(accessToken);
         
-        return NotFound();
+        var result = await Mediator.Send(
+            new GetTotalShoppingCartPriceQuery()
+            {
+                UserId = userId
+            });
+        
+        if(result is null)
+            return NotFound(); 
+        
+        return Ok(result);
     }
 }

@@ -15,125 +15,137 @@ namespace ShopDevelop.WebApi.Controllers;
 
 [ApiController]
 [ApiVersion(1, Deprecated = false)]
-[Route("api/v{version:apiVersion}/[controller]/[action]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class ReviewController(IMapper mapper) : BaseController
 {
     [HttpPost]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/review")]
     public async Task<IActionResult> Create([FromBody] CreateReviewDto model)
     {
         var review = mapper.Map<CreateReviewCommand>(model);
         var result = await Mediator.Send(review);
+        
         if(result != Guid.Empty)
             return Created();
         
         return BadRequest();
     }
     
-    [HttpPut]
+    // TODO: доделать
+    [HttpPatch]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Edit([FromBody] UpdateReviewDto model)
+    [Route("/api/v{version:apiVersion}/review/{id:guid}")]
+    public async Task<IActionResult> Edit(Guid id, [FromBody] UpdateReviewDto model)
     {
         var review = mapper.Map<UpdateReviewCommand>(model);
         await Mediator.Send(review);
         return NoContent();
     }
-    
-    [HttpDelete("{id}")]
+
+    [HttpDelete]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/review/{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await Mediator.Send(new DeleteReviewCommand { Id = id });
         return NoContent();
     }
-    
+
     [HttpGet]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/reviews")]
     public async Task<IActionResult> GetAll()
     {
         var result = await Mediator.Send(new GetAllReviewsQuery());
-        if (result != null)
-            return Ok(result);
-        
-        return NotFound();
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
     }
-    
-    [HttpGet("{productId}")]
+
+    [HttpGet]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Get(Guid productId)
+    [Route("/api/v{version:apiVersion}/product-reviews/{productId:guid}")]
+    public async Task<IActionResult> GetByProductId(Guid productId)
     {
         var result = await Mediator.Send(
             new GetAllReviewsByProductIdQuery()
             {
                 ProductId = productId
             });
-        
-        if (result != null)
-            return Ok(result);
-        
-        return NotFound();
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
     }
-    
-    [HttpGet("{userId}")]
+
+    [HttpGet]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Get(string userId)
+    [Route("/api/v{version:apiVersion}/user-reviews/{userId:guid}")]
+    public async Task<IActionResult> GetByUserId(string userId)
     {
         var result = await Mediator.Send(
         new GetAllReviewsByUserIdQuery()
         {
             UserId = userId
         });
-        
-        if (result != null)
-            return Ok(result);
-        
-        return NotFound();
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
     }
-    
-    [HttpGet("{productId}/{count}")]
+
+    [HttpGet]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/product-reviews-by-rating/{productId:guid}/{count:int}")]
     public async Task<IActionResult> GetFirstByRating(Guid productId, int count)
     {
         var request = await Mediator.Send(
             new GetFirstReviewsByRatingQuery()
             {
-                ProductId = productId, 
+                ProductId = productId,
                 Count = count
             });
-        
-        if(request != null)
-            return Ok(request);
-        
-        return NotFound();
+
+        if(request is null)
+            return NotFound();
+
+        return Ok(request);
     }
-    
-    [HttpGet("{productId}/{count}")]
+
+    [HttpGet]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/product-reviews-by-date/{productId:guid}/{count:int}")]
     public async Task<IActionResult> GetFirstByDate(Guid productId, int count)
     {
         var request = await Mediator.Send(
             new GetFirstReviewsByDateQuery()
             {
-                ProductId = productId, 
+                ProductId = productId,
                 Count = count
             });
-        
-        if(request != null)
-            return Ok(request);
-        
-        return NotFound();
+
+        if(request is null)
+            return NotFound();
+
+        return Ok(request);
     }
-    
-    [HttpPost("{reviewId}/{userId}")]
+    // TODO: переделать
+    [HttpPost]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> LikeReview(Guid reviewId, Guid userId)
+    [Route("/api/v{version:apiVersion}/like-review/{reviewId:guid}/{userId}")]
+    public async Task<IActionResult> LikeReview(Guid reviewId, string userId)
     {
         // TODO: доделать лайк отзыва
         return Ok();
     }
-    
+    // TODO: переделать
     [HttpPost]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/ulike-review/{reviewId:guid}/{userId}")]
     public async Task<IActionResult> UnlikeReview()
     {
         // TODO: доделать снятие лайка с отзыва

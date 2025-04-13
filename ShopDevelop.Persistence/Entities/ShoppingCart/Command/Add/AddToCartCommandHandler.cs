@@ -14,16 +14,17 @@ public class AddToCartCommandHandler
 {
     private readonly ILogger logger;
     private readonly IProductRepository productRepository;
-    private readonly ApplicationDbContext context;
+    private readonly IShoppingCartRepository shoppingCartRepository;
+    
     
     public AddToCartCommandHandler(
         ILogger<AddToCartCommandHandler> logger,
         IProductRepository productRepository,
-        ApplicationDbContext context)
+        IShoppingCartRepository shoppingCartRepository)
     {
         this.logger = logger;
         this.productRepository = productRepository;
-        this.context = context;
+        this.shoppingCartRepository = shoppingCartRepository;
     }
     
     public async Task Handle(AddToCartCommand request,
@@ -33,38 +34,33 @@ public class AddToCartCommandHandler
         
         var product = await productRepository.GetByIdAsync(request.ProductId, cancellationToken);
         
-        var shoppingCartItem = await context.ShoppingCartItems
-            .SingleOrDefaultAsync(item => 
-                item.Product.Id == product.Id,
-                cancellationToken);
-        
-        var isValidAmount = true;
+        var shoppingCartItem = await shoppingCartRepository
+            .GetItemUserIdAndProductIdAsync(
+                productId: request.ProductId, 
+                userId: request.UserId, 
+                cancellationToken: cancellationToken);
 
         if (shoppingCartItem == null)
         {
-            if(request.Amount > product.InStock)
-                isValidAmount = false;
+            if (request.Amount > product.InStock) return;
             
             shoppingCartItem = new ShoppingCartItem()
             {
-                Product = product,
-                ProductId = product.Id,
-                Amount = (uint)Math.Min(product.InStock, request.Amount),
+                ProductId = request.ProductId,
+                Amount = Math.Min(product.InStock, request.Amount),
                 ApplicationUserId = request.UserId
             };
+            await shoppingCartRepository.AddToCartAsync(shoppingCartItem, cancellationToken);
         }
         else
         {
-            if(product.InStock - shoppingCartItem.Amount - request.Amount >= 0)
-                shoppingCartItem.Amount += (uint)request.Amount;
+            if (product.InStock - shoppingCartItem.Amount - request.Amount >= 0)
+                shoppingCartItem.Amount += request.Amount;
             else
-            {
                 shoppingCartItem.Amount += (product.InStock - shoppingCartItem.Amount);
-                isValidAmount = false;
-            }
+            
+            await shoppingCartRepository.UpdateItemAsync(shoppingCartItem, cancellationToken);
         }
-        await context.ShoppingCartItems.AddAsync(shoppingCartItem);
-        await context.SaveChangesAsync();
         
         logger.LogInformation($"Handled {nameof(AddToCartCommandHandler)}");
     }

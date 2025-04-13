@@ -1,51 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
-using ShopDevelop.Application.Data.Common.Mappings;
-using ShopDevelop.Application.Data.Common.Mappings.Order;
-using ShopDevelop.Application.Data.Common.Mappings.Product;
-using ShopDevelop.Application.Data.Common.Mappings.Review;
-using ShopDevelop.Application.Data.Common.Mappings.Seller;
-using ShopDevelop.Application.Data.Common.Mappings.ShoppingCart;
-using ShopDevelop.Application.Entities.Category.Commands.Create;
-using ShopDevelop.Application.Entities.Category.Commands.Delete;
-using ShopDevelop.Application.Entities.Category.Commands.Update;
-using ShopDevelop.Application.Entities.Category.Queries.GetAllCategories;
-using ShopDevelop.Application.Entities.Category.Queries.GetCategoryById;
-using ShopDevelop.Application.Entities.Category.Queries.GetCategoryByName;
-using ShopDevelop.Application.Entities.Orders.Commands.Create;
-using ShopDevelop.Application.Entities.Orders.Commands.Delete;
-using ShopDevelop.Application.Entities.Orders.Commands.Update;
-using ShopDevelop.Application.Entities.Orders.Queries.GetAll;
-using ShopDevelop.Application.Entities.Orders.Queries.GetById;
-using ShopDevelop.Application.Entities.Orders.Queries.GetByProductId;
-using ShopDevelop.Application.Entities.Orders.Queries.GetByUserId;
-using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
-using ShopDevelop.Application.Entities.Product.Commands.Create.Shoes;
-using ShopDevelop.Application.Entities.Product.Commands.Delete;
-using ShopDevelop.Application.Entities.Product.Commands.Update;
-using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
-using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
-using ShopDevelop.Application.Entities.Review.Commands.Create;
-using ShopDevelop.Application.Entities.Review.Commands.Delete;
-using ShopDevelop.Application.Entities.Review.Commands.Update;
-using ShopDevelop.Application.Entities.Review.Queries.GetAllByProductId;
-using ShopDevelop.Application.Entities.Review.Queries.GetAllReviews;
-using ShopDevelop.Application.Entities.Review.Queries.GetAllReviewsByUserId;
-using ShopDevelop.Application.Entities.Review.Queries.GetFirstByCreatedDate;
-using ShopDevelop.Application.Entities.Review.Queries.GetFirstByRating;
-using ShopDevelop.Application.Entities.Seller.Command.Create;
-using ShopDevelop.Application.Entities.Seller.Command.Delete;
-using ShopDevelop.Application.Entities.Seller.Command.Update;
-using ShopDevelop.Application.Entities.Seller.Queries.GetAll;
-using ShopDevelop.Application.Entities.Seller.Queries.GetById;
-using ShopDevelop.Application.Entities.Seller.Queries.GetByName;
-using ShopDevelop.Application.Entities.ShoppingCart.Command.Add;
-using ShopDevelop.Application.Entities.ShoppingCart.Command.Clear;
-using ShopDevelop.Application.Entities.ShoppingCart.Command.Remove;
-using ShopDevelop.Application.Entities.ShoppingCart.Query.GetAll;
-using ShopDevelop.Application.Entities.ShoppingCart.Query.GetByUserId;
-using ShopDevelop.Application.Entities.ShoppingCart.Query.GetTotalPrice;
+using ShopDevelop.Application.Data.Common.Mappings.Category;
 
 namespace ShopDevelop.Application;
 
@@ -61,9 +17,11 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(GetProductMappingProfile));
         // Category
         services.AddAutoMapper(typeof(CreateCategoryMappingModel));
+        services.AddAutoMapper(typeof(UpdateCategoryMappingProfile));
         services.AddAutoMapper(typeof(GetCategoryByIdMappingProfile));
         services.AddAutoMapper(typeof(GetCategoryByNameMappingProfile));
         // Seller
+        services.AddAutoMapper(typeof(UpdateSellerMappingProfile));
         services.AddAutoMapper(typeof(CreateSellerMappingProfile));
         services.AddAutoMapper(typeof(GetAllSellersMappingProfile));
         services.AddAutoMapper(typeof(GetSellerByNameMappingProfile));

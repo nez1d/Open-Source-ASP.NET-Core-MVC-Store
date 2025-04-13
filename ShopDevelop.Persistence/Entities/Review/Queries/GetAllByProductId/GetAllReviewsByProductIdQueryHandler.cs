@@ -26,7 +26,7 @@ public class GetAllReviewsByProductIdQueryHandler
         logger.LogInformation($"Handling {nameof(GetAllReviewsByProductIdQueryHandler)}");
 
         var items = await reviewRepository
-            .GetAllByProductIdAsync(request.ProductId, cancellationToken);
+            .GetByProductIdAsync(request.ProductId, cancellationToken);
         
         var result = items
             .Select(review => 

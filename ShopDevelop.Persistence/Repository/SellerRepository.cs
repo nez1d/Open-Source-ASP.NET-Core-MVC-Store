@@ -1,4 +1,7 @@
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
 using ShopDevelop.Application.Data.Common.Exceptions;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -8,8 +11,15 @@ namespace ShopDevelop.Persistence.Repository;
 public class SellerRepository : ISellerRepository
 {
     private readonly ApplicationDbContext context;
-    public SellerRepository(ApplicationDbContext context) =>
+    private readonly string? connectionString;
+    
+    public SellerRepository(
+        ApplicationDbContext context,
+        IConfiguration configuration)
+    {
+        connectionString = configuration.GetConnectionString("DefaultConnection");
         this.context = context;
+    }
 
     public async Task<int> CreateAsync(Seller seller, CancellationToken cancellationToken)
     {
@@ -36,27 +46,70 @@ public class SellerRepository : ISellerRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Seller>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Seller>?> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await context.Sellers
-            .ToListAsync(cancellationToken);
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT
+                *
+            FROM
+                ""Sellers""";
+        
+        return await connection
+            .QueryAsync<Seller>(
+                sql, cancellationToken)
+                    ?? null;
     }
 
     public async Task<Seller> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await context.Sellers
-            .FirstOrDefaultAsync(seller => 
-                seller.Id == id, 
-                cancellationToken)
+        return await this.FindByIdAsync(id, cancellationToken)
             ?? throw new NotFoundException(typeof(Seller), id);
     }
-    
-    public async Task<Seller> GetByNameAsync(string name, CancellationToken cancellationToken)
+
+    public async Task<Seller?> FindByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await context.Sellers
-            .FirstOrDefaultAsync(seller => 
-                seller.Name == name, 
-                cancellationToken)
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT
+                *
+            FROM
+                ""Sellers""
+            WHERE
+                ""Id""=@Id";
+        
+        return await connection
+            .QueryFirstOrDefaultAsync<Seller>(
+                sql, new { Id = id })
+                    ?? null;
+    }
+
+    public async Task<Seller?> GetByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        return await this.FindByNameAsync(name, cancellationToken)
             ?? throw new NotFoundException(typeof(Seller), name);
+    }
+    
+    public async Task<Seller?> FindByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT
+                *
+            FROM
+                ""Sellers""
+            WHERE
+                ""Name""=@Name";
+        
+        return await connection
+           .QueryFirstOrDefaultAsync<Seller>(
+               sql, new { Name = name })
+                   ?? null;
     }
 }

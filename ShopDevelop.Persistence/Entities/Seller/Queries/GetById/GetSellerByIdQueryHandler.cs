@@ -22,12 +22,14 @@ public class GetSellerByIdQueryHandler
         this.sellerRepository = sellerRepository;
     }
     
-    public async Task<GetSellerByIdVm> Handle(GetSellerByIdQuery request,
+    public async Task<GetSellerByIdVm?> Handle(GetSellerByIdQuery request,
         CancellationToken cancellationToken)
     {
         logger.LogInformation($"Handling {nameof(GetSellerByIdQueryHandler)}");
         
-        var seller = await sellerRepository.GetByIdAsync(request.Id, cancellationToken);
+        var seller = await sellerRepository.FindByIdAsync(request.Id, cancellationToken);
+        
+        if (seller == null) return null;
         
         var result = mapper.Map<GetSellerByIdVm>(seller);
         

@@ -16,6 +16,15 @@ public class ShoppingCartRepository : IShoppingCartRepository
         CancellationToken cancellationToken)
     {
         await context.ShoppingCartItems.AddAsync(shoppingCartItem, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+    
+    public async Task UpdateItemAsync(
+        ShoppingCartItem shoppingCartItem, 
+        CancellationToken cancellationToken)
+    {
+        context.ShoppingCartItems.Update(shoppingCartItem);
+        await context.SaveChangesAsync(cancellationToken);
     }
     
     public async Task RemoveFromCartAsync(Guid itemId, 
@@ -64,5 +73,17 @@ public class ShoppingCartRepository : IShoppingCartRepository
         return await context.ShoppingCartItems
             .FirstOrDefaultAsync(item => item.Id == itemId, cancellationToken)
             ?? throw new NotFoundException(typeof(ShoppingCartItem), itemId);
+    }
+    
+    public async Task<ShoppingCartItem?> GetItemUserIdAndProductIdAsync(
+        Guid productId,
+        string userId,
+        CancellationToken cancellationToken)
+    {
+        return await context.ShoppingCartItems
+            .FirstOrDefaultAsync(item => 
+                item.ProductId == productId &&
+                item.ApplicationUserId == userId,
+                cancellationToken);
     }
 }

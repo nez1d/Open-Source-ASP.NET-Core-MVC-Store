@@ -18,8 +18,8 @@ namespace ShopDevelop.WebApi.Controllers;
 public class ProductController(IMapper mapper) : BaseController
 {
     [HttpPost]
-    [AllowAnonymous]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/product-clothes")]
     public async Task<IActionResult> CreateClothes([FromBody] CreateClothesProductDto model)
     {
         var command = mapper.Map<CreateClothesProductCommand>(model);
@@ -32,8 +32,8 @@ public class ProductController(IMapper mapper) : BaseController
     }
     
     [HttpPost]
-    [AllowAnonymous]
     [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/product-shoes")]
     public async Task<IActionResult> CreateShoes([FromBody] CreateShoesProductDto model)
     {
         var command = mapper.Map<CreateShoesProductCommand>(model);
@@ -46,8 +46,9 @@ public class ProductController(IMapper mapper) : BaseController
     }
     
     [HttpPut]
-    [AllowAnonymous]
     [MapToApiVersion(1)]
+    // TODO: доделать
+    [Route("/api/v{version:apiVersion}/product")]
     public async Task<IActionResult> Edit([FromBody] UpdateProductDto model)
     {
         var command = mapper.Map<UpdateProductCommand>(model);
@@ -55,11 +56,15 @@ public class ProductController(IMapper mapper) : BaseController
         return NoContent();
     }
     
-    [HttpDelete("{id}")]
-    [AllowAnonymous]
+    [HttpDelete]
     [MapToApiVersion(1)]
-    public async Task<IActionResult> Delete([FromBody] DeleteProductCommand command)
+    [Route("/api/v{version:apiVersion}/category/{productId:guid}")]
+    public async Task<IActionResult> Delete(Guid productId)
     {
+        var command = new DeleteProductCommand()
+        {
+            ProductId = productId
+        };
         await Mediator.Send(command);
         return NoContent();
     }
@@ -67,27 +72,51 @@ public class ProductController(IMapper mapper) : BaseController
     [HttpGet]
     [AllowAnonymous]
     [MapToApiVersion(1)]
-    public async Task<ActionResult> Get()
+    [Route("/api/v{version:apiVersion}/minimized-products")]
+    public async Task<ActionResult> GetAll()
     {
-        var result = await Mediator.Send(
-            new GetMiniProductListQuery());
+        var result = await Mediator.Send(new GetMiniProductListQuery());
+        
+        if(result is null)
+            return NotFound();
+        
         return Ok(result);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
     [AllowAnonymous]
     [MapToApiVersion(1)]
-    public async Task<ActionResult> Get(Guid id)
+    [Route("/api/v{version:apiVersion}/product/{id:guid}")]
+    public async Task<ActionResult> GetById(Guid id)
     {
         var byIdQuery = new GetProductByIdQuery
         {
             Id = id
         };
+        
         var result = await Mediator.Send(byIdQuery);
         
-        if(result != null)
-            return Ok(result);
+        if(result is null)
+            return NotFound();
         
-        return NotFound();
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    // TODO: доделать!
+    public async Task<ActionResult> GetByArticle(Guid id)
+    {
+        return Ok();
+    }
+    
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    // TODO: сделать!
+    public async Task<ActionResult> GetBySellerId(int sellerId)
+    {
+        return Ok();
     }
 }

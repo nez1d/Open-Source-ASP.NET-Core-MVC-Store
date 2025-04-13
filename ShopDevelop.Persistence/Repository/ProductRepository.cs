@@ -91,6 +91,12 @@ public class ProductRepository : IProductRepository
                 sql, cancellationToken) 
                     ?? [];
     }
+    
+    public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await this.FindByIdAsync(id, cancellationToken)
+               ?? throw new NotFoundException(typeof(Product), id);
+    }
 
     public async Task<Product?> FindByIdAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -109,12 +115,6 @@ public class ProductRepository : IProductRepository
            .QueryFirstOrDefaultAsync<Product>(
                sql, new { Id = id })
                    ?? null;
-    }
-    
-    public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-    {
-        return await this.FindByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException(typeof(Product), id);
     }
     
     public async Task<ClothesProduct?> GetClothesByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -140,21 +140,57 @@ public class ProductRepository : IProductRepository
         product.Product = null;
         return product;
     }
-    
+
     public async Task<ProductDetail?> GetDetailsByProductIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await context.ProductDetails
-            .FirstOrDefaultAsync(details => 
-                details.ProductId == id,
-                cancellationToken)
-            ?? throw new NotFoundException(typeof(ProductDetail), id);
+        return await this.FindDetailsByProductIdAsync(id, cancellationToken)
+               ?? throw new NotFoundException(typeof(ProductDetail), id);
+    }
+    public async Task<ProductDetail?> FindDetailsByProductIdAsync(Guid id, CancellationToken cancellationToken)
+    
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT 
+                *
+            FROM 
+                ""ProductDetails""
+            WHERE 
+                ""Id""=@Id";
+        
+        return await connection
+            .QueryFirstOrDefaultAsync<ProductDetail>(
+                sql, new { Id = id })
+                    ?? null;
     }
 
-    public async Task<IEnumerable<Product?>> GetByCategoryIdAsync(int categoryId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId, CancellationToken cancellationToken)
     {
-        // TODO: доделать
-        /*return context.Products
-            .Where(product => product.Category.Id == categoryId);*/
-        return null;
+        return await this.FindByCategoryIdAsync(categoryId, cancellationToken)
+            ?? throw new NotFoundException(typeof(Product), categoryId);
+    }
+
+    public async Task<IEnumerable<Product>?> FindByCategoryIdAsync(int categoryId, CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT
+                *
+            FROM
+                ""Products""
+            WHERE
+                ""CategoryId""=@CategoryId";
+        
+        return await connection
+            .QueryAsync<Product>(
+                sql, new
+                {
+                    CategoryId = categoryId
+                })
+                    ?? null;
     }
 }
