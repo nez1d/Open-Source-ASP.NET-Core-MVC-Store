@@ -43,13 +43,13 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
     
     [HttpDelete]
     [MapToApiVersion(1)]
-    // TODO: сделать колличественное удаление продукта из корзины
-    [Route("/api/v{version:apiVersion}/cart/{id:guid}")]
-    public async Task<IActionResult> RemoveFromCart(Guid id)
+    [Route("/api/v{version:apiVersion}/cart/{id:guid}/{amount:int}")]
+    public async Task<IActionResult> RemoveFromCart(Guid id, int amount = 1)
     {
         await Mediator.Send(new RemoveFromCartCommand()
         {
-            ItemId = id
+            ItemId = id,
+            Amount = (uint)amount
         });
         return NoContent();
     }

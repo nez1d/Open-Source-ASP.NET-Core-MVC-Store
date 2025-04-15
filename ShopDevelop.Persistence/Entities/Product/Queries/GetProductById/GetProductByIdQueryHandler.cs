@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ShopDevelop.Application.Data.Common.Exceptions;
-using ShopDevelop.Application.Entities.Product.Queries.GetProduct;
+using ShopDevelop.Application.Entities.Product.Queries.GetById;
 using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
 using ShopDevelop.Application.Repository;
 using ShopDevelop.Domain.Entities;
@@ -10,24 +10,24 @@ using ShopDevelop.Domain.Entities.Products;
 
 namespace ShopDevelop.Persistence.Entities.Product.Queries.GetProduct;
 
-public class GetProductQueryHandler 
-    : IRequestHandler<GetProductByIdQuery, ProductVm>
+public class GetProductByIdQueryHandler 
+    : IRequestHandler<GetProductByIdQuery, GetProductByIdVm>
 {
     private readonly IMapper mapper;
     private readonly IProductRepository productRepository;
-    private readonly ILogger<GetProductQueryHandler> logger;
+    private readonly ILogger<GetProductByIdQueryHandler> logger;
     
-    public GetProductQueryHandler(
+    public GetProductByIdQueryHandler(
         IMapper mapper,
         IProductRepository productRepository,
-        ILogger<GetProductQueryHandler> logger)
+        ILogger<GetProductByIdQueryHandler> logger)
     {
         this.productRepository = productRepository;
         this.mapper = mapper;
         this.logger = logger;
     }
     
-    public async Task<ProductVm> Handle(GetProductByIdQuery request, 
+    public async Task<GetProductByIdVm> Handle(GetProductByIdQuery request, 
         CancellationToken cancellationToken)
     {
         logger.LogInformation($"Handling {nameof(GetProductByIdQuery)}");
@@ -38,7 +38,7 @@ public class GetProductQueryHandler
         if (product.Id != request.Id)
             throw new NotFoundException(typeof(Domain.Entities.Product), request.Id);
         
-        var result = mapper.Map<ProductVm>(product);
+        var result = mapper.Map<GetProductByIdVm>(product);
 
         if (product.CategoryName == "Clothes" &&
             product.ClothesProductId != Guid.Empty)
@@ -52,6 +52,9 @@ public class GetProductQueryHandler
             result.ShoesProduct = await productRepository.GetShoesByIdAsync(
                 product.ShoesProductId, cancellationToken);
         }
+        
+        result.ProductDetail = await productRepository.FindDetailsByProductIdAsync(
+            result.ProductId, cancellationToken);
         
         logger.LogInformation($"Handled {nameof(GetProductByIdQuery)}");
         return result;

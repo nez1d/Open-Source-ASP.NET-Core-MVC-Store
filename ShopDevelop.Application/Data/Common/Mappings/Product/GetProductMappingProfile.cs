@@ -1,5 +1,5 @@
 using AutoMapper;
-using ShopDevelop.Application.Entities.Product.Queries.GetProduct;
+using ShopDevelop.Application.Entities.Product.Queries.GetById;
 
 namespace ShopDevelop.Application.Data.Common.Mappings.Product;
 
@@ -9,7 +9,7 @@ public class GetProductMappingProfile : Profile
     {
         #region Product To ProductVm
 
-        CreateMap<Domain.Entities.Product, ProductVm>()
+        CreateMap<Domain.Entities.Product, GetProductByIdVm>()
 
             #region Product Mapper
             .ForMember(model => model.ProductId, opt =>
@@ -52,9 +52,6 @@ public class GetProductMappingProfile : Profile
             #endregion
 
             #region Product Details Mapper
-
-            .ForMember(model => model.Article, opt =>
-                opt.MapFrom(product => product.ProductDetail.Article))
             .ForMember(model => model.Brend, opt =>
                 opt.MapFrom(product => product.ProductDetail.Brend))
             .ForMember(model => model.CountryOfManufacture, opt =>
