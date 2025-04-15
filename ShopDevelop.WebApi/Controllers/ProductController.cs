@@ -6,8 +6,11 @@ using ShopDevelop.Application.Entities.Product.Commands.Create.Clothes;
 using ShopDevelop.Application.Entities.Product.Commands.Create.Shoes;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
 using ShopDevelop.Application.Entities.Product.Commands.Update;
+using ShopDevelop.Application.Entities.Product.Queries.GetByArticle;
 using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
 using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
+using ShopDevelop.Application.Entities.Product.Queries.GetSortedByPrice;
+using ShopDevelop.Application.Entities.Product.Queries.GetSortedByRating;
 using ShopDevelop.Domain.Dto.Product;
 
 namespace ShopDevelop.WebApi.Controllers;
@@ -105,10 +108,57 @@ public class ProductController(IMapper mapper) : BaseController
     [HttpGet]
     [AllowAnonymous]
     [MapToApiVersion(1)]
-    // TODO: доделать!
-    public async Task<ActionResult> GetByArticle(Guid id)
+    [Route("/api/v{version:apiVersion}/product/{article:int}")]
+    public async Task<ActionResult> GetByArticle(int article)
     {
-        return Ok();
+        var query = await Mediator.Send(
+            new GetProductByArticleQuery()
+            {
+                Article = article
+            });
+        
+        if(query is null)
+            return NotFound();
+        
+        return Ok(query);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/product/{maxPrice:decimal}/{minPrice:decimal}/{descending:bool}")]
+    public async Task<ActionResult> GetSortedByPrice(decimal? maxPrice = null, decimal? minPrice = null, bool descending = false)
+    {
+        var result = await Mediator.Send(
+            new GetSortedProductsByPriceQuery()
+            {
+                MaxPrice = maxPrice,
+                MinPrice = minPrice,
+                Descending = descending
+            });
+
+        if (result is null)
+            return BadRequest();
+        
+        return Ok(result);
+    }
+    
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/product/{descending:bool}")]
+    public async Task<ActionResult> GetSortedByRating(bool descending = false)
+    {
+        var result = await Mediator.Send(
+            new GetSortedProductsByRatingQuery()
+            {
+                Descending = descending
+            });
+
+        if (result is null)
+            return BadRequest();
+        
+        return Ok(result);
     }
     
     [HttpGet]

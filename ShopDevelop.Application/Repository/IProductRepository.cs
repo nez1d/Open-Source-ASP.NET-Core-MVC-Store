@@ -102,4 +102,27 @@ public interface IProductRepository
     /// <returns>Return IEnumerable collection of Products if Products is found.</returns>
     /// <exception cref="NotFoundException">Thrown if the Product is not found.</exception>
     Task<IEnumerable<Product?>> GetByCategoryIdAsync(int categoryId, CancellationToken cancellationToken);
+    /// <summary>
+    /// Finds a ProductDetail by article.
+    /// </summary>
+    /// <param name="article">Article.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return ProductDetail if Product is found else returns null.</returns>
+    Task<ProductDetail?> FindDetailByArticleIdAsync(int article, CancellationToken cancellationToken);
+    /// <summary>
+    /// Finds a Products by price.
+    /// </summary>
+    /// <param name="maxPrice">Max Price.</param>
+    /// <param name="minPrice">Min Price.</param>
+    /// <param name="descending">Descending.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Products if Products is found else returns en empty collection.</returns>
+    Task<IEnumerable<Product>> FindSortedByPriceAsync(CancellationToken cancellationToken, decimal? maxPrice = null, decimal? minPrice = null, bool descending = false);
+    /// <summary>
+    /// Finds a Products by rating.
+    /// </summary>
+    /// <param name="descending">Descending.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Products if Products is found else returns en empty collection.</returns>
+    Task<IEnumerable<Product>> FindSortedByRatingAsync(CancellationToken cancellationToken, bool descending = false);
 }

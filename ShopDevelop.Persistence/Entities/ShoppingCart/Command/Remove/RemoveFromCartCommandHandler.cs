@@ -24,7 +24,20 @@ public class RemoveFromCartCommandHandler
     {
         logger.LogInformation($"Handling {nameof(RemoveFromCartCommandHandler)}");
         
-        await shoppingCartRepository.RemoveFromCartAsync(request.ItemId, cancellationToken);
+        var item = await shoppingCartRepository.GetByItemIdAsync(request.ItemId, cancellationToken);
+
+        if (item is null) return;
+        
+        if (item.Amount == 1 || item.Amount == request.Amount)
+            await shoppingCartRepository.RemoveFromCartAsync(request.ItemId, cancellationToken);
+        else
+        {
+            if (item.Amount >= request.Amount)
+            {
+                item.Amount -= request.Amount;
+                await shoppingCartRepository.UpdateItemAsync(item, cancellationToken);
+            }
+        }
         
         logger.LogInformation($"Handled {nameof(RemoveFromCartCommandHandler)}");
     }

@@ -2,6 +2,9 @@
 using System.Reflection;
 using FluentValidation;
 using ShopDevelop.Application.Data.Common.Mappings.Category;
+using ShopDevelop.Application.Entities.Product.Queries.GetByArticle;
+using ShopDevelop.Application.Entities.Product.Queries.GetSortedByPrice;
+using ShopDevelop.Application.Entities.Product.Queries.GetSortedByRating;
 
 namespace ShopDevelop.Application;
 
@@ -15,6 +18,7 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(CreateShoesProducMappingProfile));
         services.AddAutoMapper(typeof(UpdateProductMappingProfile));
         services.AddAutoMapper(typeof(GetProductMappingProfile));
+        services.AddAutoMapper(typeof(GetProductByArticleMappingProfile));
         // Category
         services.AddAutoMapper(typeof(CreateCategoryMappingModel));
         services.AddAutoMapper(typeof(UpdateCategoryMappingProfile));
@@ -46,7 +50,10 @@ public static class DependencyInjection
                 typeof(UpdateProductCommand).Assembly,
                 typeof(DeleteProductCommand).Assembly,
                 typeof(GetProductByIdQuery).Assembly,
-                typeof(GetMiniProductListQuery).Assembly
+                typeof(GetMiniProductListQuery).Assembly,
+                typeof(GetProductByArticleQuery).Assembly,
+                typeof(GetSortedProductsByPriceQuery).Assembly,
+                typeof(GetSortedProductsByRatingQuery).Assembly
                 ));
         // Category
         services.AddMediatR(x =>

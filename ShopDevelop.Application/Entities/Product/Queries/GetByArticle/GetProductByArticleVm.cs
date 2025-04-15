@@ -1,9 +1,10 @@
+using ShopDevelop.Domain.Entities;
 using ShopDevelop.Domain.Entities.Products;
 using ShopDevelop.Domain.Enums;
 
-namespace ShopDevelop.Application.Entities.Product.Queries.GetProduct;
+namespace ShopDevelop.Application.Entities.Product.Queries.GetByArticle;
 
-public class ProductVm
+public class GetProductByArticleVm
 {
     public Guid ProductId { get; set; }
     public string ProductName { get; set; }
@@ -21,6 +22,7 @@ public class ProductVm
     public string SellerName { get; set; }
     public int SellerId { get; set; }
     public Guid ProductDetailId { get; set; }
+    public ProductDetail ProductDetail { get; set; }
     public uint Article { get; set; }
     public string Brend { get; set; }
     public string? CountryOfManufacture { get; set; }

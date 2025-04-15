@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Text;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -147,7 +148,6 @@ public class ProductRepository : IProductRepository
                ?? throw new NotFoundException(typeof(ProductDetail), id);
     }
     public async Task<ProductDetail?> FindDetailsByProductIdAsync(Guid id, CancellationToken cancellationToken)
-    
     {
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken);
@@ -158,7 +158,7 @@ public class ProductRepository : IProductRepository
             FROM 
                 ""ProductDetails""
             WHERE 
-                ""Id""=@Id";
+                ""ProductId""=@Id";
         
         return await connection
             .QueryFirstOrDefaultAsync<ProductDetail>(
@@ -192,5 +192,101 @@ public class ProductRepository : IProductRepository
                     CategoryId = categoryId
                 })
                     ?? null;
+    }
+
+    public async Task<ProductDetail?> FindDetailByArticleIdAsync(int article, CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        string sql = @"
+            SELECT
+                *
+            FROM
+                ""ProductDetails""
+            WHERE
+                ""Article""=@Article";
+        
+        return await connection
+           .QueryFirstOrDefaultAsync<ProductDetail>(
+               sql, new
+               {
+                   Article = article
+               })
+                   ?? null;
+    }
+
+    public async Task<IEnumerable<Product>> FindSortedByPriceAsync(
+        CancellationToken cancellationToken,
+        decimal? maxPrice = null, 
+        decimal? minPrice = null, 
+        bool descending = false)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        
+        var direction = descending ? "DESC" : "ASC";
+        
+        var sql = new StringBuilder(@"
+            SELECT 
+                ""Id"", 
+                ""ProductName"", 
+                ""Price"", 
+                ""Rating"", 
+                ""ImageMiniPath"", 
+                ""SellerName"" 
+            FROM 
+                ""Products""");
+
+        var conditions = new List<string>();
+        
+        if (minPrice.HasValue)
+            conditions.Add(@"""Price"" >= @MinPrice");
+        if (maxPrice.HasValue)
+            conditions.Add(@"""Price"" <= @MaxPrice");
+        
+        if(conditions.Any())
+            sql.Append(" WHERE " + string.Join(" AND ", conditions));
+        
+        sql.Append($" ORDER BY \"Price\" {direction}");
+
+        return await connection
+            .QueryAsync<Product>(
+                sql.ToString(), new
+                {
+                    MinPrice = minPrice, 
+                    MaxPrice = maxPrice
+                }) 
+                    ?? [];
+    }
+
+    public async Task<IEnumerable<Product>> FindSortedByRatingAsync(
+        CancellationToken cancellationToken,
+        bool descending = false)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        
+        var direction = descending ? "DESC" : "ASC";
+        
+        var sql = new StringBuilder(@"
+            SELECT 
+                ""Id"", 
+                ""ProductName"", 
+                ""Price"", 
+                ""Rating"", 
+                ""ImageMiniPath"", 
+                ""SellerName"" 
+            FROM 
+                ""Products""");
+
+        sql.Append($" ORDER BY \"Rating\" {direction}");
+        
+        var data = sql.ToString();
+
+        return await connection
+            .QueryAsync<Product>(
+                sql.ToString(),
+                    cancellationToken);
     }
 }
