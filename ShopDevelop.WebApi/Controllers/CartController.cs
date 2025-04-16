@@ -77,12 +77,12 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
     [Route("/api/v{version:apiVersion}/cart-items")]
     public async Task<IActionResult> GetAll()
     {
-        var items = await Mediator.Send(new GetAllCartItemsQuery());
+        var result = await Mediator.Send(new GetAllCartItemsQuery());
         
-        if(items is null)
+        if(!result.Any())
             return NotFound();
         
-        return Ok(items);
+        return Ok(result);
     }
     
     [HttpGet]
@@ -96,16 +96,16 @@ public class CartController(IMapper mapper, JwtProvider jwtProvider) : BaseContr
         
         var userId = jwtProvider.GetUserId(accessToken);
         
-        var items = await Mediator.Send(
+        var result = await Mediator.Send(
             new GetShoppingCartItemsByUserIdQuery()
             {
                 UserId = userId
             });
         
-        if(items is null)
+        if(!result.Any())
             return NotFound();
         
-        return Ok(items);
+        return Ok(result);
     }
 
     [HttpGet]

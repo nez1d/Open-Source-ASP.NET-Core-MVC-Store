@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ShopDevelop.Persistence.Entities.Product.Queries.GetMyArticle;
-using ShopDevelop.Persistence.Entities.Product.Queries.GetSortedByPrice;
-using ShopDevelop.Persistence.Entities.Product.Queries.GetSortedByRating;
 
 namespace ShopDevelop.Persistence;
 
@@ -23,7 +20,9 @@ public static class DependencyInjection
                 typeof(GetMiniProductListQueryHandler).Assembly,
                 typeof(GetProductByArticleQueryHandler).Assembly,
                 typeof(GetSortedProductsByPriceQueryHandler).Assembly,
-                typeof(GetSortedProductsByRatingQueryHandler).Assembly
+                typeof(GetSortedProductsByRatingQueryHandler).Assembly,
+                typeof(GetProductBySellerIdQueryHandler).Assembly,
+                typeof(GetProductByNoveltyQueryHandler).Assembly
                 ));
         // Category
         services.AddMediatR(x =>

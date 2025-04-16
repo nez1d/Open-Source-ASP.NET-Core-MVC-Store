@@ -287,6 +287,82 @@ public class ProductRepository : IProductRepository
         return await connection
             .QueryAsync<Product>(
                 sql.ToString(),
-                    cancellationToken);
+                    cancellationToken)
+                        ?? [];
+    }
+
+    public async Task<IEnumerable<Product>> FindByNameAsync(
+        string keyWord,
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT *
+            FROM 
+                ""Products""
+            WHERE
+                ""Name"" LIKE @KeyWord OR 
+                ""Description"" LIKE @KeyWord 
+            ORDER BY 
+                ""Name""";
+
+        return await connection
+            .QueryAsync<Product>(
+                sql, new 
+                    { KeyWord = keyWord })
+                    ?? [];
+    }
+
+    public async Task<IEnumerable<Product>> FindBySellerIdAsync(
+        int sellerId,
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = @"
+            SELECT*
+            FROM ""Products""
+            WHERE ""SellerId""=@SellerId";
+        
+        return await connection
+           .QueryAsync<Product>(
+               sql, new 
+                   { SellerId = sellerId })
+                       ?? [];
+    }
+    
+    // TODO: у продукта нету свойства CreatedDate!!!
+    public async Task<IEnumerable<Product>> FindSortedByNoveltyAsync(
+        CancellationToken cancellationToken,
+        bool descending = false)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        
+        var direction = descending ? "DESC" : "ASC";
+        
+        var sql = new StringBuilder(@"
+            SELECT 
+                ""Id"", 
+                ""ProductName"", 
+                ""Price"", 
+                ""Rating"", 
+                ""ImageMiniPath"", 
+                ""SellerName"" 
+            FROM 
+                ""Products""");
+
+        sql.Append($" ORDER BY \"CreatedDate\" {direction}");
+        
+        var data = sql.ToString();
+
+        return await connection
+           .QueryAsync<Product>(
+               sql.ToString(),
+               cancellationToken)
+                   ?? [];
     }
 }

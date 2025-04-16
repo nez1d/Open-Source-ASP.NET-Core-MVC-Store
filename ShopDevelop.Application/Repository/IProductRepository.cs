@@ -125,4 +125,25 @@ public interface IProductRepository
     /// <param name="cancellationToken">Cancellation Token.</param>
     /// <returns>Return Products if Products is found else returns en empty collection.</returns>
     Task<IEnumerable<Product>> FindSortedByRatingAsync(CancellationToken cancellationToken, bool descending = false);
+    /// <summary>
+    /// Finds a Products by Product Name and Description.
+    /// </summary>
+    /// <param name="keyWord">The Words that will be searched for.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Products if Products is found else returns en empty collection.</returns>
+    Task<IEnumerable<Product>> FindByNameAsync(string keyWord, CancellationToken cancellationToken);
+    /// <summary>
+    /// Finds a Products by SellerId.
+    /// </summary>
+    /// <param name="sellerId">Seller Id.</param>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <returns>Return Products if Products is found else returns en empty collection.</returns>
+    Task<IEnumerable<Product>> FindBySellerIdAsync(int sellerId, CancellationToken cancellationToken);
+    /// <summary>
+    /// Finds a Products by CreatedDate.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation Token.</param>
+    /// <param name="descending">Descending.</param>
+    /// <returns>Return Products if Products is found else returns en empty collection.</returns>
+    Task<IEnumerable<Product>> FindSortedByNoveltyAsync(CancellationToken cancellationToken, bool descending);
 }

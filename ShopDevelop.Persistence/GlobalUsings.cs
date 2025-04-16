@@ -34,3 +34,8 @@ global using ShopDevelop.Persistence.Entities.ShoppingCart.Command.Remove;
 global using ShopDevelop.Persistence.Entities.ShoppingCart.Query.GetAll;
 global using ShopDevelop.Persistence.Entities.ShoppingCart.Query.GetByUserId;
 global using ShopDevelop.Persistence.Entities.ShoppingCart.Query.GetTotalPrice;
+global using ShopDevelop.Persistence.Entities.Product.Queries.GetByNovelty;
+global using ShopDevelop.Persistence.Entities.Product.Queries.GetBySellerId;
+global using ShopDevelop.Persistence.Entities.Product.Queries.GetMyArticle;
+global using ShopDevelop.Persistence.Entities.Product.Queries.GetSortedByPrice;
+global using ShopDevelop.Persistence.Entities.Product.Queries.GetSortedByRating;

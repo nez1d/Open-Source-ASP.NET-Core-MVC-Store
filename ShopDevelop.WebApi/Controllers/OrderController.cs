@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using AutoMapper;
+using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using ShopDevelop.Application.Entities.Orders.Commands.Create;
 using ShopDevelop.Application.Entities.Orders.Commands.Delete;
@@ -68,7 +69,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
     {
         var result = await Mediator.Send(new GetAllOrdersQuery());
         
-        if(result is null)
+        if(!result.Any())
             return NotFound();
             
         return Ok(result);
@@ -98,7 +99,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
                 UserId = userId
             });
         
-        if(result is null)
+        if(!result.Any())
             return NotFound();
         
         return Ok(result);
@@ -115,7 +116,7 @@ public class OrderController(IMapper mapper, JwtProvider jwtProvider) : BaseCont
                 ProductId = productId
             });
         
-        if(result is null)
+        if(!result.Any())
             return NotFound();
         
         return Ok(result);

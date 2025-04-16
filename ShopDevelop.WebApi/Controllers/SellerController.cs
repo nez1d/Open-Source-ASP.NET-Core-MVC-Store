@@ -65,10 +65,10 @@ public class SellerController(IMapper mapper) : BaseController
         var result = await Mediator
             .Send(new GetAllSellersListQuery());
         
-        if(result is not null)
-            return Ok(result);
+        if(!result.Any())
+            return NotFound();
         
-        return NotFound();
+        return Ok(result);
     }
     
     [HttpGet]
@@ -79,10 +79,10 @@ public class SellerController(IMapper mapper) : BaseController
         var query = new GetSellerByIdQuery { Id = id };
         var result = await Mediator.Send(query);
         
-        if(result is not null)
-            return Ok(result);
+        if(result is null)
+            return NotFound();
         
-        return NotFound();
+        return Ok(result);
     }
 
     [HttpGet]

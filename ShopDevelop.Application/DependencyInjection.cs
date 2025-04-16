@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
-using ShopDevelop.Application.Data.Common.Mappings.Category;
-using ShopDevelop.Application.Entities.Product.Queries.GetByArticle;
-using ShopDevelop.Application.Entities.Product.Queries.GetSortedByPrice;
-using ShopDevelop.Application.Entities.Product.Queries.GetSortedByRating;
+using ShopDevelop.Application.Entities.Product.Queries.GetByName;
 
 namespace ShopDevelop.Application;
 
@@ -53,7 +50,10 @@ public static class DependencyInjection
                 typeof(GetMiniProductListQuery).Assembly,
                 typeof(GetProductByArticleQuery).Assembly,
                 typeof(GetSortedProductsByPriceQuery).Assembly,
-                typeof(GetSortedProductsByRatingQuery).Assembly
+                typeof(GetSortedProductsByRatingQuery).Assembly,
+                typeof(GetProductBySellerIdQuery).Assembly,
+                typeof(GetProductByNoveltyQuery).Assembly,
+                typeof(GetProductByNameQuery).Assembly
                 ));
         // Category
         services.AddMediatR(x =>
