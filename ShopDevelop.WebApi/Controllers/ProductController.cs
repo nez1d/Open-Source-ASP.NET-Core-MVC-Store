@@ -7,6 +7,9 @@ using ShopDevelop.Application.Entities.Product.Commands.Create.Shoes;
 using ShopDevelop.Application.Entities.Product.Commands.Delete;
 using ShopDevelop.Application.Entities.Product.Commands.Update;
 using ShopDevelop.Application.Entities.Product.Queries.GetByArticle;
+using ShopDevelop.Application.Entities.Product.Queries.GetByName;
+using ShopDevelop.Application.Entities.Product.Queries.GetByNovelty;
+using ShopDevelop.Application.Entities.Product.Queries.GetBySellerId;
 using ShopDevelop.Application.Entities.Product.Queries.GetMinimizedProducts;
 using ShopDevelop.Application.Entities.Product.Queries.GetProductDetails;
 using ShopDevelop.Application.Entities.Product.Queries.GetSortedByPrice;
@@ -64,11 +67,12 @@ public class ProductController(IMapper mapper) : BaseController
     [Route("/api/v{version:apiVersion}/category/{productId:guid}")]
     public async Task<IActionResult> Delete(Guid productId)
     {
-        var command = new DeleteProductCommand()
-        {
-            ProductId = productId
-        };
-        await Mediator.Send(command);
+        await Mediator.Send(
+            new DeleteProductCommand()
+            {
+                ProductId = productId
+            });
+        
         return NoContent();
     }
 
@@ -78,9 +82,11 @@ public class ProductController(IMapper mapper) : BaseController
     [Route("/api/v{version:apiVersion}/minimized-products")]
     public async Task<ActionResult> GetAll()
     {
-        var result = await Mediator.Send(new GetMiniProductListQuery());
+        var result = 
+            await Mediator.Send(
+                new GetMiniProductListQuery());
         
-        if(result is null)
+        if(!result.Any())
             return NotFound();
         
         return Ok(result);
@@ -92,12 +98,12 @@ public class ProductController(IMapper mapper) : BaseController
     [Route("/api/v{version:apiVersion}/product/{id:guid}")]
     public async Task<ActionResult> GetById(Guid id)
     {
-        var byIdQuery = new GetProductByIdQuery
-        {
-            Id = id
-        };
-        
-        var result = await Mediator.Send(byIdQuery);
+        var result = 
+            await Mediator.Send(
+                new GetProductByIdQuery
+                {
+                    Id = id
+                });
         
         if(result is null)
             return NotFound();
@@ -111,11 +117,12 @@ public class ProductController(IMapper mapper) : BaseController
     [Route("/api/v{version:apiVersion}/product/{article:int}")]
     public async Task<ActionResult> GetByArticle(int article)
     {
-        var query = await Mediator.Send(
-            new GetProductByArticleQuery()
-            {
-                Article = article
-            });
+        var query = 
+            await Mediator.Send(
+                new GetProductByArticleQuery()
+                {
+                    Article = article
+                });
         
         if(query is null)
             return NotFound();
@@ -129,15 +136,16 @@ public class ProductController(IMapper mapper) : BaseController
     [Route("/api/v{version:apiVersion}/product/{maxPrice:decimal}/{minPrice:decimal}/{descending:bool}")]
     public async Task<ActionResult> GetSortedByPrice(decimal? maxPrice = null, decimal? minPrice = null, bool descending = false)
     {
-        var result = await Mediator.Send(
-            new GetSortedProductsByPriceQuery()
-            {
-                MaxPrice = maxPrice,
-                MinPrice = minPrice,
-                Descending = descending
-            });
+        var result = 
+            await Mediator.Send(
+                new GetSortedProductsByPriceQuery()
+                {
+                    MaxPrice = maxPrice,
+                    MinPrice = minPrice,
+                    Descending = descending
+                });
 
-        if (result is null)
+        if (!result.Any())
             return BadRequest();
         
         return Ok(result);
@@ -149,24 +157,74 @@ public class ProductController(IMapper mapper) : BaseController
     [Route("/api/v{version:apiVersion}/product/{descending:bool}")]
     public async Task<ActionResult> GetSortedByRating(bool descending = false)
     {
-        var result = await Mediator.Send(
-            new GetSortedProductsByRatingQuery()
-            {
-                Descending = descending
-            });
+        var result = 
+            await Mediator.Send(
+                new GetSortedProductsByRatingQuery()
+                {
+                    Descending = descending
+                });
 
-        if (result is null)
+        if (!result.Any())
             return BadRequest();
         
         return Ok(result);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/products/{name}")]
+    // TODO: доделать
+    public async Task<ActionResult> GetByName(string name)
+    {
+        var result = 
+            await Mediator.Send(
+                new GetProductByNameQuery()
+                {
+                    Name = name
+                });
+        
+        if (!result.Any())
+            return NotFound();
+        
+        return Ok();
     }
     
     [HttpGet]
     [AllowAnonymous]
     [MapToApiVersion(1)]
-    // TODO: сделать!
+    [Route("/api/v{version:apiVersion}/products/{descending:bool}")]
+    public async Task<ActionResult> GetByNoveltyByRating(bool descending = true)
+    {
+        var result = 
+            await Mediator.Send(
+                new GetProductByNoveltyQuery()
+                {
+                    Descending = descending
+                });
+        
+        if(!result.Any())
+            return NotFound();
+        
+        return Ok();
+    }
+    
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/seller-products/{sellerId:int}")]
     public async Task<ActionResult> GetBySellerId(int sellerId)
     {
-        return Ok();
+        var result = 
+            await Mediator.Send(
+                new GetProductBySellerIdQuery()
+                {
+                    SellerId = sellerId
+                });
+        
+        if(!result.Any())
+            return NotFound();
+        
+        return Ok(result);
     }
 }

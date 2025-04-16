@@ -68,7 +68,7 @@ public class CategoryController(IMapper mapper) : BaseController
         var result = await Mediator
             .Send(new GetCategoriesListQuery());
         
-        if (result is null)
+        if (!result.Any())
             return NotFound();
         
         return Ok(result);

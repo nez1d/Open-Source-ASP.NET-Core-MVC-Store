@@ -58,7 +58,8 @@ public class ReviewController(IMapper mapper) : BaseController
     public async Task<IActionResult> GetAll()
     {
         var result = await Mediator.Send(new GetAllReviewsQuery());
-        if (result is null)
+        
+        if (!result.Any())
             return NotFound();
 
         return Ok(result);
@@ -75,7 +76,7 @@ public class ReviewController(IMapper mapper) : BaseController
                 ProductId = productId
             });
 
-        if (result is null)
+        if (!result.Any())
             return NotFound();
 
         return Ok(result);
@@ -92,7 +93,7 @@ public class ReviewController(IMapper mapper) : BaseController
             UserId = userId
         });
 
-        if (result is null)
+        if (!result.Any())
             return NotFound();
 
         return Ok(result);
@@ -110,7 +111,7 @@ public class ReviewController(IMapper mapper) : BaseController
                 Count = count
             });
 
-        if(request is null)
+        if(!request.Any())
             return NotFound();
 
         return Ok(request);
@@ -128,7 +129,7 @@ public class ReviewController(IMapper mapper) : BaseController
                 Count = count
             });
 
-        if(request is null)
+        if(!request.Any())
             return NotFound();
 
         return Ok(request);
