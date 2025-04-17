@@ -154,7 +154,7 @@ public class ProductController(IMapper mapper) : BaseController
     [HttpGet]
     [AllowAnonymous]
     [MapToApiVersion(1)]
-    [Route("/api/v{version:apiVersion}/product/{descending:bool}")]
+    [Route("/api/v{version:apiVersion}/by-rating-product/{descending:bool}")]
     public async Task<ActionResult> GetSortedByRating(bool descending = false)
     {
         var result = 
@@ -173,28 +173,28 @@ public class ProductController(IMapper mapper) : BaseController
     [HttpGet]
     [AllowAnonymous]
     [MapToApiVersion(1)]
-    [Route("/api/v{version:apiVersion}/products/{name}")]
-    // TODO: доделать
-    public async Task<ActionResult> GetByName(string name)
+    [Route("/api/v{version:apiVersion}/search-products/{words}")]
+    //TODO: исправить ошибку.
+    public async Task<ActionResult> SearchByName(string words)
     {
         var result = 
             await Mediator.Send(
                 new GetProductByNameQuery()
                 {
-                    Name = name
+                    Name = words
                 });
         
         if (!result.Any())
             return NotFound();
         
-        return Ok();
+        return Ok(result);
     }
     
     [HttpGet]
     [AllowAnonymous]
     [MapToApiVersion(1)]
-    [Route("/api/v{version:apiVersion}/products/{descending:bool}")]
-    public async Task<ActionResult> GetByNoveltyByRating(bool descending = true)
+    [Route("/api/v{version:apiVersion}/by-novelty-products/{descending:bool}")]
+    public async Task<ActionResult> GetByNovelty(bool descending = true)
     {
         var result = 
             await Mediator.Send(
@@ -206,7 +206,7 @@ public class ProductController(IMapper mapper) : BaseController
         if(!result.Any())
             return NotFound();
         
-        return Ok();
+        return Ok(result);
     }
     
     [HttpGet]
@@ -226,5 +226,32 @@ public class ProductController(IMapper mapper) : BaseController
             return NotFound();
         
         return Ok(result);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/category-products/{name}")]
+    public async Task<ActionResult> GetByCategoryName(string name)
+    {
+        return Ok();
+    }
+    
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/featured-products")]
+    public async Task<ActionResult> GetByFeatured()
+    {
+        return Ok();
+    }
+    
+    [HttpGet]
+    [AllowAnonymous]
+    [MapToApiVersion(1)]
+    [Route("/api/v{version:apiVersion}/discounts-products")]
+    public async Task<ActionResult> GetDiscountsProducts()
+    {
+        return Ok();
     }
 }

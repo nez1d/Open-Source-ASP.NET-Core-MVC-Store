@@ -26,4 +26,5 @@ public class Product
     public Guid ClothesProductId { get; set; }
     public ShoesProduct? ShoesProduct { get; set; }
     public Guid ShoesProductId { get; set; }
+    public DateTime CreatedDate { get; set; }
 }

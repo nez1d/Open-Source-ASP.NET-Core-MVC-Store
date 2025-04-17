@@ -217,10 +217,10 @@ public class ProductRepository : IProductRepository
     }
 
     public async Task<IEnumerable<Product>> FindSortedByPriceAsync(
+        bool descending,
         CancellationToken cancellationToken,
         decimal? maxPrice = null, 
-        decimal? minPrice = null, 
-        bool descending = false)
+        decimal? minPrice = null)
     {
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken);
@@ -261,8 +261,8 @@ public class ProductRepository : IProductRepository
     }
 
     public async Task<IEnumerable<Product>> FindSortedByRatingAsync(
-        CancellationToken cancellationToken,
-        bool descending = false)
+        bool descending,
+        CancellationToken cancellationToken)
     {
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken);
@@ -291,7 +291,7 @@ public class ProductRepository : IProductRepository
                         ?? [];
     }
 
-    public async Task<IEnumerable<Product>> FindByNameAsync(
+    public async Task<IEnumerable<Product>> SearchByNameAsync(
         string keyWord,
         CancellationToken cancellationToken)
     {
@@ -299,20 +299,31 @@ public class ProductRepository : IProductRepository
         await connection.OpenAsync(cancellationToken);
 
         const string sql = @"
-            SELECT *
+            SELECT 
+                ""Id"", 
+                ""ProductName"", 
+                ""Price"", 
+                ""Rating"", 
+                ""ImageMiniPath"", 
+                ""SellerName"" 
             FROM 
                 ""Products""
             WHERE
-                ""Name"" LIKE @KeyWord OR 
-                ""Description"" LIKE @KeyWord 
+                LOWER(""ProductName"") 
+                    LIKE  @KeyWords
+            OR 
+               LOWER(""Description"")
+                    LIKE @KeyWords
             ORDER BY 
-                ""Name""";
-
-        return await connection
-            .QueryAsync<Product>(
-                sql, new 
-                    { KeyWord = keyWord })
-                    ?? [];
+                ""ProductName""";
+        
+            return await connection
+                .QueryAsync<Product>(
+                    sql, new
+                    {
+                        KeyWords = $"%{keyWord.ToLower()}%"
+                    })
+                        ?? [];
     }
 
     public async Task<IEnumerable<Product>> FindBySellerIdAsync(
@@ -334,10 +345,9 @@ public class ProductRepository : IProductRepository
                        ?? [];
     }
     
-    // TODO: у продукта нету свойства CreatedDate!!!
     public async Task<IEnumerable<Product>> FindSortedByNoveltyAsync(
-        CancellationToken cancellationToken,
-        bool descending = false)
+        bool descending,
+        CancellationToken cancellationToken)
     {
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken);

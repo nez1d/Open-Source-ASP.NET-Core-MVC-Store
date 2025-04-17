@@ -117,21 +117,21 @@ public interface IProductRepository
     /// <param name="descending">Descending.</param>
     /// <param name="cancellationToken">Cancellation Token.</param>
     /// <returns>Return Products if Products is found else returns en empty collection.</returns>
-    Task<IEnumerable<Product>> FindSortedByPriceAsync(CancellationToken cancellationToken, decimal? maxPrice = null, decimal? minPrice = null, bool descending = false);
+    Task<IEnumerable<Product>> FindSortedByPriceAsync(bool descending, CancellationToken cancellationToken, decimal? maxPrice = null, decimal? minPrice = null);
     /// <summary>
     /// Finds a Products by rating.
     /// </summary>
     /// <param name="descending">Descending.</param>
     /// <param name="cancellationToken">Cancellation Token.</param>
     /// <returns>Return Products if Products is found else returns en empty collection.</returns>
-    Task<IEnumerable<Product>> FindSortedByRatingAsync(CancellationToken cancellationToken, bool descending = false);
+    Task<IEnumerable<Product>> FindSortedByRatingAsync(bool descending, CancellationToken cancellationToken);
     /// <summary>
-    /// Finds a Products by Product Name and Description.
+    /// Search a Products by Product Name and Description.
     /// </summary>
     /// <param name="keyWord">The Words that will be searched for.</param>
     /// <param name="cancellationToken">Cancellation Token.</param>
     /// <returns>Return Products if Products is found else returns en empty collection.</returns>
-    Task<IEnumerable<Product>> FindByNameAsync(string keyWord, CancellationToken cancellationToken);
+    Task<IEnumerable<Product>> SearchByNameAsync(string keyWord, CancellationToken cancellationToken);
     /// <summary>
     /// Finds a Products by SellerId.
     /// </summary>
@@ -145,5 +145,5 @@ public interface IProductRepository
     /// <param name="cancellationToken">Cancellation Token.</param>
     /// <param name="descending">Descending.</param>
     /// <returns>Return Products if Products is found else returns en empty collection.</returns>
-    Task<IEnumerable<Product>> FindSortedByNoveltyAsync(CancellationToken cancellationToken, bool descending);
+    Task<IEnumerable<Product>> FindSortedByNoveltyAsync(bool descending, CancellationToken cancellationToken);
 }

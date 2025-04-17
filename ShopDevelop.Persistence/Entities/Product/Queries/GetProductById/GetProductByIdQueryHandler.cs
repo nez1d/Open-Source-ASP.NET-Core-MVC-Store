@@ -33,10 +33,10 @@ public class GetProductByIdQueryHandler
         logger.LogInformation($"Handling {nameof(GetProductByIdQuery)}");
 
         var product = await productRepository
-            .GetByIdAsync(request.Id, cancellationToken);
-            
-        if (product.Id != request.Id)
-            throw new NotFoundException(typeof(Domain.Entities.Product), request.Id);
+            .FindByIdAsync(request.Id, cancellationToken);
+
+        if (product is null)
+            return null;
         
         var result = mapper.Map<GetProductByIdVm>(product);
 
