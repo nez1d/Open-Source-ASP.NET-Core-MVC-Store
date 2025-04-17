@@ -25,7 +25,7 @@ public class GetProductByNoveltyQueryHandler
         logger.LogInformation($"Handling {nameof(GetProductByNoveltyQueryHandler)}");
 
         var products = await productRepository
-            .FindSortedByNoveltyAsync(cancellationToken, request.Descending);
+            .FindSortedByNoveltyAsync(request.Descending, cancellationToken);
         
         var result = products
             .Select(product => 

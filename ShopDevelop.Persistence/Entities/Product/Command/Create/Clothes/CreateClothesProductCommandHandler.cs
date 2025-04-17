@@ -56,6 +56,7 @@ public class CreateClothesProductCommandHandler
         product.SellerName = seller.Name; 
         product.Discount = discount;
         product.ProductDetail.Article = article; 
+        product.CreatedDate = DateTime.UtcNow;
         product.ImagePath = "sources/images/products/clothes/" + product.Id + ".jpg";
         product.ImagePath = "sources/images/products/clothes/mini/" + product.Id + ".jpg";
         

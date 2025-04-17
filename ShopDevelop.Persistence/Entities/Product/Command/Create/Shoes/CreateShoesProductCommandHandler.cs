@@ -44,6 +44,7 @@ public class CreateShoesProductCommandHandler :
         if (category == null || seller == null)
             return Guid.Empty;
         
+        // TODO: обработать ошибку(когда текущая стоимость больше строй)
         var discount = await productService.CalculateDiscountByPriceAsync(
                 request.Price, request.OldPrice);
         
@@ -56,6 +57,7 @@ public class CreateShoesProductCommandHandler :
         product.SellerName = seller.Name; 
         product.Discount = discount;
         product.ProductDetail.Article = article; 
+        product.CreatedDate = DateTime.UtcNow;
         product.ImagePath = "sources/images/products/shoes/" + product.Id + ".jpg";
         product.ImagePath = "sources/images/products/shoes/mini/" + product.Id + ".jpg";
         

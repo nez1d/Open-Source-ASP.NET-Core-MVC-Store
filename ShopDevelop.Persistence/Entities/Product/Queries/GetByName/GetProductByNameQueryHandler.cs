@@ -25,7 +25,7 @@ public class GetProductByNameQueryHandler
         logger.LogInformation($"Handling {nameof(GetProductByNameQueryHandler)}");
 
         var products = await productRepository
-            .FindByNameAsync(request.Name, cancellationToken);
+            .SearchByNameAsync(request.Name, cancellationToken);
         
         var result = products
             .Select(product => 
