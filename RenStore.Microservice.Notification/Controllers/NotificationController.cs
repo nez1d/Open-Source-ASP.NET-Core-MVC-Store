@@ -23,7 +23,9 @@ public class NotificationController : ControllerBase
         switch (requestDto.Type)
         {
             case NotificationType.Email:
-                await notificationService.SendEmailAsync(requestDto.To, requestDto.Subject, requestDto.Body);
+                var result = await notificationService.SendEmailAsync(requestDto.UserId, requestDto.To, requestDto.Subject, requestDto.Body);
+                if(result.IsFailure)
+                    return BadRequest(result.Error);
                 break;
             case NotificationType.Sms:
                 await notificationService.SendSmsAsync(requestDto.To, requestDto.Body);
@@ -34,7 +36,6 @@ public class NotificationController : ControllerBase
             default:
                 return BadRequest("");
         }
-        
         return NoContent();
     }
     

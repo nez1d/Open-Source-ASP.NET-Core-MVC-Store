@@ -1,31 +1,49 @@
-using Microsoft.EntityFrameworkCore;
-using RenStore.Microservice.Notification.Data;
+using RenStore.Microservice.Notification.Common.Result;
+using RenStore.Microservice.Notification.Enums;
+using RenStore.Microservice.Notification.Repository;
 
 namespace RenStore.Microservice.Notification.Services;
 
 public class NotificationService : INotificationService
 {
     private readonly ILogger<NotificationService> logger;
-    private readonly IEmailService emailService;
-    private readonly NotificationDbContext context;
-
+    private readonly IEmailNotificationSender emailNotificationSender;
+    private readonly INotificationRepository notificationRepository;
+    
     public NotificationService(
         ILogger<NotificationService> logger, 
-        IEmailService emailService,
-        NotificationDbContext context)
+        IEmailNotificationSender emailNotificationSender,
+        INotificationRepository notificationRepository)
     {
         this.logger = logger;
-        this.emailService = emailService;
-        this.context = context;
+        this.emailNotificationSender = emailNotificationSender;
+        this.notificationRepository = notificationRepository;
     }
     
-    public async Task SendEmailAsync(string to, string subject, string body)
+    public async Task<Result> SendEmailAsync(Guid userId, string to, string subject, string body)
     {
         logger.LogInformation($"Handling {nameof(NotificationService)}");
         
-        await emailService.SendEmailAsync(to, subject, body);
+        var notify = await emailNotificationSender.SendEmailAsync(to, subject, body);
+        
+        if(notify.IsFailure)
+            return Result.Failure(new Error("", ""));
+        
+        var notification = new Models.Notification
+        {
+            UserId = userId,
+            Type = NotificationType.Email,
+            Subject = subject,
+            Content = body,
+            Status = NotificationStatus.Pending,
+            CreatedAt = DateTime.UtcNow
+        };
+        
+        await notificationRepository.AddNotificationAsync(notification, CancellationToken.None);
         
         logger.LogInformation($"Handled {nameof(NotificationService)}");
+        
+        return Result.Success;
     }
 
     public async Task SendSmsAsync(string phoneNumber, string message)
@@ -36,35 +54,5 @@ public class NotificationService : INotificationService
     public async Task SendPushAsync(string deviceToken, string message)
     {
         throw new NotImplementedException();
-    }
-
-    public async Task AddNotificationAsync(Models.Notification notification, CancellationToken cancellationToken)
-    {
-        await context.Notifications.AddAsync(notification, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
-    }
-    
-    public async Task UpdateNotificationAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        
-    }
-    
-    public async Task DeleteNotificationAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        var notification = await this.GetNotificationAsync(userId, cancellationToken);
-        
-        if (notification is null)
-            return;
-        
-        context.Remove(notification);
-        await context.SaveChangesAsync(cancellationToken);
-    }
-    
-    public async Task<Models.Notification?> GetNotificationAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        return await context.Notifications
-            .FirstOrDefaultAsync(notification => 
-                notification.UserId == userId,
-                cancellationToken);
     }
 }

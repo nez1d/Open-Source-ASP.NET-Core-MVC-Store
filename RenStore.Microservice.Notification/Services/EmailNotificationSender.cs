@@ -1,22 +1,23 @@
 using MailKit.Net.Smtp;
 using MimeKit;
+using RenStore.Microservice.Notification.Common.Result;
 
 namespace RenStore.Microservice.Notification.Services;
 
-public class EmailService : IEmailService
+public class EmailNotificationSender : IEmailNotificationSender
 {
     private readonly IConfiguration configuration;
-    private readonly ILogger<EmailService> logger;
+    private readonly ILogger<EmailNotificationSender> logger;
     
-    public EmailService(
+    public EmailNotificationSender(
         IConfiguration configuration,
-        ILogger<EmailService> logger)
+        ILogger<EmailNotificationSender> logger)
     { 
         this.configuration = configuration;
         this.logger = logger;
     }
     
-    public async Task SendEmailAsync(string email, string subject, string message)
+    public async Task<Result> SendEmailAsync(string email, string subject, string message)
     {
         logger.LogInformation($"Sending email to {email} with subject {subject}.");
         
@@ -43,8 +44,11 @@ public class EmailService : IEmailService
         {
             logger.LogError(ex, ex.Message);
             Console.WriteLine($"SMTP Error: {ex.StatusCode} - {ex.Message}");
+            
+            return Result.Failure(new Error(ex.Message, "SMTP Error"));
         }
         
         logger.LogInformation($"Sent email to {email} with subject {subject}.");
+        return Result.Success;
     }
 }

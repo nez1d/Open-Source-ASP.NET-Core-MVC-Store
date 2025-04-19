@@ -12,5 +12,4 @@ public class Notification
     public NotificationStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? ReadAt { get; set; }
-    public bool IsSent { get; set; }
 }
